@@ -1,7 +1,7 @@
 # COMP30022 - IT Project
 [Discord Channel](https://discord.gg/GNrWuMGC)
 
-[Jira]
+[Jira](https://cloud-surf.atlassian.net/jira/software/projects/DEV/boards/1)
 
 [Github](https://github.com/Mihai-Blaga/COMP30022.git)
 
