@@ -7,6 +7,7 @@ import android.os.Handler
 import android.view.MotionEvent
 import android.view.View
 import android.widget.Button
+import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
 
@@ -16,7 +17,7 @@ import android.widget.TextView
  */
 class FullscreenActivity : AppCompatActivity() {
     private lateinit var fullscreenContent: TextView
-    private lateinit var fullscreenContentControls: LinearLayout
+    private lateinit var fullscreenContentControls: FrameLayout
     private val hideHandler = Handler()
 
     @SuppressLint("InlinedApi")
