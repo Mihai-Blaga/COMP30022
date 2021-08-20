@@ -6,10 +6,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.view.MotionEvent
 import android.view.View
-import android.widget.Button
-import android.widget.FrameLayout
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.*
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -80,6 +77,25 @@ class FullscreenActivity : AppCompatActivity() {
         // operations to prevent the jarring behavior of controls going away
         // while interacting with the UI.
         findViewById<Button>(R.id.button1).setOnTouchListener(delayHideTouchListener)
+
+
+        val contactBtn = findViewById<Button>(R.id.button1)
+        val btn2 = findViewById<Button>(R.id.button2)
+        val btn3 = findViewById<Button>(R.id.button3)
+        val btn4 = findViewById<Button>(R.id.button4)
+
+        val txt1 = findViewById<EditText>(R.id.textField1)
+        val txt2 = findViewById<EditText>(R.id.textField2)
+        val txt3 = findViewById<EditText>(R.id.textField3)
+        val txt4 = findViewById<EditText>(R.id.textField4)
+
+
+        //Interacting with the first button (testing contact functionality)
+        contactBtn.setOnClickListener {
+            txt1.setText("Contact name goes here")
+            txt2.setText("Phone goes here")
+            txt3.setText("Email goes here")
+        }
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
