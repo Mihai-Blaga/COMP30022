@@ -17,4 +17,18 @@
     <string name="meetings_open_calendar_button">View Calendar</string>
     <string name="top_bar_search">Search</string>
     <string name="top_bar_content_description_search">Search for a contact</string>
+    <string name="login_email_text_hint">Email</string>
+    <string name="login_password_text_hint">Password</string>
+    <string name="login_enter_button_text">Log in</string>
+    <string name="new_contact_name_text">Name</string>
+    <string name="new_contact_mobile_text">Mobile</string>
+    <string name="new_contact_email_text">Email</string>
+    <string name="new_contact_notes_text">Notes</string>
+    <string name="add_new_contact_button_text">Save</string>
+    <string name="new_meeting_contact_text">Contact</string>
+    <string name="new_meeting_name_text">Name</string>
+    <string name="new_meeting_date_text">Date/time</string>
+    <string name="new_meeting_location_text">Location</string>
+    <string name="new_meeting_notes_text">Notes</string>
+    <string name="add_new_meeting_button_text">Save</string>
 </resources>
