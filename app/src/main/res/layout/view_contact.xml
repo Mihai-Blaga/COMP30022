@@ -20,7 +20,7 @@
             android:layout_height="?attr/actionBarSize"
             app:menu="@menu/top_app_bar_no_search"
             app:navigationIcon="@drawable/ic_back"
-            app:title="@string/add_new_contact_page_title" />
+            app:title="View Contact test" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -135,16 +135,5 @@
         app:itemTextColor="?android:attr/textColorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:menu="@menu/bottom_navigation_menu" />
-
-    <Button
-        android:id="@+id/button7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:text="@string/add_new_contact_button_text"
-        app:layout_constraintEnd_toEndOf="@+id/outlinedTextFieldNotes"
-        app:layout_constraintTop_toBottomOf="@+id/outlinedTextFieldNotes" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
