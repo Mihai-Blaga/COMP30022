@@ -6,4 +6,15 @@
     <string name="button_2">Button 2 </string>
     <string name="button_3">Button 3 </string>
     <string name="button_4">Button 4 </string>
+    <string name="bottom_nav_menu_button_1">Contacts</string>
+    <string name="bottom_nav_menu_button_2">Meetings</string>
+    <string name="bottom_nav_menu_button_3">Settings</string>
+    <string name="view_contacts_list_page_title">Contacts</string>
+    <string name="view_meetings_page_title">Meetings</string>
+    <string name="add_new_contact_page_title">Add New Contact</string>
+    <string name="add_new_meeting_page_title">Add New Meeting</string>
+    <string name="meetings_create_meeting_button">New Meeting</string>
+    <string name="meetings_open_calendar_button">View Calendar</string>
+    <string name="top_bar_search">Search</string>
+    <string name="top_bar_content_description_search">Search for a contact</string>
 </resources>
