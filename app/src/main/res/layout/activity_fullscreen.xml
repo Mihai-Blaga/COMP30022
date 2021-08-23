@@ -38,6 +38,7 @@
         android:layout_weight="1"
         android:ems="10"
         android:inputType="textPersonName"
+        android:text="cloud.surf.dev@gmail.com"
         app:layout_constraintTop_toBottomOf="@+id/button3"
         tools:layout_editor_absoluteX="16dp" />
 
@@ -60,7 +61,20 @@
         android:layout_weight="1"
         android:ems="10"
         android:inputType="textPersonName"
+        android:text="Subject"
         app:layout_constraintTop_toTopOf="@+id/fullscreen_content"
+        tools:layout_editor_absoluteX="0dp" />
+
+    <EditText
+        android:id="@+id/editTextTextPersonName4"
+        android:layout_width="match_parent"
+        android:layout_height="53dp"
+        android:layout_marginTop="20dp"
+        android:layout_weight="1"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Message"
+        app:layout_constraintTop_toBottomOf="@+id/button1"
         tools:layout_editor_absoluteX="0dp" />
 
     <Button
@@ -84,18 +98,6 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName2" />
-
-    <EditText
-        android:id="@+id/editTextTextPersonName4"
-        android:layout_width="match_parent"
-        android:layout_height="53dp"
-        android:layout_marginTop="20dp"
-        android:layout_weight="1"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="@string/input"
-        app:layout_constraintTop_toBottomOf="@+id/button1"
-        tools:layout_editor_absoluteX="0dp" />
 
     <Button
         android:id="@+id/button2"
