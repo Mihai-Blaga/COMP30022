@@ -12,4 +12,12 @@
     <color name="light_blue_A200">#FF40C4FF</color>
     <color name="light_blue_A400">#FF00B0FF</color>
     <color name="black_overlay">#66000000</color>
+    <color name="matte_orange">#B15649</color>
+    <color name="matte_dark_grey">#232323</color>
+    <color name="matte_black">#121212</color>
+    <color name="matte_med_grey">#272727</color>
+    <color name="matte_orange_dark">#813A2F</color>
+    <color name="light_white">#A9A9A9</color>
+    <color name="matte_light_grey">#2F2F2F</color>
+    <color name="mtrl_textinput_default_box_stroke_color">#2F2F2F</color>
 </resources>
