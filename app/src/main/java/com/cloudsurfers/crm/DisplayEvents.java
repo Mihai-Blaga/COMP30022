@@ -72,14 +72,12 @@ public class DisplayEvents extends AppCompatActivity implements View.OnClickList
                     return;
                 }
 
+
+                // Build and execute the query
                 long now = System.currentTimeMillis();
                 Uri.Builder builder = Uri.parse("content://com.android.calendar/instances/when").buildUpon();
-
-
                 ContentUris.appendId(builder, now);
                 ContentUris.appendId(builder, now + DateUtils.DAY_IN_MILLIS * 7);
-
-
                 calendarCursor = getContentResolver().query(
                         builder.build(),
                         null,
@@ -94,13 +92,15 @@ public class DisplayEvents extends AppCompatActivity implements View.OnClickList
                 Calendar nowTime = Calendar.getInstance();
                 nowTime.setTimeInMillis(now);
                 System.out.println(String.format(
-                        " Now : %d/%d/%d - %d:%d",
+                        " Current Time : %d/%d/%d - %d:%d",
                         nowTime.get(Calendar.DAY_OF_MONTH),
                         nowTime.get(Calendar.MONTH)+1, // Jan is month 0
                         nowTime.get(Calendar.YEAR),
                         nowTime.get(Calendar.HOUR_OF_DAY),
                         nowTime.get(Calendar.MINUTE)
                 ));
+
+                // iterate through and output all the results in a table
                 TableLayout eventTable = (TableLayout)findViewById(R.id.eventsTable);
                 eventTable.setStretchAllColumns(true);
                 eventTable.bringToFront();
@@ -119,7 +119,6 @@ public class DisplayEvents extends AppCompatActivity implements View.OnClickList
                         String description = calendarCursor.getString(id_desc);
                         String location = calendarCursor.getString(id_location);
 
-//                        Toast.makeText(this, mDay+"/"+mMonth+"/"+mYear +","+title+","+description+","+location,Toast.LENGTH_SHORT).show();
                         System.out.println(title+","+description+","+location);
 
                         TableRow tr =  new TableRow(this);
