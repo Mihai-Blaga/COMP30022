@@ -1,9 +1,14 @@
 package com.cloudsurfers.crm
 
+import android.Manifest
 import androidx.appcompat.app.AppCompatActivity
 import android.annotation.SuppressLint
+import android.content.pm.PackageManager
+import android.database.Cursor
+import android.database.DatabaseUtils
 import android.os.Bundle
 import android.os.Handler
+import android.provider.ContactsContract
 import android.view.MotionEvent
 import android.view.View
 import android.widget.*
@@ -92,9 +97,65 @@ class FullscreenActivity : AppCompatActivity() {
 
         //Interacting with the first button (testing contact functionality)
         contactBtn.setOnClickListener {
-            txt1.setText("Contact name goes here")
-            txt2.setText("Phone goes here")
-            txt3.setText("Email goes here")
+            // A "projection" defines the columns that will be returned for each row
+            val mProjection: Array<String> = arrayOf(
+                ContactsContract.Data._ID,    // Contract class constant for the _ID column name
+                ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME,   // Contract class constant for the name column name
+                ContactsContract.CommonDataKinds.Phone.NUMBER,  // Contract class constant for the phone column name
+                ContactsContract.CommonDataKinds.Email.ADDRESS
+            )
+
+            if (this.checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED){
+                val requestCode = 1;
+                this.requestPermissions(arrayOf(Manifest.permission.READ_CONTACTS), requestCode);
+            }
+
+            val mCursor = contentResolver.query(
+                ContactsContract.Data.CONTENT_URI,
+                mProjection,
+                null,
+                emptyArray<String>(),
+                null
+            )
+
+            // Some providers return null if an error occurs, others throw an exception
+            when (mCursor?.count) {
+                null -> {
+                    txt1.setText("Contact not found")
+                    /*
+                     * Insert code here to handle the error. Be sure not to use the cursor!
+                     * You may want to call android.util.Log.e() to log this error.
+                     *
+                     */
+                }
+                0 -> {
+                    txt1.setText("Contact not found")
+                    /*
+                     * Insert code here to notify the user that the search was unsuccessful. This isn't
+                     * necessarily an error. You may want to offer the user the option to insert a new
+                     * row, or re-type the search term.
+                     */
+                }
+                else -> {
+                    mCursor.moveToFirst()
+
+                    var txt1Str = mCursor.getColumnName(0) + ": " + mCursor.getString(0)
+                    var txt2Str = mCursor.getColumnName(1) + ": " + mCursor.getString(1)
+                    var txt3Str = mCursor.getColumnName(2) + ": " + mCursor.getString(2)
+                    var txt4Str = mCursor.getColumnName(3) + ": " + mCursor.getString(3)
+
+
+                    txt2Str = mCursor.columnCount.toString()
+                    txt3Str = mCursor.count.toString()
+                    txt4Str = DatabaseUtils.dumpCursorToString(mCursor)
+
+                    txt1.setText(txt1Str)
+                    txt2.setText(txt2Str)
+                    txt3.setText(txt3Str)
+                    txt4.setText(txt4Str)
+                    // Insert code here to do something with the results
+                }
+            }
         }
     }
 
