@@ -2,14 +2,16 @@ package com.cloudsurfers.crm
 
 import androidx.appcompat.app.AppCompatActivity
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
-import android.widget.Button
-import android.widget.FrameLayout
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.*
+import java.lang.Exception
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -80,6 +82,11 @@ class FullscreenActivity : AppCompatActivity() {
         // operations to prevent the jarring behavior of controls going away
         // while interacting with the UI.
         findViewById<Button>(R.id.button1).setOnTouchListener(delayHideTouchListener)
+
+        var emailButton: Button = findViewById(R.id.button2)
+        emailButton.setOnClickListener {
+            sendEmail()
+        }
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
@@ -89,6 +96,11 @@ class FullscreenActivity : AppCompatActivity() {
         // created, to briefly hint to the user that UI controls
         // are available.
         delayedHide(100)
+    }
+
+    private fun emailPage() {
+        val i = Intent(this, ComposeEmail::class.java)
+        startActivity(i)
     }
 
     private fun toggle() {
@@ -149,5 +161,28 @@ class FullscreenActivity : AppCompatActivity() {
          * and a change of the status and navigation bar.
          */
         private const val UI_ANIMATION_DELAY = 300
+    }
+
+    private fun sendEmail() { // maybe pass in these values (to,cc,subject,text) in the function definition
+        Log.i("Send email", "")
+        val to:Array<String> = arrayOf("cloud.surf.dev@gmail.com") // get these from the app page
+        //val cc:Array<String> = arrayOf("apples")
+        val emailIntent = Intent(Intent.ACTION_SEND)
+
+        emailIntent.data = Uri.parse("mailto:")
+        emailIntent.type = "message/rfc822"
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, to)
+        //emailIntent.putExtra(Intent.EXTRA_CC, cc)
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Test Subject 1") // <--- Need to change these to text fields in the page that are assigned to vars.
+        emailIntent.putExtra(Intent.EXTRA_TEXT, R.id.editTextTextPersonName4) // ---^
+
+        try {
+            startActivity(Intent.createChooser(emailIntent, "Send mail using..."))
+            finish()
+            Log.i("Finished sending email.", "")
+        } catch (e: Exception) {
+            Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()
+        }
+
     }
 }
