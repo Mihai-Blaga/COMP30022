@@ -19,6 +19,9 @@ import android.provider.CalendarContract;
 import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Date;
@@ -69,11 +72,11 @@ public class DisplayEvents extends AppCompatActivity implements View.OnClickList
                     return;
                 }
 
-                long now = new Date().getTime();
+                long now = System.currentTimeMillis();
                 Uri.Builder builder = Uri.parse("content://com.android.calendar/instances/when").buildUpon();
 
 
-                ContentUris.appendId(builder, now - DateUtils.DAY_IN_MILLIS * 7);
+                ContentUris.appendId(builder, now);
                 ContentUris.appendId(builder, now + DateUtils.DAY_IN_MILLIS * 7);
 
 
@@ -82,13 +85,25 @@ public class DisplayEvents extends AppCompatActivity implements View.OnClickList
                         null,
                         null,
                         null,
-                        null
+                        CalendarContract.Events.DTSTART+" ASC"
                 );
 
                 System.out.println("Got events : "+String.valueOf(
                         calendarCursor.getCount()
                 ));
-
+                Calendar nowTime = Calendar.getInstance();
+                nowTime.setTimeInMillis(now);
+                System.out.println(String.format(
+                        " Now : %d/%d/%d - %d:%d",
+                        nowTime.get(Calendar.DAY_OF_MONTH),
+                        nowTime.get(Calendar.MONTH)+1, // Jan is month 0
+                        nowTime.get(Calendar.YEAR),
+                        nowTime.get(Calendar.HOUR_OF_DAY),
+                        nowTime.get(Calendar.MINUTE)
+                ));
+                TableLayout eventTable = (TableLayout)findViewById(R.id.eventsTable);
+                eventTable.setStretchAllColumns(true);
+                eventTable.bringToFront();
                 while(calendarCursor.moveToNext()){
                     if (calendarCursor!=null){
                         int id_start = calendarCursor.getColumnIndex(CalendarContract.Events.DTSTART);
@@ -97,17 +112,41 @@ public class DisplayEvents extends AppCompatActivity implements View.OnClickList
                         int id_location = calendarCursor.getColumnIndex(CalendarContract.Events.EVENT_LOCATION);
 
                         String beginTime = calendarCursor.getString(id_start);
-                        Calendar newCalendar = Calendar.getInstance();
-                        newCalendar.setTimeInMillis(Long.parseLong(beginTime));
-                        int mYear = newCalendar.get(Calendar.YEAR);
-                        int mMonth = newCalendar.get(Calendar.MONTH);
-                        int mDay = newCalendar.get(Calendar.DAY_OF_MONTH);
+                        Calendar beginCalendarObject = Calendar.getInstance();
+                        beginCalendarObject.setTimeInMillis(Long.parseLong(beginTime));
 
                         String title = calendarCursor.getString(id_title);
                         String description = calendarCursor.getString(id_desc);
                         String location = calendarCursor.getString(id_location);
 
-                        Toast.makeText(this, mDay+"/"+mMonth+"/"+mYear +","+title+","+description+","+location,Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(this, mDay+"/"+mMonth+"/"+mYear +","+title+","+description+","+location,Toast.LENGTH_SHORT).show();
+                        System.out.println(title+","+description+","+location);
+
+                        TableRow tr =  new TableRow(this);
+                        tr.setLayoutParams(new TableLayout.LayoutParams(
+                                TableLayout.LayoutParams.MATCH_PARENT,
+                                TableLayout.LayoutParams.WRAP_CONTENT));
+                        TextView c1 = new TextView(this);
+                        c1.setText(String.format(
+                                "%d/%d/%d - %d:%d",
+                                    beginCalendarObject.get(Calendar.DAY_OF_MONTH),
+                                    beginCalendarObject.get(Calendar.MONTH)+1,
+                                    beginCalendarObject.get(Calendar.YEAR),
+                                    beginCalendarObject.get(Calendar.HOUR_OF_DAY),
+                                    beginCalendarObject.get(Calendar.MINUTE)
+                                ));
+
+                        TextView c2 = new TextView(this);
+                        c2.setText(title);
+                        TextView c3 = new TextView(this);
+                        c3.setLayoutParams(new TableRow.LayoutParams(
+                                TableLayout.LayoutParams.MATCH_PARENT,
+                                TableLayout.LayoutParams.WRAP_CONTENT));
+                        c3.setText(description);
+                        tr.addView(c1);
+                        tr.addView(c2);
+                        tr.addView(c3);
+                        eventTable.addView(tr);
                     }
                     else{
                         Toast.makeText(this,"Events are over!",Toast.LENGTH_SHORT).show();

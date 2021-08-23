@@ -17,14 +17,17 @@
         tools:layout_editor_absoluteX="158dp"
         tools:layout_editor_absoluteY="214dp" />
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="128dp"
-            android:layout_height="19dp"
-            android:text="@string/dummytext"
-            tools:layout_editor_absoluteX="73dp"
-            tools:layout_editor_absoluteY="312dp" />
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+            <TableLayout
+                android:layout_width="wrap_content"
+                android:id="@+id/eventsTable"
+                android:layout_height="wrap_content">
+            </TableLayout>
 
+        </ScrollView>
     </LinearLayout>
 
 
