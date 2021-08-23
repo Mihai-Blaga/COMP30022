@@ -1,15 +1,17 @@
 package com.cloudsurfers.crm
 
+import android.Manifest
 import androidx.appcompat.app.AppCompatActivity
 import android.annotation.SuppressLint
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
-import android.widget.Button
-import android.widget.FrameLayout
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.*
+import androidx.annotation.RequiresApi
+import com.cloudsurfers.crm.databinding.ActivityFullscreenBinding
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -61,11 +63,12 @@ class FullscreenActivity : AppCompatActivity() {
         false
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        setContentView(R.layout.activity_fullscreen)
+        val binding = ActivityFullscreenBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         isFullscreen = true
@@ -76,10 +79,24 @@ class FullscreenActivity : AppCompatActivity() {
 
         fullscreenContentControls = findViewById(R.id.fullscreen_content_controls)
 
+
         // Upon interacting with UI controls, delay any scheduled hide()
         // operations to prevent the jarring behavior of controls going away
         // while interacting with the UI.
         findViewById<Button>(R.id.button1).setOnTouchListener(delayHideTouchListener)
+
+        // Testing Calendar Operations
+        binding.button1.setOnClickListener() {
+            val intent = CalendarUtil.getInsertEventIntent()
+            startActivity(intent)
+        }
+
+        binding.button2.setOnClickListener() {
+            val eventId: Long = CalendarUtil.addEvent(this)
+            val intent = CalendarUtil.getViewEventIntent(eventId)
+            startActivity(intent)
+        }
+
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
