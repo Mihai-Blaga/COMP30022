@@ -3,9 +3,8 @@ package com.cloudsurfers.crm
 import android.Manifest
 import androidx.appcompat.app.AppCompatActivity
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.pm.PackageManager
-import android.database.Cursor
-import android.database.DatabaseUtils
 import android.os.Bundle
 import android.os.Handler
 import android.provider.ContactsContract
@@ -84,10 +83,8 @@ class FullscreenActivity : AppCompatActivity() {
         findViewById<Button>(R.id.button1).setOnTouchListener(delayHideTouchListener)
 
 
-        val contactBtn = findViewById<Button>(R.id.button1)
-        val btn2 = findViewById<Button>(R.id.button2)
-        val btn3 = findViewById<Button>(R.id.button3)
-        val btn4 = findViewById<Button>(R.id.button4)
+        val loadBtn = findViewById<Button>(R.id.button1)
+        val viewBtn = findViewById<Button>(R.id.button4)
 
         val txt1 = findViewById<EditText>(R.id.textField1)
         val txt2 = findViewById<EditText>(R.id.textField2)
@@ -95,19 +92,24 @@ class FullscreenActivity : AppCompatActivity() {
         val txt4 = findViewById<EditText>(R.id.textField4)
 
 
+        viewBtn.setOnClickListener{
+            val intent = Intent(this, ViewContactActivity::class.java)
+            startActivity(intent)
+        }
+
         //Interacting with the first button (testing contact functionality)
-        contactBtn.setOnClickListener {
+        loadBtn.setOnClickListener {
+
             // A "projection" defines the columns that will be returned for each row
             val mProjection: Array<String> = arrayOf(
-                ContactsContract.Data._ID,    // Contract class constant for the _ID column name
-                ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME,   // Contract class constant for the name column name
-                ContactsContract.CommonDataKinds.Phone.NUMBER,  // Contract class constant for the phone column name
-                ContactsContract.CommonDataKinds.Email.ADDRESS
+                ContactsContract.Data.RAW_CONTACT_ID,    // Contract class constant for the _ID column name
+                ContactsContract.Data.MIMETYPE,
+                ContactsContract.Data.DATA1
             )
 
             if (this.checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED){
                 val requestCode = 1;
-                this.requestPermissions(arrayOf(Manifest.permission.READ_CONTACTS), requestCode);
+                this.requestPermissions(arrayOf(Manifest.permission.READ_CONTACTS), requestCode)
             }
 
             val mCursor = contentResolver.query(
@@ -121,7 +123,8 @@ class FullscreenActivity : AppCompatActivity() {
             // Some providers return null if an error occurs, others throw an exception
             when (mCursor?.count) {
                 null -> {
-                    txt1.setText("Contact not found")
+                    val errormsg = "Error connecting to contacts"
+                    txt1.setText(errormsg)
                     /*
                      * Insert code here to handle the error. Be sure not to use the cursor!
                      * You may want to call android.util.Log.e() to log this error.
@@ -129,7 +132,8 @@ class FullscreenActivity : AppCompatActivity() {
                      */
                 }
                 0 -> {
-                    txt1.setText("Contact not found")
+                    val errormsg = "Contact not found"
+                    txt1.setText(errormsg)
                     /*
                      * Insert code here to notify the user that the search was unsuccessful. This isn't
                      * necessarily an error. You may want to offer the user the option to insert a new
@@ -139,15 +143,29 @@ class FullscreenActivity : AppCompatActivity() {
                 else -> {
                     mCursor.moveToFirst()
 
-                    var txt1Str = mCursor.getColumnName(0) + ": " + mCursor.getString(0)
-                    var txt2Str = mCursor.getColumnName(1) + ": " + mCursor.getString(1)
-                    var txt3Str = mCursor.getColumnName(2) + ": " + mCursor.getString(2)
-                    var txt4Str = mCursor.getColumnName(3) + ": " + mCursor.getString(3)
+                    var email = ""
+                    var name = ""
+                    var phone = ""
+                    var note = ""
 
+                    for (i in 0..mCursor.count - 1){
+                        mCursor.moveToPosition(i)
+                        when(mCursor.getString(1)) {
+                            ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE ->
+                                phone = mCursor.getString(2) ?: "Phone not found"
+                            ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE ->
+                                email = mCursor.getString(2) ?: "Email not found"
+                            ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE ->
+                                name = mCursor.getString(2) ?: "Name not found"
+                            ContactsContract.CommonDataKinds.Note.CONTENT_ITEM_TYPE ->
+                                note = mCursor.getString(2) ?: "Note not found"
+                        }
+                    }
 
-                    txt2Str = mCursor.columnCount.toString()
-                    txt3Str = mCursor.count.toString()
-                    txt4Str = DatabaseUtils.dumpCursorToString(mCursor)
+                    var txt1Str = name
+                    var txt2Str = phone
+                    var txt3Str = email
+                    var txt4Str = note
 
                     txt1.setText(txt1Str)
                     txt2.setText(txt2Str)

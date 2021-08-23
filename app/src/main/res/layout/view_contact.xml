@@ -20,7 +20,7 @@
             android:layout_height="?attr/actionBarSize"
             app:menu="@menu/top_app_bar_no_search"
             app:navigationIcon="@drawable/ic_back"
-            app:title="View Contact test" />
+            app:title="View Contact" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -45,6 +45,7 @@
         app:layout_constraintTop_toBottomOf="@+id/topAppBarLayout">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/name_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -70,6 +71,7 @@
         app:layout_constraintTop_toBottomOf="@+id/outlinedTextFieldName">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/mobile_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -95,6 +97,7 @@
         app:layout_constraintTop_toBottomOf="@+id/outlinedTextFieldMobile">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/email_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -120,6 +123,7 @@
         app:layout_constraintTop_toBottomOf="@+id/outlinedTextFieldEmail">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/notes_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
