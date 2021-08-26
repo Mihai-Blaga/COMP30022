@@ -31,4 +31,10 @@
     <string name="new_meeting_location_text">Location</string>
     <string name="new_meeting_notes_text">Notes</string>
     <string name="add_new_meeting_button_text">Save</string>
+
+
+
+    <string name="view_meetings_list_item_contact_name_default_text">Drake</string>
+    <string name="view_meetings_list_item_meeting_name_default_text">Recording Session</string>
+    <string name="view_meetings_list_item_meeting_time_default_text">1-3pm</string>
 </resources>

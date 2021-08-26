@@ -33,4 +33,8 @@
 <!--        <item name="android:iconTint">@color/matte_black</item>-->
     </style>
 
+    <style name="MeetingsListItemsText">
+        <item name="android:textColor">@color/light_white</item>
+    </style>
+
 </resources>

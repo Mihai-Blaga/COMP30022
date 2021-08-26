@@ -93,7 +93,8 @@ class FullscreenActivity : AppCompatActivity() {
 
 
         viewBtn.setOnClickListener{
-            val intent = Intent(this, ViewContactActivity::class.java)
+//            val intent = Intent(this, ViewContactActivity::class.java)
+            val intent = Intent(this, ViewMeetingsActivity::class.java)
             startActivity(intent)
         }
 
