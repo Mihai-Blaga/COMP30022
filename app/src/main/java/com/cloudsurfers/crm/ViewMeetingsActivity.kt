@@ -17,7 +17,7 @@ class ViewMeetingsActivity : AppCompatActivity() {
         val testStrings: ArrayList<String> =  ArrayList<String>()
         testStrings.add("Phil Yang")
         testStrings.add("Eren Jaeger")
-        testStrings.add("Moderna Vaccine")
+        testStrings.add("Joe Mama")
         val viewMeetingsAdapter = ViewMeetingsAdapter(testStrings.toTypedArray())
         val recyclerView: RecyclerView = findViewById(R.id.view_meetings_list_recycler_view)
 

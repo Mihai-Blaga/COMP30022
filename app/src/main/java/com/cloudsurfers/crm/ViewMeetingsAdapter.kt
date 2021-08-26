@@ -38,6 +38,8 @@ class ViewMeetingsAdapter(private val dataSet: Array<String>) :
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
         viewHolder.contactNameTextView.text = dataSet[position]
+//        viewHolder.meetingNameTextView.text = dataSet[position]
+//        viewHolder.meetingTimeTextView.text = dataSet[position]
     }
 
     // Return the size of your dataset (invoked by the layout manager)
