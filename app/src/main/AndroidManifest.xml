@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.cloudsurfers.crm">
 
+    <uses-permission android:name="android.permission.READ_CALENDAR" />
+    <uses-permission android:name="android.permission.WRITE_CALENDAR" />
+
     <uses-sdk android:minSdkVersion="23" />
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -18,7 +21,7 @@
         android:theme="@style/Theme.CRM">
         <activity
             android:name=".ViewMeetingsActivity"
-            android:exported="true">
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -29,11 +32,14 @@
             android:name=".ViewContactActivity"
             android:exported="true" />
         <activity
+            android:name=".DisplayEvents"
+            android:exported="true" >
+        </activity>
+        <activity
             android:name=".FullscreenActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/app_name"
             android:theme="@style/Theme.CRM.Fullscreen">
-
         </activity>
     </application>
 
