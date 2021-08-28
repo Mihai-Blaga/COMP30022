@@ -87,7 +87,7 @@ class FullscreenActivity : AppCompatActivity() {
 
         // Testing Calendar Operations
         binding.button1.setOnClickListener() {
-            val intent = CalendarUtil.getInsertEventIntent()
+            val intent = CalendarUtil.getInsertEventIntent("Meeting with Someone", "Meeting", "Gym", "kth@gmail.com")
             startActivity(intent)
         }
 

@@ -14,29 +14,25 @@ import androidx.annotation.RequiresApi
 
 class CalendarUtil{
     companion object{
+        private const val ONE_HOUR_IN_MILLI : Long = 60 * 60 * 1000;
+
         @RequiresApi(Build.VERSION_CODES.N)
-        fun getInsertEventIntent(): Intent{
-            val startMillis: Long = Calendar.getInstance().run {
-                set(2012, 0, 19, 7, 30)
-                timeInMillis
-            }
-            val endMillis: Long = Calendar.getInstance().run {
-                set(2012, 0, 19, 8, 30)
-                timeInMillis
-            }
+        fun getInsertEventIntent(title: String, desc: String, location: String, contactEmail: String): Intent{
+            val startMillis: Long = Calendar.getInstance().timeInMillis
+            val endMillis: Long = startMillis + ONE_HOUR_IN_MILLI;
             val intent: Intent = Intent(Intent.ACTION_INSERT)
                 .setData(CalendarContract.Events.CONTENT_URI)
                 .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, startMillis)
                 .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, endMillis)
-                .putExtra(CalendarContract.Events.TITLE, "Yoga")
-                .putExtra(CalendarContract.Events.DESCRIPTION, "Group class")
-                .putExtra(CalendarContract.Events.EVENT_LOCATION, "The gym")
+                .putExtra(CalendarContract.Events.TITLE, title)
+                .putExtra(CalendarContract.Events.DESCRIPTION, desc)
+                .putExtra(CalendarContract.Events.EVENT_LOCATION, location)
                 .putExtra(
                     CalendarContract.Events.AVAILABILITY,
                     CalendarContract.Events.AVAILABILITY_BUSY
                 )
-                .putExtra(Intent.EXTRA_EMAIL, "rowan@example.com,trevor@example.com")
-            return intent;
+                .putExtra(Intent.EXTRA_EMAIL, contactEmail)
+            return intent
         }
 
         @RequiresApi(Build.VERSION_CODES.N)
@@ -79,6 +75,4 @@ class CalendarUtil{
             return eventID
         }
     }
-
-
 }
