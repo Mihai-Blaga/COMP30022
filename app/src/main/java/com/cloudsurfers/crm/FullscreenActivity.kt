@@ -99,81 +99,18 @@ class FullscreenActivity : AppCompatActivity() {
 
         //Interacting with the first button (testing contact functionality)
         loadBtn.setOnClickListener {
+            val contact = Contact.readContact("", this)
 
-            // A "projection" defines the columns that will be returned for each row
-            val mProjection: Array<String> = arrayOf(
-                ContactsContract.Data.RAW_CONTACT_ID,    // Contract class constant for the _ID column name
-                ContactsContract.Data.MIMETYPE,
-                ContactsContract.Data.DATA1
-            )
+            var txt1Str = contact.name
+            var txt2Str = contact.phone
+            var txt3Str = contact.email
+            var txt4Str = contact.note
 
-            if (this.checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED){
-                val requestCode = 1;
-                this.requestPermissions(arrayOf(Manifest.permission.READ_CONTACTS), requestCode)
-            }
+            txt1.setText(txt1Str)
+            txt2.setText(txt2Str)
+            txt3.setText(txt3Str)
+            txt4.setText(txt4Str)
 
-            val mCursor = contentResolver.query(
-                ContactsContract.Data.CONTENT_URI,
-                mProjection,
-                null,
-                emptyArray<String>(),
-                null
-            )
-
-            // Some providers return null if an error occurs, others throw an exception
-            when (mCursor?.count) {
-                null -> {
-                    val errormsg = "Error connecting to contacts"
-                    txt1.setText(errormsg)
-                    /*
-                     * Insert code here to handle the error. Be sure not to use the cursor!
-                     * You may want to call android.util.Log.e() to log this error.
-                     *
-                     */
-                }
-                0 -> {
-                    val errormsg = "Contact not found"
-                    txt1.setText(errormsg)
-                    /*
-                     * Insert code here to notify the user that the search was unsuccessful. This isn't
-                     * necessarily an error. You may want to offer the user the option to insert a new
-                     * row, or re-type the search term.
-                     */
-                }
-                else -> {
-                    mCursor.moveToFirst()
-
-                    var email = ""
-                    var name = ""
-                    var phone = ""
-                    var note = ""
-
-                    for (i in 0..mCursor.count - 1){
-                        mCursor.moveToPosition(i)
-                        when(mCursor.getString(1)) {
-                            ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE ->
-                                phone = mCursor.getString(2) ?: "Phone not found"
-                            ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE ->
-                                email = mCursor.getString(2) ?: "Email not found"
-                            ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE ->
-                                name = mCursor.getString(2) ?: "Name not found"
-                            ContactsContract.CommonDataKinds.Note.CONTENT_ITEM_TYPE ->
-                                note = mCursor.getString(2) ?: "Note not found"
-                        }
-                    }
-
-                    var txt1Str = name
-                    var txt2Str = phone
-                    var txt3Str = email
-                    var txt4Str = note
-
-                    txt1.setText(txt1Str)
-                    txt2.setText(txt2Str)
-                    txt3.setText(txt3Str)
-                    txt4.setText(txt4Str)
-                    // Insert code here to do something with the results
-                }
-            }
         }
     }
 
