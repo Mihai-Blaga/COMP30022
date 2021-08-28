@@ -24,6 +24,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class DisplayEvents extends AppCompatActivity implements View.OnClickListener {
@@ -72,84 +73,32 @@ public class DisplayEvents extends AppCompatActivity implements View.OnClickList
                     return;
                 }
 
-
-                // Build and execute the query
-                long now = System.currentTimeMillis();
-                Uri.Builder builder = Uri.parse("content://com.android.calendar/instances/when").buildUpon();
-                ContentUris.appendId(builder, now);
-                ContentUris.appendId(builder, now + DateUtils.DAY_IN_MILLIS * 7);
-                calendarCursor = getContentResolver().query(
-                        builder.build(),
-                        null,
-                        null,
-                        null,
-                        CalendarContract.Events.DTSTART+" ASC"
-                );
-
-                System.out.println("Got events : "+String.valueOf(
-                        calendarCursor.getCount()
-                ));
-                Calendar nowTime = Calendar.getInstance();
-                nowTime.setTimeInMillis(now);
-                System.out.println(String.format(
-                        " Current Time : %d/%d/%d - %d:%d",
-                        nowTime.get(Calendar.DAY_OF_MONTH),
-                        nowTime.get(Calendar.MONTH)+1, // Jan is month 0
-                        nowTime.get(Calendar.YEAR),
-                        nowTime.get(Calendar.HOUR_OF_DAY),
-                        nowTime.get(Calendar.MINUTE)
-                ));
+                ArrayList<Meeting> meetings = Meeting.fetchAllMeetings(this);
 
                 // iterate through and output all the results in a table
                 TableLayout eventTable = (TableLayout)findViewById(R.id.eventsTable);
                 eventTable.setStretchAllColumns(true);
                 eventTable.bringToFront();
-                while(calendarCursor.moveToNext()){
-                    if (calendarCursor!=null){
-                        int id_start = calendarCursor.getColumnIndex(CalendarContract.Events.DTSTART);
-                        int id_title = calendarCursor.getColumnIndex(CalendarContract.Events.TITLE);
-                        int id_desc = calendarCursor.getColumnIndex(CalendarContract.Events.DESCRIPTION);
-                        int id_location = calendarCursor.getColumnIndex(CalendarContract.Events.EVENT_LOCATION);
 
-                        String beginTime = calendarCursor.getString(id_start);
-                        Calendar beginCalendarObject = Calendar.getInstance();
-                        beginCalendarObject.setTimeInMillis(Long.parseLong(beginTime));
-
-                        String title = calendarCursor.getString(id_title);
-                        String description = calendarCursor.getString(id_desc);
-                        String location = calendarCursor.getString(id_location);
-
-                        System.out.println(title+","+description+","+location);
-
-                        TableRow tr =  new TableRow(this);
-                        tr.setLayoutParams(new TableLayout.LayoutParams(
-                                TableLayout.LayoutParams.MATCH_PARENT,
-                                TableLayout.LayoutParams.WRAP_CONTENT));
-                        TextView c1 = new TextView(this);
-                        c1.setText(String.format(
-                                "%d/%d/%d - %d:%d",
-                                    beginCalendarObject.get(Calendar.DAY_OF_MONTH),
-                                    beginCalendarObject.get(Calendar.MONTH)+1,
-                                    beginCalendarObject.get(Calendar.YEAR),
-                                    beginCalendarObject.get(Calendar.HOUR_OF_DAY),
-                                    beginCalendarObject.get(Calendar.MINUTE)
-                                ));
-
-                        TextView c2 = new TextView(this);
-                        c2.setText(title);
-                        TextView c3 = new TextView(this);
-                        c3.setLayoutParams(new TableRow.LayoutParams(
-                                TableLayout.LayoutParams.MATCH_PARENT,
-                                TableLayout.LayoutParams.WRAP_CONTENT));
-                        c3.setText(description);
-                        tr.addView(c1);
-                        tr.addView(c2);
-                        tr.addView(c3);
-                        eventTable.addView(tr);
-                    }
-                    else{
-                        Toast.makeText(this,"Events are over!",Toast.LENGTH_SHORT).show();
-                    }
+                for (Meeting meeting:
+                     meetings) {
+                    TableRow tr =  new TableRow(this);
+                    tr.setLayoutParams(new TableLayout.LayoutParams(
+                            TableLayout.LayoutParams.MATCH_PARENT,
+                            TableLayout.LayoutParams.WRAP_CONTENT));
+                    TextView c1 = new TextView(this);
+                    c1.setText(meeting.getMeetingTime());
+                    TextView c2 = new TextView(this);
+                    c2.setText(meeting.getTitle());
+                    TextView c3 = new TextView(this);
+                    c3.setLayoutParams(new TableRow.LayoutParams(
+                            TableLayout.LayoutParams.MATCH_PARENT,
+                            TableLayout.LayoutParams.WRAP_CONTENT));
+                    c3.setText(meeting.getDescription());
+                    tr.addView(c1);
+                    tr.addView(c2);
+                    tr.addView(c3);
+                    eventTable.addView(tr);
                 }
 
                 break;
