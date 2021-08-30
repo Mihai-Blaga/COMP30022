@@ -96,7 +96,7 @@ public class Meeting{
         // Build and execute the query
         long now = System.currentTimeMillis();
         Uri.Builder builder = CalendarContract.Instances.CONTENT_URI.buildUpon();
-        ContentUris.appendId(builder, now);
+        ContentUris.appendId(builder, now - DateUtils.DAY_IN_MILLIS*100);
         ContentUris.appendId(builder, now + DateUtils.DAY_IN_MILLIS * 100);
         calendarCursor = context.getContentResolver().query(
                 builder.build(),
