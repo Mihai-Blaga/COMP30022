@@ -10,6 +10,7 @@ import android.net.Uri
 import android.os.Build
 import android.provider.CalendarContract
 import androidx.annotation.RequiresApi
+import java.util.*
 
 
 class CalendarUtil{
@@ -17,7 +18,7 @@ class CalendarUtil{
         private const val ONE_HOUR_IN_MILLI : Long = 60 * 60 * 1000;
 
         @RequiresApi(Build.VERSION_CODES.N)
-        fun getInsertEventIntent(title: String, desc: String, location: String, contactEmail: String): Intent{
+        fun getInsertEventIntent(title: String, contactEmail: String, location: String, time: Date,  desc: String): Intent{
             val startMillis: Long = Calendar.getInstance().timeInMillis
             val endMillis: Long = startMillis + ONE_HOUR_IN_MILLI;
             val intent: Intent = Intent(Intent.ACTION_INSERT)
