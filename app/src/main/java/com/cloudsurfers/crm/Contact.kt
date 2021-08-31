@@ -80,22 +80,27 @@ class Contact(){
                 else -> {
                     mCursor.moveToFirst()
 
-                    var email = ""
-                    var name = ""
-                    var phone = ""
-                    var note = ""
-
-                    for (i in 0..mCursor.count - 1) {
+                    for (i in 0 until mCursor.count) {
                         mCursor.moveToPosition(i)
+
+                        var c: Contact?
+                        if (tempMap.containsKey(mCursor.getString(0))){
+                            c = tempMap[mCursor.getString(0)]
+                        } else {
+                            c = Contact()
+                            tempMap[mCursor.getString(0)] = c
+                        }
+
+
                         when (mCursor.getString(1)) {
                             ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE ->
-                                phone = mCursor.getString(2) ?: "Phone not found"
+                                c?.phone = mCursor.getString(2) ?: "Phone not found"
                             ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE ->
-                                email = mCursor.getString(2) ?: "Email not found"
+                                c?.email = mCursor.getString(2) ?: "Email not found"
                             ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE ->
-                                name = mCursor.getString(2) ?: "Name not found"
+                                c?.name = mCursor.getString(2) ?: "Name not found"
                             ContactsContract.CommonDataKinds.Note.CONTENT_ITEM_TYPE ->
-                                note = mCursor.getString(2) ?: "Note not found"
+                                c?.note = mCursor.getString(2) ?: "Note not found"
                         }
                     }
                 }

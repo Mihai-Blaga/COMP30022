@@ -99,12 +99,22 @@ class FullscreenActivity : AppCompatActivity() {
 
         //Interacting with the first button (testing contact functionality)
         loadBtn.setOnClickListener {
-            val contact = Contact.readContact("", this)
+            val contactList = Contact.readContacts(this)
 
-            var txt1Str = contact.name
-            var txt2Str = contact.phone
-            var txt3Str = contact.email
-            var txt4Str = contact.note
+            var txt1Str = ""
+            var txt2Str = ""
+            var txt3Str = ""
+            var txt4Str = ""
+
+
+            if (contactList != null) {
+                for (c in contactList){
+                    txt1Str += c.name + ", "
+                    txt2Str += c.phone + ", "
+                    txt3Str += c.email + ", "
+                    txt4Str += c.note + ", "
+                }
+            }
 
             txt1.setText(txt1Str)
             txt2.setText(txt2Str)
