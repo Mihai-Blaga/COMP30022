@@ -1,15 +1,10 @@
 package com.cloudsurfers.crm
 
-import android.Manifest
 import androidx.appcompat.app.AppCompatActivity
 import android.annotation.SuppressLint
-import android.content.pm.PackageManager
-import android.database.Cursor
-import android.database.DatabaseUtils
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
-import android.provider.ContactsContract
 import android.view.MotionEvent
 import android.view.View
 import android.widget.*
@@ -53,16 +48,19 @@ class ViewContactActivity : AppCompatActivity() {
 
         isFullscreen = true
 
-        val name_txt = findViewById<EditText>(R.id.name_text)
-        val mobile_text = findViewById<EditText>(R.id.mobile_text)
-        val email_text = findViewById<EditText>(R.id.email_text)
-        val notes_text = findViewById<EditText>(R.id.notes_text)
+        val nameTxt = findViewById<EditText>(R.id.name_text)
+        val mobileTxt = findViewById<EditText>(R.id.mobile_text)
+        val emailTxt = findViewById<EditText>(R.id.email_text)
+        val notesTxt = findViewById<EditText>(R.id.notes_text)
 
-        val contact = Contact.readContact("", this)
-        name_txt.setText(contact.name)
-        mobile_text.setText(contact.phone)
-        email_text.setText(contact.email)
-        notes_text.setText(contact.note)
+        //TODO: pass URIs between activities
+        val contactList = Contact.readContacts(this)
+        val contact = Contact.readContact(contactList!!.get(0), this)
+
+        nameTxt.setText(contact.name)
+        mobileTxt.setText(contact.phone)
+        emailTxt.setText(contact.email)
+        notesTxt.setText(contact.note)
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
