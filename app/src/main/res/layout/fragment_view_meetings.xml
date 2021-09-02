@@ -8,40 +8,37 @@ tools:context=".ViewMeetingsFragment">
 
 
 
-<Button
-    android:id="@+id/button"
-    style="@style/MeetingsButtons"
-    android:layout_marginStart="16dp"
-    android:layout_marginBottom="16dp"
-    android:text="@string/meetings_create_meeting_button"
-    app:cornerRadius="30dp"
-    app:icon="@drawable/ic_baseline_add_24"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintStart_toStartOf="parent" />
+    <Button
+        android:id="@+id/button"
+        style="@style/MeetingsButtons"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="16dp"
+        android:text="@string/meetings_create_meeting_button"
+        app:cornerRadius="30dp"
+        app:icon="@drawable/ic_baseline_add_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-<Button
-    android:id="@+id/button5"
-    style="@style/MeetingsButtons"
+    <Button
+        android:id="@+id/button5"
+        style="@style/MeetingsButtons"
 
-    android:layout_marginEnd="16dp"
-    android:layout_marginBottom="16dp"
-    android:text="@string/meetings_open_calendar_button"
-    app:cornerRadius="30dp"
-    app:icon="@drawable/ic_baseline_calendar_today_24"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"></Button>
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:text="@string/meetings_open_calendar_button"
+        app:cornerRadius="30dp"
+        app:icon="@drawable/ic_baseline_calendar_today_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
-<androidx.recyclerview.widget.RecyclerView
-    android:id="@+id/view_meetings_list_recycler_view"
-    android:layout_width="409dp"
-    android:layout_height="544dp"
-    android:layout_marginBottom="16dp"
-    app:layout_constraintBottom_toTopOf="@+id/button"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintHorizontal_bias="0.0"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintVertical_bias="0.0">
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/view_meetings_list_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-</androidx.recyclerview.widget.RecyclerView>
+    </androidx.recyclerview.widget.RecyclerView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

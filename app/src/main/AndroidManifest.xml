@@ -22,15 +22,16 @@
         <activity
             android:name=".AddMeetingActivity"
             android:theme="@style/Theme.CRM.Fullscreen"
+            android:exported="true"
             />
         <activity
             android:name=".ViewContactActivity"
             android:exported="true" />
         <activity
-            android:name=".FullscreenActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/Theme.CRM.Fullscreen">
+            android:theme="@style/Theme.CRM"
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

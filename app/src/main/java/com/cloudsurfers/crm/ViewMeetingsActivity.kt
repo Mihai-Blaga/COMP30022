@@ -18,12 +18,7 @@ class ViewMeetingsActivity : AppCompatActivity() {
         testStrings.add("Phil Yang")
         testStrings.add("Eren Jaeger")
         testStrings.add("Joe Mama")
-        val viewMeetingsAdapter = ViewMeetingsAdapter(testStrings.toTypedArray())
-        val recyclerView: RecyclerView = findViewById(R.id.view_meetings_list_recycler_view)
 
-        recyclerView.adapter = viewMeetingsAdapter
-
-        recyclerView.layoutManager = LinearLayoutManager(this)
     }
 }
 

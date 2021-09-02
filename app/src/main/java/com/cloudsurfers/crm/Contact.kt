@@ -7,9 +7,6 @@ import android.os.Build
 import android.provider.ContactsContract
 import androidx.annotation.RequiresApi
 import android.net.Uri
-import android.provider.ContactsContract.CommonDataKinds.Phone
-
-
 
 
 /** Helper class to store all the relevant contact information so that it can be passed between
@@ -102,7 +99,7 @@ class Contact(){
 
         //Queries for contact information using the lookup uri and last known id of said contact.
         @RequiresApi(Build.VERSION_CODES.M)
-        fun readContact(c: Contact, activity: Activity): Contact{
+        fun readContact(c: Contact, activity: Activity): Contact {
             checkPermissions(activity)
 
             //TODO: check for empty c.id and c.uri
