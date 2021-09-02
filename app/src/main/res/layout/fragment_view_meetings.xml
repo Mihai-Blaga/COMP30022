@@ -9,7 +9,7 @@ tools:context=".ViewMeetingsFragment">
 
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/addMeetingButton"
         style="@style/MeetingsButtons"
         android:layout_marginStart="16dp"
         android:layout_marginBottom="16dp"

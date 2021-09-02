@@ -98,11 +98,11 @@ class FullscreenActivity : AppCompatActivity() {
 //            val intent = CalendarUtil.getViewEventIntent(eventId)
 //            startActivity(intent)
 //        }
-        binding.button2.text = "Go to Add Meeting page"
-        binding.button2.setOnClickListener() {
-            val intent = Intent(this, AddMeetingActivity::class.java)
-            startActivity(intent)
-        }
+//        binding.button2.text = "Go to Add Meeting page"
+//        binding.button2.setOnClickListener() {
+//            val intent = Intent(this, AddMeetingActivity::class.java)
+//            startActivity(intent)
+//        }
 
 
 //         // --------------- Do not delete ---------------

@@ -20,11 +20,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CRM">
         <activity
-            android:name=".AddMeetingActivity"
-            android:theme="@style/Theme.CRM.Fullscreen"
-            android:exported="true"
-            />
-        <activity
             android:name=".ViewContactActivity"
             android:exported="true" />
         <activity

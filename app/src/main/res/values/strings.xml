@@ -28,7 +28,8 @@
     <string name="add_new_contact_button_text">Save</string>
     <string name="new_meeting_contact_text">Contact</string>
     <string name="new_meeting_name_text">Name</string>
-    <string name="new_meeting_date_text">Date/time</string>
+    <string name="new_meeting_date_text">Date</string>
+    <string name="new_meeting_time_text">Time</string>
     <string name="new_meeting_location_text">Location</string>
     <string name="new_meeting_notes_text">Notes</string>
     <string name="add_new_meeting_button_text">Save</string>

@@ -18,8 +18,8 @@ class CalendarUtil{
         private const val ONE_HOUR_IN_MILLI : Long = 60 * 60 * 1000;
 
         @RequiresApi(Build.VERSION_CODES.N)
-        fun getInsertEventIntent(title: String, contactEmail: String, location: String, time: Date,  desc: String): Intent{
-            val startMillis: Long = Calendar.getInstance().timeInMillis
+        fun getInsertEventIntent(title: String, contactEmail: String, location: String, dateTime: Calendar,  desc: String): Intent{
+            val startMillis: Long = dateTime.timeInMillis
             val endMillis: Long = startMillis + ONE_HOUR_IN_MILLI;
             val intent: Intent = Intent(Intent.ACTION_INSERT)
                 .setData(CalendarContract.Events.CONTENT_URI)
