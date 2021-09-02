@@ -95,9 +95,7 @@ public class Meeting{
 
         // Build and execute the query
         long now = System.currentTimeMillis();
-        Uri.Builder builder = CalendarContract.Instances.CONTENT_URI.buildUpon();
-        ContentUris.appendId(builder, now - DateUtils.DAY_IN_MILLIS*100);
-        ContentUris.appendId(builder, now + DateUtils.DAY_IN_MILLIS * 100);
+        Uri.Builder builder = CalendarContract.Events.CONTENT_URI.buildUpon();
         calendarCursor = context.getContentResolver().query(
                 builder.build(),
                 new String[]{
@@ -176,5 +174,18 @@ public class Meeting{
 
     public String getTitle() {
         return title;
+    }
+
+    @Override
+    public String toString() {
+        return "Meeting{" +
+                "beginDate=" + beginDate +
+                ", endDate=" + endDate +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", contactName='" + contactName + '\'' +
+                ", contactEmail='" + contactEmail + '\'' +
+                ", eventID='" + eventID + '\'' +
+                '}';
     }
 }
