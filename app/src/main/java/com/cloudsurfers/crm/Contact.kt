@@ -2,13 +2,15 @@ package com.cloudsurfers.crm
 
 import android.Manifest
 import android.app.Activity
-import android.content.ContentUris
 import android.content.pm.PackageManager
 import android.os.Build
 import android.provider.ContactsContract
 import androidx.annotation.RequiresApi
-import kotlinx.serialization.Serializable
 import android.net.Uri
+import android.provider.ContactsContract.CommonDataKinds.Phone
+
+
+
 
 /** Helper class to store all the relevant contact information so that it can be passed between
  * components of the App without need of parsing the cursors multiple times.
@@ -155,8 +157,41 @@ class Contact(){
             return c
         }
 
-        fun readContactFromEmail(email: String, activity: Activity): Contact{
+        fun readContactFromEmail(email: String = "alex@example.com", activity: Activity): Contact {
             var c = Contact()
+
+            val selectionClause = "${ContactsContract.Data.DATA1} = ?"
+            val selectionArgs = arrayOf(email)
+
+            val mProjection: Array<String> = arrayOf(
+                ContactsContract.Data.RAW_CONTACT_ID,    // Contract class constant for the _ID column name
+                ContactsContract.Data.MIMETYPE,
+                ContactsContract.Data.DATA1,
+                ContactsContract.Contacts.LOOKUP_KEY
+            )
+
+            val mCursor = activity.contentResolver.query(
+                ContactsContract.Data.CONTENT_URI,
+                mProjection,
+                selectionClause,
+                selectionArgs,
+                null
+            )
+
+            when (mCursor?.count){
+                null -> {}
+                //TODO: let user know that no contact with this email was found
+                0 -> {}
+                else -> {
+                    mCursor.moveToPosition(0)
+
+                    c.id = mCursor.getString(0)
+                    c.email = mCursor.getString(2)
+                    c.uri = mCursor.getString(3)
+                }
+            }
+
+            c = readContact(c, activity)
 
             return c
         }
