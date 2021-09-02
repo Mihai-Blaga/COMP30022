@@ -84,6 +84,7 @@ class FullscreenActivity : AppCompatActivity() {
 
 
         val loadBtn = findViewById<Button>(R.id.button1)
+        val emailBtn = findViewById<Button>(R.id.button2)
         val viewBtn = findViewById<Button>(R.id.button4)
 
         val txt1 = findViewById<EditText>(R.id.textField1)
@@ -95,6 +96,16 @@ class FullscreenActivity : AppCompatActivity() {
         viewBtn.setOnClickListener{
             val intent = Intent(this, ViewContactActivity::class.java)
             startActivity(intent)
+        }
+
+        emailBtn.setOnClickListener{
+            var email = txt1.text.toString()
+            val contact = Contact.readContactFromEmail(email = email, activity = this)
+
+            txt1.setText(contact.name)
+            txt2.setText(contact.phone)
+            txt3.setText(contact.email)
+            txt4.setText(contact.note)
         }
 
         //Interacting with the first button (testing contact functionality)
@@ -120,7 +131,6 @@ class FullscreenActivity : AppCompatActivity() {
             txt2.setText(txt2Str)
             txt3.setText(txt3Str)
             txt4.setText(txt4Str)
-
         }
     }
 
