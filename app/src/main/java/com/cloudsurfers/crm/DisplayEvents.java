@@ -82,6 +82,7 @@ public class DisplayEvents extends AppCompatActivity implements View.OnClickList
 
                 for (Meeting meeting:
                      meetings) {
+                    System.out.println(meeting);
                     TableRow tr =  new TableRow(this);
                     tr.setLayoutParams(new TableLayout.LayoutParams(
                             TableLayout.LayoutParams.MATCH_PARENT,
