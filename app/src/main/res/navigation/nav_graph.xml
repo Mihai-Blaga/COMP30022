@@ -18,7 +18,32 @@
         android:id="@+id/viewContactsList"
         android:name="com.cloudsurfers.crm.ViewContactsList"
         android:label="Contacts"
-        tools:layout="@layout/fragment_view_contacts_list" />
+        tools:layout="@layout/fragment_view_contacts_list" >
+        <action
+            android:id="@+id/action_viewContactsList_to_viewContactFragment"
+            app:destination="@id/viewContactFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/viewContactFragment"
+        android:name="com.cloudsurfers.crm.ViewContactFragment"
+        android:label="Contacts"
+        tools:layout="@layout/fragment_view_contact" >
+        <argument
+            android:name="name"
+            app:argType="string"
+            app:nullable="true" />
+        <argument android:name="email"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="mobile"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="notes"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
     <fragment
         android:id="@+id/addMeetingFragment"
         android:name="com.cloudsurfers.crm.AddMeetingFragment"
