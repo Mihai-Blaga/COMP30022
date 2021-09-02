@@ -43,6 +43,14 @@ class CalendarUtil{
         }
 
         @RequiresApi(Build.VERSION_CODES.N)
+        fun getViewCalendarIntent(): Intent{
+            val builder = CalendarContract.CONTENT_URI.buildUpon()
+            builder.appendPath("time")
+            ContentUris.appendId(builder, Calendar.getInstance().timeInMillis)
+            return Intent(Intent.ACTION_VIEW).setData(builder.build())
+        }
+
+        @RequiresApi(Build.VERSION_CODES.N)
         fun addEvent(activity: Activity) : Long {
             if (activity.checkSelfPermission(Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED){
                 val requestCode = 1;

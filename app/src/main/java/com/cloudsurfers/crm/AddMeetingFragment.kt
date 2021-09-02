@@ -44,8 +44,11 @@ class AddMeetingFragment : Fragment() {
 
         val binding = FragmentAddNewMeetingBinding.inflate(layoutInflater, container, false)
 
+        binding.outlinedTextFieldMeetingName.editText?.setText("Someone's Meeting")
+        // Stores the date and time that can be changed by the user
         val cal = Calendar.getInstance()
 
+        // Date and Time Dialog Selectors
         val dateSetListener = DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
             cal.set(Calendar.YEAR, year)
             cal.set(Calendar.MONTH, monthOfYear)
@@ -62,6 +65,7 @@ class AddMeetingFragment : Fragment() {
             binding.outlinedTextFieldMeetingTime.editText?.setText("${hourOfDay}:${minute}")
         }
 
+        // On Click Listeners
         binding.outlinedTextFieldMeetingDate.editText?.setOnClickListener(){
             DatePickerDialog(requireActivity(), dateSetListener,
                 cal.get(Calendar.YEAR),
@@ -85,6 +89,8 @@ class AddMeetingFragment : Fragment() {
             val intent = CalendarUtil.getInsertEventIntent(meetingName, meetingContact, meetingLocation, cal, meetingNotes)
             startActivity(intent)
         }
+
+
         return binding.root;
     }
 

@@ -2,6 +2,7 @@ package com.cloudsurfers.crm
 
 import android.Manifest
 import android.app.Activity
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -70,6 +71,12 @@ class ViewMeetingsFragment : Fragment() {
         val addMeetingButton = view.findViewById<Button>(R.id.addMeetingButton)
         addMeetingButton.setOnClickListener(){
             Navigation.findNavController(view).navigate(R.id.view_meeting_to_add_meeting)
+        }
+
+        val viewMeetingButton = view.findViewById<Button>(R.id.viewCalendarButton)
+        viewMeetingButton.setOnClickListener(){
+            val intent: Intent = CalendarUtil.getViewCalendarIntent()
+            startActivity(intent)
         }
 
         return view
