@@ -1,17 +1,14 @@
 package com.cloudsurfers.crm
 
-import android.Manifest
 import androidx.appcompat.app.AppCompatActivity
 import android.annotation.SuppressLint
-import android.content.pm.PackageManager
-import android.database.Cursor
-import android.database.DatabaseUtils
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
-import android.provider.ContactsContract
 import android.view.MotionEvent
 import android.view.View
 import android.widget.*
+import androidx.annotation.RequiresApi
 
 class ViewContactActivity : AppCompatActivity() {
     private val hideHandler = Handler()
@@ -41,89 +38,29 @@ class ViewContactActivity : AppCompatActivity() {
         false
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        if (this.checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED){
-            val requestCode = 1;
-            this.requestPermissions(arrayOf(Manifest.permission.READ_CONTACTS), requestCode)
-        }
 
         setContentView(R.layout.view_contact)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         isFullscreen = true
 
-        val name_txt = findViewById<EditText>(R.id.name_text)
-        val mobile_text = findViewById<EditText>(R.id.mobile_text)
-        val email_text = findViewById<EditText>(R.id.email_text)
-        val notes_text = findViewById<EditText>(R.id.notes_text)
+        val nameTxt = findViewById<EditText>(R.id.name_text)
+        val mobileTxt = findViewById<EditText>(R.id.mobile_text)
+        val emailTxt = findViewById<EditText>(R.id.email_text)
+        val notesTxt = findViewById<EditText>(R.id.notes_text)
 
+        //TODO: pass URIs between activities
+        val contactList = Contact.readContacts(this)
+        val contact = Contact.readContact(contactList!!.get(0), this)
 
-        // A "projection" defines the columns that will be returned for each row
-        val mProjection: Array<String> = arrayOf(
-            ContactsContract.Data.RAW_CONTACT_ID,    // Contract class constant for the _ID column name
-            ContactsContract.Data.MIMETYPE,
-            ContactsContract.Data.DATA1
-        )
-
-        val mCursor = contentResolver.query(
-            ContactsContract.Data.CONTENT_URI,
-            mProjection,
-            null,
-            emptyArray<String>(),
-            null
-        )
-
-        // Some providers return null if an error occurs, others throw an exception
-        when (mCursor?.count) {
-            null -> {
-                val errormsg = "Error connecting to contacts"
-                name_txt.setText(errormsg)
-                /*
-                 * Insert code here to handle the error. Be sure not to use the cursor!
-                 * You may want to call android.util.Log.e() to log this error.
-                 *
-                 */
-            }
-            0 -> {
-                val errormsg = "Contact not found"
-                name_txt.setText(errormsg)
-                /*
-                 * Insert code here to notify the user that the search was unsuccessful. This isn't
-                 * necessarily an error. You may want to offer the user the option to insert a new
-                 * row, or re-type the search term.
-                 */
-            }
-            else -> {
-                mCursor.moveToFirst()
-
-                var email = ""
-                var name = ""
-                var phone = ""
-                var note = ""
-
-                for (i in 0..mCursor.count - 1){
-                    mCursor.moveToPosition(i)
-                    when(mCursor.getString(1)) {
-                        ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE ->
-                            phone = mCursor.getString(2) ?: "Phone not found"
-                        ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE ->
-                            email = mCursor.getString(2) ?: "Email not found"
-                        ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE ->
-                            name = mCursor.getString(2) ?: "Name not found"
-                        ContactsContract.CommonDataKinds.Note.CONTENT_ITEM_TYPE ->
-                            note = mCursor.getString(2) ?: "Note not found"
-                    }
-                }
-
-                name_txt.setText(name)
-                mobile_text.setText(phone)
-                email_text.setText(email)
-                notes_text.setText(note)
-            }
-        }
+        nameTxt.setText(contact.name)
+        mobileTxt.setText(contact.phone)
+        emailTxt.setText(contact.email)
+        notesTxt.setText(contact.note)
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
