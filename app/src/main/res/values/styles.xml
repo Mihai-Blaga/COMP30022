@@ -23,6 +23,7 @@
     <style name="TopAppBarStyle">
         <item name="android:background">@color/matte_black</item>
         <item name="android:titleTextStyle">@style/TitleTextAppearance</item>
+        <item name="android:navigationIcon">@drawable/ic_back</item>
     </style>
 
     <style name="MeetingsButtons">
@@ -31,6 +32,10 @@
         <item name="android:textSize">10dp</item>
 <!--        <item name="android:textColor">@color/matte_black</item>-->
 <!--        <item name="android:iconTint">@color/matte_black</item>-->
+    </style>
+
+    <style name="MeetingsListItemsText">
+        <item name="android:textColor">@color/light_white</item>
     </style>
 
 </resources>

@@ -3,6 +3,7 @@ package com.cloudsurfers.crm
 import android.Manifest
 import androidx.appcompat.app.AppCompatActivity
 import android.annotation.SuppressLint
+
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -83,6 +84,14 @@ class FullscreenActivity : AppCompatActivity() {
         findViewById<Button>(R.id.button1).setOnTouchListener(delayHideTouchListener)
 
 
+//         // --------------- Do not delete ---------------
+//         var emailButton = findViewById<Button>(R.id.button2)
+//         emailButton.setOnClickListener {
+//             val intent = Intent(this, ComposeEmail::class.java)
+//             startActivity(intent)
+//         }
+//         // ---------------------------------------------
+
         val loadBtn = findViewById<Button>(R.id.button1)
         val emailBtn = findViewById<Button>(R.id.button2)
         val viewBtn = findViewById<Button>(R.id.button4)
@@ -94,6 +103,7 @@ class FullscreenActivity : AppCompatActivity() {
 
 
         viewBtn.setOnClickListener{
+//            val intent = Intent(this, ViewContactActivity::class.java)
             val intent = Intent(this, ViewContactActivity::class.java)
             startActivity(intent)
         }
@@ -141,6 +151,11 @@ class FullscreenActivity : AppCompatActivity() {
         // created, to briefly hint to the user that UI controls
         // are available.
         delayedHide(100)
+    }
+
+    private fun emailPage() {
+        val i = Intent(this, ComposeEmail::class.java)
+        startActivity(i)
     }
 
     private fun toggle() {
@@ -202,4 +217,5 @@ class FullscreenActivity : AppCompatActivity() {
          */
         private const val UI_ANIMATION_DELAY = 300
     }
+
 }
