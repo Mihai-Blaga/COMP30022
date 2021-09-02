@@ -154,6 +154,13 @@ class Contact(){
             mCursor?.close()
             return c
         }
+
+        fun readContactFromEmail(email: String, activity: Activity): Contact{
+            var c = Contact()
+
+            return c
+        }
+
     }
 
 }
