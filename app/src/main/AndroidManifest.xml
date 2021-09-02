@@ -30,7 +30,6 @@
         <activity
             android:name=".ViewMeetingsActivity"
             android:exported="true">
-
         </activity>
         <activity
             android:name=".ViewContactActivity"

@@ -2,6 +2,7 @@
     <string name="app_name">CRM</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="input">Input</string>
     <string name="button_1">Load Contact </string>
     <string name="button_2">Button 2 </string>
     <string name="button_3">Button 3 </string>
