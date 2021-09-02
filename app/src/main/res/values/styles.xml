@@ -23,6 +23,7 @@
     <style name="TopAppBarStyle">
         <item name="android:background">@color/matte_black</item>
         <item name="android:titleTextStyle">@style/TitleTextAppearance</item>
+        <item name="android:navigationIcon">@drawable/ic_back</item>
     </style>
 
     <style name="MeetingsButtons">

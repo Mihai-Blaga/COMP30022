@@ -34,6 +34,13 @@
     <string name="view_meetings_list_item_contact_name_default_text">Drake</string>
     <string name="view_meetings_list_item_meeting_name_default_text">Recording Session</string>
     <string name="view_meetings_list_item_meeting_time_default_text">1-3pm</string>
+    <string name="view_meetings_list_item_overflow_buttons_content_description">Overflow button</string>
     <string name="fetch_events">Fetch Events</string>
     <string name="dummytext">DummyText</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
 </resources>
