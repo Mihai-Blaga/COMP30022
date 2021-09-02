@@ -126,16 +126,6 @@
     </com.google.android.material.textfield.TextInputLayout>
 
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_navigation"
-        style="@style/BottomNavBarStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:itemIconTint="?android:attr/textColorPrimary"
-        app:itemTextColor="?android:attr/textColorPrimary"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:menu="@menu/bottom_navigation_menu" />
-
     <Button
         android:id="@+id/button7"
         android:layout_width="wrap_content"

@@ -23,14 +23,4 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_navigation"
-        style="@style/BottomNavBarStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:itemIconTint="?android:attr/textColorPrimary"
-        app:itemTextColor="?android:attr/textColorPrimary"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:menu="@menu/bottom_navigation_menu" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>
