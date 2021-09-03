@@ -1,10 +1,12 @@
 package com.cloudsurfers.crm
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 
 // TODO: Rename parameter arguments, choose names that match
@@ -42,8 +44,13 @@ class ViewContactFragment : Fragment() {
 
         // Inflate the layout for this fragment
         requireActivity().findViewById<com.google.android.material.appbar.MaterialToolbar>(R.id.toolbar).title = name
-
-        return inflater.inflate(R.layout.fragment_view_contact, container, false)
+        val view = inflater.inflate(R.layout.fragment_view_contact, container, false)
+        val sendEmailButton = view.findViewById<Button>(R.id.view_contact_send_email_button)
+        sendEmailButton.setOnClickListener(){
+            val intent: Intent = ComposeEmail.getSendEmailIntent(email!!)
+            startActivity(Intent.createChooser(intent, "Send mail using..."))
+        }
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -53,6 +60,8 @@ class ViewContactFragment : Fragment() {
         view.findViewById<TextView>(R.id.view_contact_email_text).text = email
         view.findViewById<TextView>(R.id.view_contact_mobile_text).text = mobile
         view.findViewById<TextView>(R.id.view_contact_notes_text).text = notes
+
+
     }
 
     companion object {

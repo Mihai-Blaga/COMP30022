@@ -75,7 +75,7 @@ class ViewMeetingsFragment : Fragment() {
 
         val viewMeetingButton = view.findViewById<Button>(R.id.viewCalendarButton)
         viewMeetingButton.setOnClickListener(){
-            val intent: Intent = CalendarUtil.getViewCalendarIntent()
+        val intent: Intent = CalendarUtil.getViewCalendarIntent()
             startActivity(intent)
         }
 
