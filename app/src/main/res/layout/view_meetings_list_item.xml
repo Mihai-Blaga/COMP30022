@@ -4,7 +4,11 @@
     android:layout_width="match_parent"
     android:layout_marginStart="16dp"
     android:layout_height="@dimen/view_meetings_list_item_height"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:background="?android:selectableItemBackground">
 
     <TextView
         android:id="@+id/view_meetings_list_item_contact_name_text_view"
@@ -16,7 +20,7 @@
 
     <TextView
         android:id="@+id/view_meetings_list_item_meeting_name_text_view"
-        android:layout_width="200dp"
+        android:layout_width="130dp"
         android:layout_height="match_parent"
         android:gravity="center_vertical"
         android:text="@string/view_meetings_list_item_meeting_name_default_text"
@@ -24,7 +28,7 @@
 
     <TextView
         android:id="@+id/view_meetings_list_item_meeting_time_text_view"
-        android:layout_width="60dp"
+        android:layout_width="130dp"
         android:layout_height="match_parent"
         android:gravity="center_vertical"
         android:text="@string/view_meetings_list_item_meeting_time_default_text"

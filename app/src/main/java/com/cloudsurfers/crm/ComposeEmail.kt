@@ -1,13 +1,18 @@
 package com.cloudsurfers.crm
 
+import android.content.ContentUris
 import android.net.Uri
 import android.os.Bundle
 import android.content.Intent
+import android.icu.util.Calendar
+import android.os.Build
+import android.provider.CalendarContract
 import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import java.lang.Exception
 
@@ -19,19 +24,23 @@ class ComposeEmail : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_email)
 
-        val sendEmailBtn= findViewById<Button>(R.id.button2)
-        sendEmailBtn.setOnClickListener {
-            sendEmail()
-        }
+//        val sendEmailBtn= findViewById<Button>(R.id.button2)
+//        sendEmailBtn.setOnClickListener {
+//            sendEmail()
+//        }
     }
 
-    private fun sendEmail() { // maybe pass in these values (to,cc,subject,text) in the function definition
+
+
+    private fun sendEmail(address: String) { // maybe pass in these values (to,cc,subject,text) in the function definition
 
         // Parsing the email's text fields
         // TODO: Change these values to the correct fields in the MVP
-        val subject = findViewById<EditText>(R.id.editTextTextPersonName).text.toString()
-        val message = findViewById<EditText>(R.id.editTextTextPersonName4).text
-        val address: Array<String> = arrayOf(findViewById<EditText>(R.id.editTextTextPersonName2).text.toString())
+//        val subject = findViewById<EditText>(R.id.editTextTextPersonName).text.toString()
+//        val message = findViewById<EditText>(R.id.editTextTextPersonName4).text
+        val subject = ""
+        val message = ""
+//        val address: Array<String> = arrayOf(findViewById<EditText>(R.id.editTextTextPersonName2).text.toString())
         // TODO: consider CCs and BCCs, attachments
 
         Log.i("Send email", "")
@@ -58,7 +67,27 @@ class ComposeEmail : AppCompatActivity() {
     }
 
     fun buttonOnClick(v: View) {
-        sendEmail()
+//        sendEmail()
     }
 
+    companion object {
+        fun getSendEmailIntent(address: String): Intent {
+            val subject = ""
+            val message = ""
+
+            Log.i("Send email", "")
+            // val to:Array<String> = arrayOf("cloud.surf.dev@gmail.com") // get these from the contacts page, or lke a  selection box??
+            // val cc:Array<String> = arrayOf("apples")
+            val emailIntent = Intent(Intent.ACTION_SEND)
+
+            // Configuring the message
+            emailIntent.data = Uri.parse("mailto:")
+            emailIntent.type = "message/rfc822"
+            emailIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf(address))
+            emailIntent.putExtra(Intent.EXTRA_SUBJECT, subject)
+            emailIntent.putExtra(Intent.EXTRA_TEXT, message)
+
+            return emailIntent
+        }
+    }
 }

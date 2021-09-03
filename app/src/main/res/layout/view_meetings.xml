@@ -25,7 +25,7 @@
 
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/addMeetingButton"
         style="@style/MeetingsButtons"
         android:layout_marginStart="16dp"
         android:layout_marginBottom="16dp"
@@ -36,7 +36,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/button5"
+        android:id="@+id/viewCalendarButton"
         style="@style/MeetingsButtons"
 
         android:layout_marginEnd="16dp"
@@ -52,7 +52,7 @@
         android:layout_width="409dp"
         android:layout_height="544dp"
         android:layout_marginBottom="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/button"
+        app:layout_constraintBottom_toTopOf="@+id/addMeetingButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"

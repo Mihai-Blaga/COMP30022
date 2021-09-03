@@ -1,10 +1,21 @@
 package com.cloudsurfers.crm
 
+import android.Manifest
+import android.app.Activity
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import androidx.annotation.RequiresApi
+import androidx.navigation.Navigation
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import java.util.ArrayList
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -29,12 +40,46 @@ class ViewMeetingsFragment : Fragment() {
         }
     }
 
+
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_view_meetings, container, false)
+        val requestCode = 1
+        requestPermissions(arrayOf(Manifest.permission.READ_CALENDAR), requestCode)
+        val view: View = inflater.inflate(R.layout.fragment_view_meetings, container, false)
+
+        val activity: Activity = activity as Activity
+//        println("before")
+//        println(Meeting.fetchAllMeetings(activity))
+//        println("after")
+//        println("before contacts")
+//        println(Contact.readContacts(activity))
+//        println("after contacts")
+        val meetingsList: ArrayList<Meeting> = Meeting.fetchAllMeetings(activity) as ArrayList<Meeting>
+
+
+
+
+        view.findViewById<RecyclerView>(R.id.view_meetings_list_recycler_view).apply {
+            adapter = ViewMeetingsAdapter(meetingsList)
+            layoutManager = LinearLayoutManager(activity)
+        }
+
+        val addMeetingButton = view.findViewById<Button>(R.id.addMeetingButton)
+        addMeetingButton.setOnClickListener(){
+            Navigation.findNavController(view).navigate(R.id.view_meeting_to_add_meeting)
+        }
+
+        val viewMeetingButton = view.findViewById<Button>(R.id.viewCalendarButton)
+        viewMeetingButton.setOnClickListener(){
+        val intent: Intent = CalendarUtil.getViewCalendarIntent()
+            startActivity(intent)
+        }
+
+        return view
     }
 
     companion object {

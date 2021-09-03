@@ -28,7 +28,8 @@
     <string name="add_new_contact_button_text">Save</string>
     <string name="new_meeting_contact_text">Contact</string>
     <string name="new_meeting_name_text">Name</string>
-    <string name="new_meeting_date_text">Date/time</string>
+    <string name="new_meeting_date_text">Date</string>
+    <string name="new_meeting_time_text">Time</string>
     <string name="new_meeting_location_text">Location</string>
     <string name="new_meeting_notes_text">Notes</string>
     <string name="add_new_meeting_button_text">Save</string>
@@ -36,6 +37,7 @@
     <string name="view_meetings_list_item_meeting_name_default_text">Recording Session</string>
     <string name="view_meetings_list_item_meeting_time_default_text">1-3pm</string>
     <string name="view_meetings_list_item_overflow_buttons_content_description">Overflow button</string>
+    <string name="view_contact_send_email_button_txt">Send Email</string>
     <string name="fetch_events">Fetch Events</string>
     <string name="dummytext">DummyText</string>
     <!-- TODO: Remove or change this placeholder text -->
