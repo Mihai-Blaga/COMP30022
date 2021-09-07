@@ -1,6 +1,8 @@
 package com.cloudsurfers.crm
 
 import android.content.Intent
+import android.icu.util.Calendar
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,6 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.annotation.RequiresApi
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -37,6 +41,7 @@ class ViewContactFragment : Fragment() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -45,11 +50,30 @@ class ViewContactFragment : Fragment() {
         // Inflate the layout for this fragment
         requireActivity().findViewById<com.google.android.material.appbar.MaterialToolbar>(R.id.toolbar).title = name
         val view = inflater.inflate(R.layout.fragment_view_contact, container, false)
+
+        // Send email button intent
         val sendEmailButton = view.findViewById<Button>(R.id.view_contact_send_email_button)
         sendEmailButton.setOnClickListener(){
             val intent: Intent = ComposeEmail.getSendEmailIntent(email!!)
             startActivity(Intent.createChooser(intent, "Send mail using..."))
         }
+
+        // Create meeting button intent
+        val createMeetingButton = view.findViewById<Button>(R.id.view_contact_create_meeting_button)
+
+        createMeetingButton.setOnClickListener(){
+            val intent: Intent = CalendarUtil.getInsertEventIntent(
+                title = "",
+                contactEmail = email!!,
+                location = "",
+                dateTime = Calendar.getInstance(),
+                desc = ""
+            )
+            startActivity(intent)
+        }
+
+
+
         return view
     }
 
