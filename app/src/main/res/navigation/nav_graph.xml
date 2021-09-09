@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/viewMeetingsFragment"
-        android:name="com.cloudsurfers.crm.ViewMeetingsFragment"
+        android:name="com.cloudsurfers.crm.pages.meetings.ViewMeetingsFragment"
         android:label="Upcoming Meetings"
         tools:layout="@layout/fragment_view_meetings" >
         <action
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/viewContactsList"
-        android:name="com.cloudsurfers.crm.ViewContactsList"
+        android:name="com.cloudsurfers.crm.pages.contacts.ViewContactsList"
         android:label="Contacts"
         tools:layout="@layout/fragment_view_contacts_list" >
         <action
@@ -25,7 +25,7 @@
     </fragment>
     <fragment
         android:id="@+id/viewContactFragment"
-        android:name="com.cloudsurfers.crm.ViewContactFragment"
+        android:name="com.cloudsurfers.crm.pages.contacts.ViewContactFragment"
         android:label="Contacts"
         tools:layout="@layout/fragment_view_contact" >
         <argument
@@ -46,7 +46,7 @@
     </fragment>
     <fragment
         android:id="@+id/addMeetingFragment"
-        android:name="com.cloudsurfers.crm.AddMeetingFragment"
+        android:name="com.cloudsurfers.crm.pages.meetings.AddMeetingFragment"
         android:label="Add New Meeting"
         tools:layout="@layout/fragment_add_new_meeting"/>
 </navigation>

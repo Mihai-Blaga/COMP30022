@@ -1,4 +1,4 @@
-package com.cloudsurfers.crm
+package com.cloudsurfers.crm.pages.contacts
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,8 +6,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.TextView
+import com.cloudsurfers.crm.R
+import com.cloudsurfers.crm.databinding.FragmentViewContactBinding
+import com.cloudsurfers.crm.functions.ComposeEmail
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -43,24 +45,22 @@ class ViewContactFragment : Fragment() {
     ): View? {
 
         // Inflate the layout for this fragment
+        val binding = FragmentViewContactBinding.inflate(layoutInflater, container, false);
         requireActivity().findViewById<com.google.android.material.appbar.MaterialToolbar>(R.id.toolbar).title = name
-        val view = inflater.inflate(R.layout.fragment_view_contact, container, false)
-        val sendEmailButton = view.findViewById<Button>(R.id.view_contact_send_email_button)
+        val sendEmailButton = binding.viewContactSendEmailButton
         sendEmailButton.setOnClickListener(){
             val intent: Intent = ComposeEmail.getSendEmailIntent(email!!)
             startActivity(Intent.createChooser(intent, "Send mail using..."))
         }
-        return view
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         view.findViewById<TextView>(R.id.view_contact_name_text).text = name
         view.findViewById<TextView>(R.id.view_contact_email_text).text = email
         view.findViewById<TextView>(R.id.view_contact_mobile_text).text = mobile
         view.findViewById<TextView>(R.id.view_contact_notes_text).text = notes
-
 
     }
 

@@ -1,4 +1,4 @@
-package com.cloudsurfers.crm
+package com.cloudsurfers.crm.pages.meetings
 
 import android.Manifest
 import android.app.Activity
@@ -14,6 +14,9 @@ import androidx.annotation.RequiresApi
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.cloudsurfers.crm.R
+import com.cloudsurfers.crm.functions.CalendarUtil
+import com.cloudsurfers.crm.functions.Meeting
 import java.util.ArrayList
 
 

@@ -1,10 +1,12 @@
-package com.cloudsurfers.crm
+package com.cloudsurfers.crm.pages.meetings
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.cloudsurfers.crm.R
+import com.cloudsurfers.crm.functions.Meeting
 
 class ViewMeetingsAdapter(private val meetingsList: ArrayList<Meeting>) :
     RecyclerView.Adapter<ViewMeetingsAdapter.ViewHolder>() {

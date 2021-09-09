@@ -1,10 +1,9 @@
-package com.cloudsurfers.crm
+package com.cloudsurfers.crm.functions
 
 import android.Manifest
 import android.content.Context
 import androidx.annotation.RequiresApi
 import android.os.Build
-import com.cloudsurfers.crm.Meeting
 import androidx.core.app.ActivityCompat
 import android.content.pm.PackageManager
 import android.database.Cursor
