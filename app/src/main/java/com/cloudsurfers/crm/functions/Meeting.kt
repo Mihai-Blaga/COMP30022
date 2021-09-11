@@ -67,6 +67,7 @@ class Meeting() {
                 ", contactName='" + contactName + '\'' +
                 ", contactEmail='" + contactEmail + '\'' +
                 ", eventID='" + eventID + '\'' +
+                ", contact=" + contact +
                 '}'
     }
 
@@ -141,9 +142,9 @@ class Meeting() {
                     }
                     eventAttendeesCursor.close()
                     var contact: Contact? = null;
-//                    if (attendeeEmail != null) {
-//                        contact = Contact.readContactFromEmail(attendeeEmail, context as Activity)
-//                    }
+                    if (attendeeEmail != null) {
+                        contact = Contact.readContactFromEmail(attendeeEmail, context as Activity)
+                    }
                     // create a meeting object and add it to arraylist
                     val newMeeting = Meeting(
                         eventId,
