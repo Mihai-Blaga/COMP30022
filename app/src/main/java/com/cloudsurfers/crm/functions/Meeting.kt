@@ -1,6 +1,7 @@
 package com.cloudsurfers.crm.functions
 
 import android.Manifest
+import android.app.Activity
 import android.content.Context
 import androidx.annotation.RequiresApi
 import android.os.Build
@@ -38,7 +39,8 @@ class Meeting() {
         beginDate: Date,
         endDate: Date,
         contactName: String?,
-        contactEmail: String?
+        contactEmail: String?,
+        contact: Contact?
     ) : this() {
         this.eventID = eventID
         this.title = title
@@ -47,7 +49,7 @@ class Meeting() {
         this.endDate = endDate
         this.contactEmail = contactEmail
         this.contactName = contactName
-
+        this.contact = contact
     }
 
     val meetingTime: String
@@ -154,7 +156,13 @@ class Meeting() {
                         startDate,
                         endDate,
                         attendeeName,
-                        attendeeEmail
+                        attendeeEmail,
+                        attendeeEmail?.let {
+                            Contact.readContactFromEmail(
+                                it,
+                                context as Activity
+                            )
+                        }
                     )
                     meetings.add(newMeeting)
                 } while (calendarCursor!!.moveToNext())
