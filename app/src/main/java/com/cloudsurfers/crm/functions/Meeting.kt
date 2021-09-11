@@ -12,15 +12,44 @@ import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
-class Meeting private constructor(
-    val eventID: String,
-    val title: String,
-    val description: String,
-    val beginDate: Date,
-    val endDate: Date,
-    val contactName: String?,
-    val contactEmail: String?
-) {
+//class Meeting private constructor(
+//    val eventID: String,
+//    val title: String,
+//    val description: String,
+//    val beginDate: Date,
+//    val endDate: Date,
+//    val contactName: String?,
+//    val contactEmail: String?
+//) {
+class Meeting() {
+    var eventID: String? = null
+    var title: String? = null
+    var description: String? = null
+    var beginDate: Date? = null
+    var endDate: Date? = null
+    var contactName: String? = null
+    var contactEmail: String? = null
+    var contact: Contact? = null
+
+    private constructor(
+        eventID: String,
+        title: String,
+        description: String,
+        beginDate: Date,
+        endDate: Date,
+        contactName: String?,
+        contactEmail: String?
+    ) : this() {
+        this.eventID = eventID
+        this.title = title
+        this.description = description
+        this.beginDate = beginDate
+        this.endDate = endDate
+        this.contactEmail = contactEmail
+        this.contactName = contactName
+
+    }
+
     val meetingTime: String
         get() {
             val dateFormat: DateFormat = SimpleDateFormat("dd/MM/yyyy hh:mm aa")
@@ -49,6 +78,7 @@ class Meeting private constructor(
 
     companion object {
         private var calendarCursor: Cursor? = null
+
         @JvmStatic
         @RequiresApi(api = Build.VERSION_CODES.N)
         fun fetchAllMeetings(context: Context): ArrayList<Meeting>? {
@@ -132,7 +162,7 @@ class Meeting private constructor(
             calendarCursor!!.close()
 
             // sort and return meetings
-            meetings.sortWith(Comparator { meeting, t1 -> meeting.beginDate.compareTo(t1.beginDate) })
+            meetings.sortWith(Comparator { meeting, t1 -> meeting.beginDate!!.compareTo(t1.beginDate) })
             return meetings
         }
     }
