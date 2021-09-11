@@ -19,6 +19,8 @@ class ViewMeetingsAdapter(private val meetingsList: ArrayList<Meeting>) :
         val contactNameTextView: TextView = view.findViewById(R.id.view_meetings_list_item_contact_name_text_view)
         val meetingNameTextView: TextView = view.findViewById(R.id.view_meetings_list_item_meeting_name_text_view)
         val meetingTimeTextView: TextView = view.findViewById(R.id.view_meetings_list_item_meeting_time_text_view)
+        val meetingDateTextView: TextView = view.findViewById(R.id.view_meetings_list_item_meeting_date_text_view)
+        val meetingLocationTextView: TextView = view.findViewById(R.id.view_meetings_list_item_meeting_location_text_view)
 
         init {
             // Define click listener for the ViewHolder's View.
@@ -42,6 +44,8 @@ class ViewMeetingsAdapter(private val meetingsList: ArrayList<Meeting>) :
         viewHolder.contactNameTextView.text = meetingsList[position].contact!!.name
         viewHolder.meetingNameTextView.text = meetingsList[position].title
         viewHolder.meetingTimeTextView.text = meetingsList[position].meetingTime.split(" ")[1]
+        viewHolder.meetingDateTextView.text = meetingsList[position].beginDate.toString()
+//        viewHolder.meetingLocationTextView.text = meetingsList[position].
     }
 
     // Return the size of your dataset (invoked by the layout manager)
