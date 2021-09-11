@@ -1,6 +1,8 @@
 package com.cloudsurfers.crm.pages.contacts
 
 import android.content.Intent
+import android.icu.util.Calendar
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.cloudsurfers.crm.R
+import com.cloudsurfers.crm.functions.CalendarUtil
 import com.cloudsurfers.crm.databinding.FragmentViewContactBinding
 import com.cloudsurfers.crm.functions.ComposeEmail
 import androidx.annotation.RequiresApi
@@ -58,8 +61,7 @@ class ViewContactFragment : Fragment() {
 
 
         // Create meeting button intent
-        val createMeetingButton = return binding.root.findViewById<Button>(R.id.view_contact_create_meeting_button)
-
+        val createMeetingButton = binding.viewContactCreateMeetingButton
         createMeetingButton.setOnClickListener(){
             val intent: Intent = CalendarUtil.getInsertEventIntent(
                 title = "",
@@ -70,8 +72,6 @@ class ViewContactFragment : Fragment() {
             )
             startActivity(intent)
         }
-
-
 
         return binding.root
     }
