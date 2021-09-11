@@ -2,11 +2,15 @@ package com.cloudsurfers.crm.pages.contacts
 
 import android.Manifest
 import android.app.Activity
+import android.content.Context
+import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.cloudsurfers.crm.R
@@ -27,12 +31,58 @@ class ViewContactsList : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
+    //For read contacts permissions
+    private val reqConPerLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted: Boolean ->
+            if (isGranted) {
+                android.util.Log.e("ViewContactsFragment", "Read permission granted")
+            } else {
+                android.util.Log.e("ViewContactsFragment", "Read permission denied")
+            }
+        }
+
+    private fun requestPermission(activity: Activity): Boolean{
+        android.util.Log.e("ViewContactsFragment", "Request permissions run")
+        when {
+            ContextCompat.checkSelfPermission(
+                activity,
+                Manifest.permission.READ_CONTACTS
+            ) == PackageManager.PERMISSION_GRANTED -> {
+                // You can use the API that requires the permission.
+                android.util.Log.e("ViewContactsFragment", "Permission already granted")
+                return true
+            }
+            shouldShowRequestPermissionRationale(Manifest.permission.READ_CONTACTS) -> {
+            //Explain to user why permission is needed
+                android.util.Log.e("ViewContactsFragment", "2")
+                reqConPerLauncher.launch(Manifest.permission.READ_CONTACTS)
+            }
+            else -> {
+                // You can directly ask for the permission.
+                // The registered ActivityResultCallback gets the result of this request.
+                reqConPerLauncher.launch(Manifest.permission.READ_CONTACTS)
+                android.util.Log.e("ViewContactsFragment", "3")
+            }
+        }
+        return (ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_CONTACTS)
+                == PackageManager.PERMISSION_GRANTED)
+
+    }
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+
+        android.util.Log.e("ViewContactsFragment", "OnCreate")
+        //Request permission to read contacts
+        //val activity = activity as Activity
+        //requestPermission(activity)
     }
 
     override fun onCreateView(
@@ -43,10 +93,17 @@ class ViewContactsList : Fragment() {
         val view: View = inflater.inflate(R.layout.fragment_view_contacts_list, container, false)
         val activity: Activity = activity as Activity
 
-        val requestCode = 1
-        requestPermissions(arrayOf(Manifest.permission.READ_CONTACTS), requestCode)
+        android.util.Log.e("ViewContactsFragment", "onCreateView")
 
-        val contactList: ArrayList<Contact> = Contact.readContacts(activity) as ArrayList<Contact>
+        //val requestCode = 1
+        //requestPermissions(arrayOf(Manifest.permission.READ_CONTACTS), requestCode)
+
+        var contactList: ArrayList<Contact> = ArrayList()
+
+        if (requestPermission(activity)) {
+            android.util.Log.e("ViewContactsFragment", "getting contact list")
+            contactList = Contact.readContacts(activity) as ArrayList<Contact>
+        }
 
         view.findViewById<RecyclerView>(R.id.view_contacts_list_recycler_view).apply {
             adapter = ViewContactsAdapter(contactList)
