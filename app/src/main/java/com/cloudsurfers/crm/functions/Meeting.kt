@@ -13,15 +13,7 @@ import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
-//class Meeting private constructor(
-//    val eventID: String,
-//    val title: String,
-//    val description: String,
-//    val beginDate: Date,
-//    val endDate: Date,
-//    val contactName: String?,
-//    val contactEmail: String?
-//) {
+
 class Meeting() {
     var eventID: String? = null
     var title: String? = null
@@ -148,6 +140,10 @@ class Meeting() {
                         attendeeEmail = eventAttendeesCursor.getString(1)
                     }
                     eventAttendeesCursor.close()
+                    var contact: Contact? = null;
+//                    if (attendeeEmail != null) {
+//                        contact = Contact.readContactFromEmail(attendeeEmail, context as Activity)
+//                    }
                     // create a meeting object and add it to arraylist
                     val newMeeting = Meeting(
                         eventId,
@@ -157,12 +153,7 @@ class Meeting() {
                         endDate,
                         attendeeName,
                         attendeeEmail,
-                        attendeeEmail?.let {
-                            Contact.readContactFromEmail(
-                                it,
-                                context as Activity
-                            )
-                        }
+                        contact
                     )
                     meetings.add(newMeeting)
                 } while (calendarCursor!!.moveToNext())
