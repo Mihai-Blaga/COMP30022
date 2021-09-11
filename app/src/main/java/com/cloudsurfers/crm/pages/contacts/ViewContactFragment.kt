@@ -1,6 +1,8 @@
 package com.cloudsurfers.crm.pages.contacts
 
 import android.content.Intent
+import android.icu.util.Calendar
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,8 +10,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.cloudsurfers.crm.R
+import com.cloudsurfers.crm.functions.CalendarUtil
 import com.cloudsurfers.crm.databinding.FragmentViewContactBinding
 import com.cloudsurfers.crm.functions.ComposeEmail
+import androidx.annotation.RequiresApi
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -39,6 +44,7 @@ class ViewContactFragment : Fragment() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -52,15 +58,32 @@ class ViewContactFragment : Fragment() {
             val intent: Intent = ComposeEmail.getSendEmailIntent(email!!)
             startActivity(Intent.createChooser(intent, "Send mail using..."))
         }
+
+
+        // Create meeting button intent
+        val createMeetingButton = binding.viewContactCreateMeetingButton
+        createMeetingButton.setOnClickListener(){
+            val intent: Intent = CalendarUtil.getInsertEventIntent(
+                title = "",
+                contactEmail = email!!,
+                location = "",
+                dateTime = Calendar.getInstance(),
+                desc = ""
+            )
+            startActivity(intent)
+        }
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         view.findViewById<TextView>(R.id.view_contact_name_text).text = name
         view.findViewById<TextView>(R.id.view_contact_email_text).text = email
         view.findViewById<TextView>(R.id.view_contact_mobile_text).text = mobile
         view.findViewById<TextView>(R.id.view_contact_notes_text).text = notes
+
 
     }
 
