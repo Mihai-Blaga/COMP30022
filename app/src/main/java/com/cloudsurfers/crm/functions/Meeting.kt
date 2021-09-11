@@ -105,6 +105,7 @@ class Meeting() {
                 null,
                 null
             )
+            // declare the ids as they appear in the query result
             val idEvent = 0
             val idTitle = 1
             val idDesc = 2
@@ -141,6 +142,7 @@ class Meeting() {
                         attendeeEmail = eventAttendeesCursor.getString(1)
                     }
                     eventAttendeesCursor.close()
+                    // try to find the associated contact otherwise keep it null
                     var contact: Contact? = null;
                     if (attendeeEmail != null) {
                         contact = Contact.readContactFromEmail(attendeeEmail, context as Activity)
