@@ -1,4 +1,4 @@
-package com.cloudsurfers.crm
+package com.cloudsurfers.crm.pages.meetings
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
+import com.cloudsurfers.crm.functions.CalendarUtil
 import com.cloudsurfers.crm.databinding.FragmentAddNewMeetingBinding
 import java.util.*
 

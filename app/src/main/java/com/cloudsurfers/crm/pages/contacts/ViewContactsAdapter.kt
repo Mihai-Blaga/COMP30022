@@ -1,16 +1,15 @@
-package com.cloudsurfers.crm
+package com.cloudsurfers.crm.pages.contacts
 
-import android.app.Activity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
-import androidx.fragment.app.commit
-import androidx.fragment.app.replace
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
+import com.cloudsurfers.crm.R
+import com.cloudsurfers.crm.functions.Contact
 
 class ViewContactsAdapter(private val contacts: ArrayList<Contact>) :
     RecyclerView.Adapter<ViewContactsAdapter.ViewHolder>() {

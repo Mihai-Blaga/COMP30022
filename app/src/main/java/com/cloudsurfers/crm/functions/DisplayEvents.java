@@ -1,4 +1,4 @@
-package com.cloudsurfers.crm;
+package com.cloudsurfers.crm.functions;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -6,9 +6,7 @@ import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
 import android.content.ContentResolver;
-import android.content.ContentUris;
 import android.content.ContentValues;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.icu.util.Calendar;
@@ -16,16 +14,16 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.CalendarContract;
-import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.cloudsurfers.crm.R;
+import com.cloudsurfers.crm.functions.Meeting;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 public class DisplayEvents extends AppCompatActivity implements View.OnClickListener {
     Button fetchButton;
