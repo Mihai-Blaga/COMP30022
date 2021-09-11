@@ -1,4 +1,4 @@
-package com.cloudsurfers.crm
+package com.cloudsurfers.crm.functions
 
 import android.Manifest
 import android.app.Activity

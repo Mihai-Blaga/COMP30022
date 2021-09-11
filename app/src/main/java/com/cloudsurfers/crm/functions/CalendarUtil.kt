@@ -1,4 +1,4 @@
-package com.cloudsurfers.crm
+package com.cloudsurfers.crm.functions
 import android.Manifest
 import android.app.Activity
 import android.content.ContentUris
@@ -10,7 +10,6 @@ import android.net.Uri
 import android.os.Build
 import android.provider.CalendarContract
 import androidx.annotation.RequiresApi
-import java.util.*
 
 
 class CalendarUtil{
