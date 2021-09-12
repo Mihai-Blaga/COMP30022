@@ -51,23 +51,24 @@ class ViewContactsList : Fragment() {
     //popup.
     //Returns boolean on whether permission was granted
     private fun requestPermission(activity: Activity): Boolean{
+        val per = Manifest.permission.READ_CONTACTS
         when {
             ContextCompat.checkSelfPermission(
                 activity,
-                Manifest.permission.READ_CONTACTS
+                per
             ) == PackageManager.PERMISSION_GRANTED -> {
                 return true
             }
-            shouldShowRequestPermissionRationale(Manifest.permission.READ_CONTACTS) -> {
+            shouldShowRequestPermissionRationale(per) -> {
                 //TODO: Explain to user why permission is needed
-                requestContactPermissionLauncher.launch(Manifest.permission.READ_CONTACTS)
+                requestContactPermissionLauncher.launch(per)
             }
             else -> {
-                requestContactPermissionLauncher.launch(Manifest.permission.READ_CONTACTS)
+                requestContactPermissionLauncher.launch(per)
             }
         }
 
-        return (ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_CONTACTS)
+        return (ContextCompat.checkSelfPermission(activity, per)
                 == PackageManager.PERMISSION_GRANTED)
     }
 
