@@ -156,7 +156,6 @@ class Contact() {
         }
 
         fun readContactFromEmail(email: String = "alex@example.com", activity: Activity): Contact {
-            checkPermissions(activity)
             var c = Contact()
 
             val selectionClause = "${ContactsContract.Data.DATA1} = ?"
