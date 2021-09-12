@@ -71,6 +71,7 @@ class Meeting() {
                 ", contactEmail='" + contactEmail + '\'' +
                 ", eventID='" + eventID + '\'' +
                 ", contact=" + contact +
+                ", location='" + location + '\'' +
                 '}'
     }
 
