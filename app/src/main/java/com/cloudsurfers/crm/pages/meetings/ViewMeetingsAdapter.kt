@@ -41,7 +41,7 @@ class ViewMeetingsAdapter(private val meetingsList: ArrayList<Meeting>) :
 
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
-        viewHolder.contactNameTextView.text = meetingsList[position].contact!!.name
+        viewHolder.contactNameTextView.text = meetingsList[position].contact?.name
         viewHolder.meetingNameTextView.text = meetingsList[position].title
         viewHolder.meetingTimeTextView.text = meetingsList[position].meetingTime.split(" ")[1]
         viewHolder.meetingDateTextView.text = meetingsList[position].beginDate.toString()

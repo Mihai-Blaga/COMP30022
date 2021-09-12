@@ -40,7 +40,7 @@ class ViewMeetingsFragment : Fragment() {
     private var param2: String? = null
 
     //Launches popup requesting access to reading contacts
-    private val requestContactPermissionLauncher =
+    private val requestPermissionLauncher =
         registerForActivityResult(
             ActivityResultContracts.RequestPermission()
         ) { isGranted: Boolean ->
@@ -57,8 +57,7 @@ class ViewMeetingsFragment : Fragment() {
     //Used to check if reading contact permission is granted. Otherwise displays permission request
     //popup.
     //Returns boolean on whether permission was granted
-    private fun requestPermission(activity: Activity): Boolean{
-        val per = Manifest.permission.READ_CALENDAR
+    private fun requestPermission(activity: Activity, per: String): Boolean{
         when {
             ContextCompat.checkSelfPermission(
                 activity,
@@ -68,16 +67,18 @@ class ViewMeetingsFragment : Fragment() {
             }
             shouldShowRequestPermissionRationale(per) -> {
                 //TODO: Explain to user why permission is needed
-                requestContactPermissionLauncher.launch(per)
+                requestPermissionLauncher.launch(per)
             }
             else -> {
-                requestContactPermissionLauncher.launch(per)
+                requestPermissionLauncher.launch(per)
             }
         }
 
         return (ContextCompat.checkSelfPermission(activity, per)
                 == PackageManager.PERMISSION_GRANTED)
     }
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -99,7 +100,8 @@ class ViewMeetingsFragment : Fragment() {
 
         var meetingsList: ArrayList<Meeting> = ArrayList()
 
-        if (requestPermission(activity)) {
+        if (requestPermission(activity, Manifest.permission.READ_CALENDAR) &&
+            requestPermission(activity, Manifest.permission.READ_CONTACTS)) {
             meetingsList = Meeting.fetchAllMeetings(activity) as ArrayList<Meeting>
         }
 
