@@ -7,12 +7,16 @@ import android.os.Build
 import android.provider.ContactsContract
 import androidx.annotation.RequiresApi
 import android.net.Uri
+import androidx.activity.ComponentActivity
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 
 
 /** Helper class to store all the relevant contact information so that it can be passed between
  * components of the App without need of parsing the cursors multiple times.
  */
-class Contact(){
+class Contact() {
     var id: String? = null
     var name: String? = null
     var phone: String? = null
@@ -35,21 +39,9 @@ class Contact(){
     //Additional functionality provided by companion object
     companion object {
 
-        //Checks that contacts are accessible in the relevant activity
-        @RequiresApi(Build.VERSION_CODES.M)
-        fun checkPermissions(activity: Activity){
-            if (activity.checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED){
-                val requestCode = 1
-                activity.requestPermissions(arrayOf(Manifest.permission.READ_CONTACTS), requestCode)
-            }
-            return
-        }
-
         //Provides an immutable (read-only) list of all contacts
         @RequiresApi(Build.VERSION_CODES.M)
         fun readContacts(activity: Activity): List<Contact>? {
-            checkPermissions(activity)
-
             val tempMap = hashMapOf<String, Contact>()
 
             //lookup keys are preferred to RAW_CONTACT_IDs as these can change.
@@ -100,8 +92,6 @@ class Contact(){
         //Queries for contact information using the lookup uri and last known id of said contact.
         @RequiresApi(Build.VERSION_CODES.M)
         fun readContact(c: Contact, activity: Activity): Contact {
-            checkPermissions(activity)
-
             //TODO: check for empty c.id and c.uri
             val lookupUri = ContactsContract.Contacts.getLookupUri(c.id!!.toLong(), c.uri)
             val contactDataUri = Uri.withAppendedPath(lookupUri,
