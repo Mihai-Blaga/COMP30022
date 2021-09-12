@@ -23,6 +23,7 @@ class Meeting() {
     var contactName: String? = null
     var contactEmail: String? = null
     var contact: Contact? = null
+    var location: String? = null
 
     private constructor(
         eventID: String,
@@ -32,7 +33,8 @@ class Meeting() {
         endDate: Date,
         contactName: String?,
         contactEmail: String?,
-        contact: Contact?
+        contact: Contact?,
+        location: String?
     ) : this() {
         this.eventID = eventID
         this.title = title
@@ -42,6 +44,7 @@ class Meeting() {
         this.contactEmail = contactEmail
         this.contactName = contactName
         this.contact = contact
+        this.location = location
     }
 
     val meetingTime: String
@@ -156,7 +159,8 @@ class Meeting() {
                         endDate,
                         attendeeName,
                         attendeeEmail,
-                        contact
+                        contact,
+                        null
                     )
                     meetings.add(newMeeting)
                 } while (calendarCursor!!.moveToNext())
