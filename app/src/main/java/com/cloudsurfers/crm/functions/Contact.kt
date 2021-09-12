@@ -177,9 +177,9 @@ class Contact() {
             )
 
             when (mCursor?.count){
-                null -> {}
+                null -> {return c}
                 //TODO: let user know that no contact with this email was found
-                0 -> {}
+                0 -> {return c}
                 else -> {
                     mCursor.moveToPosition(0)
 
