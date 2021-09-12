@@ -36,6 +36,17 @@ class Contact() {
         id = i
     }
 
+    override fun toString(): String {
+        return "Contact{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", phone='" + phone + '\'' +
+                ", email='" + email + '\'' +
+                ", note='" + note + '\'' +
+                ", uri=" + uri +
+                '}'
+    }
+
     //Additional functionality provided by companion object
     companion object {
 
@@ -145,6 +156,7 @@ class Contact() {
         }
 
         fun readContactFromEmail(email: String = "alex@example.com", activity: Activity): Contact {
+            checkPermissions(activity)
             var c = Contact()
 
             val selectionClause = "${ContactsContract.Data.DATA1} = ?"

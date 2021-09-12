@@ -1,6 +1,7 @@
 package com.cloudsurfers.crm.functions
 
 import android.Manifest
+import android.app.Activity
 import android.content.Context
 import androidx.annotation.RequiresApi
 import android.os.Build
@@ -12,15 +13,37 @@ import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
-class Meeting private constructor(
-    val eventID: String,
-    val title: String,
-    val description: String,
-    val beginDate: Date,
-    val endDate: Date,
-    val contactName: String?,
-    val contactEmail: String?
-) {
+
+class Meeting() {
+    var eventID: String? = null
+    var title: String? = null
+    var description: String? = null
+    var beginDate: Date? = null
+    var endDate: Date? = null
+    var contactName: String? = null
+    var contactEmail: String? = null
+    var contact: Contact? = null
+
+    private constructor(
+        eventID: String,
+        title: String,
+        description: String,
+        beginDate: Date,
+        endDate: Date,
+        contactName: String?,
+        contactEmail: String?,
+        contact: Contact?
+    ) : this() {
+        this.eventID = eventID
+        this.title = title
+        this.description = description
+        this.beginDate = beginDate
+        this.endDate = endDate
+        this.contactEmail = contactEmail
+        this.contactName = contactName
+        this.contact = contact
+    }
+
     val meetingTime: String
         get() {
             val dateFormat: DateFormat = SimpleDateFormat("dd/MM/yyyy hh:mm aa")
@@ -44,11 +67,13 @@ class Meeting private constructor(
                 ", contactName='" + contactName + '\'' +
                 ", contactEmail='" + contactEmail + '\'' +
                 ", eventID='" + eventID + '\'' +
+                ", contact=" + contact +
                 '}'
     }
 
     companion object {
         private var calendarCursor: Cursor? = null
+
         @JvmStatic
         @RequiresApi(api = Build.VERSION_CODES.N)
         fun fetchAllMeetings(context: Context): ArrayList<Meeting>? {
@@ -80,6 +105,7 @@ class Meeting private constructor(
                 null,
                 null
             )
+            // declare the ids as they appear in the query result
             val idEvent = 0
             val idTitle = 1
             val idDesc = 2
@@ -116,6 +142,11 @@ class Meeting private constructor(
                         attendeeEmail = eventAttendeesCursor.getString(1)
                     }
                     eventAttendeesCursor.close()
+                    // try to find the associated contact otherwise keep it null
+                    var contact: Contact? = null;
+                    if (attendeeEmail != null) {
+                        contact = Contact.readContactFromEmail(attendeeEmail, context as Activity)
+                    }
                     // create a meeting object and add it to arraylist
                     val newMeeting = Meeting(
                         eventId,
@@ -124,7 +155,8 @@ class Meeting private constructor(
                         startDate,
                         endDate,
                         attendeeName,
-                        attendeeEmail
+                        attendeeEmail,
+                        contact
                     )
                     meetings.add(newMeeting)
                 } while (calendarCursor!!.moveToNext())
@@ -132,7 +164,7 @@ class Meeting private constructor(
             calendarCursor!!.close()
 
             // sort and return meetings
-            meetings.sortWith(Comparator { meeting, t1 -> meeting.beginDate.compareTo(t1.beginDate) })
+            meetings.sortWith(Comparator { meeting, t1 -> meeting.beginDate!!.compareTo(t1.beginDate) })
             return meetings
         }
     }
