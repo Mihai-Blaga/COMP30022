@@ -123,8 +123,8 @@ class Meeting() {
                     val eventId = calendarCursor!!.getString(idEvent)
                     val title = calendarCursor!!.getString(idTitle)
                     val desc = calendarCursor!!.getString(idDesc)
-                    val startDate = Date(calendarCursor!!.getLong(idStart))
-                    val endDate = Date(calendarCursor!!.getLong(idEnd))
+                    val startDate = LocalDate.ofEpochDay(calendarCursor!!.getLong(idStart))
+                    val endDate = LocalDate.ofEpochDay(calendarCursor!!.getLong(idEnd))
                     // create a cursor query for attendees and fetch attendee name and email
                     val eventAttendeesCursor = context.contentResolver.query(
                         CalendarContract.Attendees.CONTENT_URI, arrayOf(
@@ -153,8 +153,8 @@ class Meeting() {
                         eventId,
                         title,
                         desc,
-                        LocalDate.now(),
-                        LocalDate.now(),
+                        startDate,
+                        endDate,
                         attendeeName,
                         attendeeEmail,
                         contact
