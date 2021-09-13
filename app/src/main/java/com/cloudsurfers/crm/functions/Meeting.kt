@@ -11,7 +11,10 @@ import android.database.Cursor
 import android.provider.CalendarContract
 import java.text.DateFormat
 import java.text.SimpleDateFormat
-import java.time.LocalDate
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 
@@ -19,8 +22,8 @@ class Meeting() {
     var eventID: String? = null
     var title: String? = null
     var description: String? = null
-    var beginDate: LocalDate? = null
-    var endDate: LocalDate? = null
+    var beginDate: LocalDateTime? = null
+    var endDate: LocalDateTime? = null
     var contactName: String? = null
     var contactEmail: String? = null
     var contact: Contact? = null
@@ -29,8 +32,8 @@ class Meeting() {
         eventID: String,
         title: String,
         description: String,
-        beginDate: LocalDate,
-        endDate: LocalDate,
+        beginDate: LocalDateTime,
+        endDate: LocalDateTime,
         contactName: String?,
         contactEmail: String?,
         contact: Contact?
@@ -46,17 +49,23 @@ class Meeting() {
     }
 
     val meetingTime: String
+        @RequiresApi(Build.VERSION_CODES.O)
         get() {
-            val dateFormat: DateFormat = SimpleDateFormat("dd/MM/yyyy hh:mm aa")
-            val begin = dateFormat.format(beginDate).split(" ").toTypedArray()
-            val end = dateFormat.format(endDate).split(" ").toTypedArray()
+            val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy hh:mm a")
+            val begin = beginDate?.format(formatter)?.split(" ")?.toTypedArray()
+            val end = endDate?.format(formatter)?.split(" ")?.toTypedArray()
             val meetingTime: String
-            meetingTime = if (begin[2] === end[2]) {
-                begin[0] + " " + begin[1] + "-" + end[1] + end[2]
-            } else {
-                begin[0] + " " + begin[1] + begin[2] + "-" + end[1] + end[2]
+            if((begin!=null) && (end!=null)) {
+                meetingTime = if ((begin[2] === end[2])) {
+                    begin[0] + " " + begin[1] + "-" + end[1] + end[2]
+                } else {
+                    begin[0] + " " + begin[1] + begin[2] + "-" + end[1] + end[2]
+                }
+                return meetingTime
             }
-            return meetingTime
+            else{
+                return ""
+            }
         }
 
     override fun toString(): String {
@@ -91,7 +100,6 @@ class Meeting() {
             }
 
             // Build and execute the query
-            val now = System.currentTimeMillis()
             val builder = CalendarContract.Events.CONTENT_URI.buildUpon()
             calendarCursor = context.contentResolver.query(
                 builder.build(), arrayOf(
@@ -123,8 +131,10 @@ class Meeting() {
                     val eventId = calendarCursor!!.getString(idEvent)
                     val title = calendarCursor!!.getString(idTitle)
                     val desc = calendarCursor!!.getString(idDesc)
-                    val startDate = LocalDate.ofEpochDay(calendarCursor!!.getLong(idStart))
-                    val endDate = LocalDate.ofEpochDay(calendarCursor!!.getLong(idEnd))
+                    // fetch the dates in milliseconds and convert into LocalDateTime Objects
+                    val startDate = LocalDateTime.ofInstant(Instant.ofEpochMilli(calendarCursor!!.getLong(idStart)), ZoneId.systemDefault())
+                    val endDate = LocalDateTime.ofInstant(Instant.ofEpochMilli(calendarCursor!!.getLong(idEnd)), ZoneId.systemDefault())
+//                    val endDate = LocalDateTime.ofEpochSecond(calendarCursor!!.getLong(idEnd))
                     // create a cursor query for attendees and fetch attendee name and email
                     val eventAttendeesCursor = context.contentResolver.query(
                         CalendarContract.Attendees.CONTENT_URI, arrayOf(
@@ -144,7 +154,7 @@ class Meeting() {
                     }
                     eventAttendeesCursor.close()
                     // try to find the associated contact otherwise keep it null
-                    var contact: Contact? = null;
+                    var contact: Contact? = null
                     if (attendeeEmail != null) {
                         contact = Contact.readContactFromEmail(attendeeEmail, context as Activity)
                     }
@@ -165,7 +175,7 @@ class Meeting() {
             calendarCursor!!.close()
 
             // sort and return meetings
-            meetings.sortWith(Comparator { meeting, t1 -> meeting.beginDate!!.compareTo(t1.beginDate) })
+            meetings.sortWith { meeting, t1 -> meeting.beginDate!!.compareTo(t1.beginDate) }
             return meetings
         }
     }
