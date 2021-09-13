@@ -2,11 +2,13 @@ package com.cloudsurfers.crm.functions
 
 import android.Manifest
 import android.app.Activity
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.provider.ContactsContract
 import androidx.annotation.RequiresApi
 import android.net.Uri
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
@@ -181,6 +183,18 @@ class Contact() {
             c = readContact(c, activity)
 
             return c
+        }
+
+        fun getCreateContact(name: String, phone: String, email: String): Intent {
+            val contactIntent = Intent(ContactsContract.Intents.Insert.ACTION)
+            contactIntent.type = ContactsContract.RawContacts.CONTENT_TYPE
+            contactIntent
+                .putExtra(ContactsContract.Intents.Insert.NAME , name) // These just have to be strings
+                .putExtra(ContactsContract.Intents.Insert.PHONE , phone)
+                .putExtra(ContactsContract.Intents.Insert.EMAIL , email)
+//                .putExtra(ContactsContract.Intents.Insert.EXTRA_DATA_SET , "idfk what this is for")
+
+            return contactIntent
         }
 
     }
