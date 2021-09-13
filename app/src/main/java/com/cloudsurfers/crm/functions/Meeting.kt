@@ -55,16 +55,26 @@ class Meeting() {
             val begin = beginDate?.format(formatter)?.split(" ")?.toTypedArray()
             val end = endDate?.format(formatter)?.split(" ")?.toTypedArray()
             val meetingTime: String
-            if((begin!=null) && (end!=null)) {
+            return if((begin!=null) && (end!=null)) {
                 meetingTime = if ((begin[2] === end[2])) {
                     begin[0] + " " + begin[1] + "-" + end[1] + end[2]
                 } else {
                     begin[0] + " " + begin[1] + begin[2] + "-" + end[1] + end[2]
                 }
-                return meetingTime
+                meetingTime
+            } else{
+                ""
             }
+        }
+
+    val meetingDay: String
+        @RequiresApi(Build.VERSION_CODES.O)
+        get(){
+            val formatter = DateTimeFormatter.ofPattern("E, d MMM")
+            return if(beginDate!=null){
+                beginDate!!.format(formatter)}
             else{
-                return ""
+                ""
             }
         }
 
@@ -134,7 +144,6 @@ class Meeting() {
                     // fetch the dates in milliseconds and convert into LocalDateTime Objects
                     val startDate = LocalDateTime.ofInstant(Instant.ofEpochMilli(calendarCursor!!.getLong(idStart)), ZoneId.systemDefault())
                     val endDate = LocalDateTime.ofInstant(Instant.ofEpochMilli(calendarCursor!!.getLong(idEnd)), ZoneId.systemDefault())
-//                    val endDate = LocalDateTime.ofEpochSecond(calendarCursor!!.getLong(idEnd))
                     // create a cursor query for attendees and fetch attendee name and email
                     val eventAttendeesCursor = context.contentResolver.query(
                         CalendarContract.Attendees.CONTENT_URI, arrayOf(
