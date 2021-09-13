@@ -11,6 +11,7 @@ import android.database.Cursor
 import android.provider.CalendarContract
 import java.text.DateFormat
 import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.util.*
 
 
@@ -18,8 +19,8 @@ class Meeting() {
     var eventID: String? = null
     var title: String? = null
     var description: String? = null
-    var beginDate: Date? = null
-    var endDate: Date? = null
+    var beginDate: LocalDate? = null
+    var endDate: LocalDate? = null
     var contactName: String? = null
     var contactEmail: String? = null
     var contact: Contact? = null
@@ -28,8 +29,8 @@ class Meeting() {
         eventID: String,
         title: String,
         description: String,
-        beginDate: Date,
-        endDate: Date,
+        beginDate: LocalDate,
+        endDate: LocalDate,
         contactName: String?,
         contactEmail: String?,
         contact: Contact?
@@ -74,8 +75,8 @@ class Meeting() {
     companion object {
         private var calendarCursor: Cursor? = null
 
+        @RequiresApi(Build.VERSION_CODES.O)
         @JvmStatic
-        @RequiresApi(api = Build.VERSION_CODES.N)
         fun fetchAllMeetings(context: Context): ArrayList<Meeting>? {
             // first check if the permission to read Calendar has been granted
             if (ActivityCompat.checkSelfPermission(
@@ -152,8 +153,8 @@ class Meeting() {
                         eventId,
                         title,
                         desc,
-                        startDate,
-                        endDate,
+                        LocalDate.now(),
+                        LocalDate.now(),
                         attendeeName,
                         attendeeEmail,
                         contact
