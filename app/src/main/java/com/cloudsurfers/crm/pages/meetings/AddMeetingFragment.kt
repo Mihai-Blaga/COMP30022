@@ -87,8 +87,15 @@ class AddMeetingFragment : Fragment() {
             val meetingLocation = binding.outlinedTextFieldMeetingLocation.editText?.text.toString()
             val meetingNotes = binding.outlinedTextFieldMeetingNotes.editText?.text.toString()
 
-            val intent = CalendarUtil.getInsertEventIntent(meetingName, meetingContact, meetingLocation, cal, meetingNotes)
-            startActivity(intent)
+//            val intent = CalendarUtil.getInsertEventIntent(meetingName, meetingContact, meetingLocation, cal, meetingNotes)
+//            startActivity(intent)
+
+            val eventID = CalendarUtil.addEvent(requireActivity(), meetingName, meetingContact, meetingLocation, cal, meetingNotes)
+
+            if (eventID >= 0){
+                requireActivity().onBackPressed()
+            }
+
         }
 
 
