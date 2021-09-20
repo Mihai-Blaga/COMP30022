@@ -117,13 +117,6 @@ class ViewContactsList : Fragment() {
                 phone = "",
                 email = ""
             )
-//            Log.i("hvgtfdr", "Testing")
-//            val intent = Intent(ContactsContract.Intents.Insert.ACTION)
-//            intent.type = ContactsContract.RawContacts.CONTENT_TYPE
-//            intent
-//                .putExtra(ContactsContract.Intents.Insert.NAME , "") // These just have to be strings
-//                .putExtra(ContactsContract.Intents.Insert.PHONE , "")
-//                .putExtra(ContactsContract.Intents.Insert.EMAIL , "")
             startActivity(intent)
         }
 
