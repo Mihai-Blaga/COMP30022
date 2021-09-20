@@ -2,12 +2,14 @@ package com.cloudsurfers.crm.pages.contacts
 
 import android.Manifest
 import android.app.Activity
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.findNavController
@@ -15,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.cloudsurfers.crm.R
 import com.cloudsurfers.crm.functions.Contact
+import com.cloudsurfers.crm.pages.search.SearchableActivity
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -89,16 +92,22 @@ class ViewContactsList : Fragment() {
         val view: View = inflater.inflate(R.layout.fragment_view_contacts_list, container, false)
         val activity: Activity = activity as Activity
 
-
         var contactList: ArrayList<Contact> = ArrayList()
 
         if (requestPermission(activity)) {
             contactList = Contact.readContacts(activity) as ArrayList<Contact>
         }
 
+        // Configure list view
         view.findViewById<RecyclerView>(R.id.view_contacts_list_recycler_view).apply {
             adapter = ViewContactsAdapter(contactList)
             layoutManager = LinearLayoutManager(activity)
+        }
+
+        // Configure search button
+        view.findViewById<Button>(R.id.view_contacts_list_search_button).setOnClickListener {
+            val searchIntent =  Intent(activity, SearchableActivity::class.java)
+            startActivity(searchIntent)
         }
 
         return view

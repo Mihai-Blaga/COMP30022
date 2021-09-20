@@ -22,6 +22,9 @@
         <action
             android:id="@+id/action_viewContactsList_to_viewContactFragment"
             app:destination="@id/viewContactFragment" />
+        <action
+            android:id="@+id/action_viewContactsList_to_searchableActivity"
+            app:destination="@id/searchableActivity" />
     </fragment>
     <fragment
         android:id="@+id/viewContactFragment"
@@ -49,4 +52,9 @@
         android:name="com.cloudsurfers.crm.pages.meetings.AddMeetingFragment"
         android:label="Add New Meeting"
         tools:layout="@layout/fragment_add_new_meeting"/>
+    <activity
+        android:id="@+id/searchableActivity"
+        android:name="com.cloudsurfers.crm.pages.search.SearchableActivity"
+        android:label="activity_searchable"
+        tools:layout="@layout/activity_searchable" />
 </navigation>

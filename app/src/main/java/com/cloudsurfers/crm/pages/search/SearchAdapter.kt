@@ -24,13 +24,13 @@ class SearchAdapter(private val contacts: ArrayList<Contact>):
 
         init {
             // Define click listener for the ViewHolder's View.
-            view.setOnClickListener() {
+            view.setOnClickListener {
                 val activity: AppCompatActivity = view.context as AppCompatActivity
                 val c: Contact = Contact.readContact(contact, activity)
 
                 val bundle = bundleOf("name" to c.name, "email" to c.email, "mobile" to c.phone, "notes" to c.note)
 
-//                Navigation.findNavController(view).navigate(R.id.action_viewContactsList_to_viewContactFragment, bundle)
+//                Navigation.findNavController(view).navigate(R.id., bundle)
             }
         }
     }
@@ -49,8 +49,8 @@ class SearchAdapter(private val contacts: ArrayList<Contact>):
 
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
-//        viewHolder.contactNameTextView.text = contacts[position].name
-//        viewHolder.contact = contacts[position]
+        viewHolder.searchItemTextView.text = contacts[position].name
+        viewHolder.contact = contacts[position]
     }
 
     // Return the size of your dataset (invoked by the layout manager)
