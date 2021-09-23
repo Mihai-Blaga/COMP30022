@@ -19,16 +19,26 @@ jobs:
     - name: Run Tests
       run: ./gradlew test
 
-    - name: Build Project
-      run: ./gradlew assemble
+    - name: Generate Release APK
+      run: ./gradlew assembleRelease
 
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Sign APK
+      uses: r0adkll/sign-android-release@v1
+      # ID used to access action output
+      id: sign_app
       with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
-        draft: false
-        prerelease: false
+        releaseDirectory: app/build/outputs/apk/release
+        signingKeyBase64: ${{ secrets.SIGNING_KEY }}
+        alias: ${{ secrets.ALIAS }}
+        keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
+        keyPassword: ${{ secrets.KEY_PASSWORD }}
+
+    - uses: actions/upload-artifact@master
+      with:
+        name: release.apk
+        path: ${{steps.sign_app.outputs.signedReleaseFile}}
+
+    - uses: actions/upload-artifact@master
+      with:
+        name: mapping.txt
+        path: app/build/outputs/mapping/release/mapping.txt
