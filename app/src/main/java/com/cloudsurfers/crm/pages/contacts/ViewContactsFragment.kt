@@ -5,6 +5,8 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.provider.ContactsContract
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -17,6 +19,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.cloudsurfers.crm.R
+import com.cloudsurfers.crm.databinding.FragmentViewContactsListBinding
 import com.cloudsurfers.crm.functions.Contact
 import com.cloudsurfers.crm.pages.search.SearchableActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -104,6 +107,20 @@ class ViewContactsList : Fragment() {
         view.findViewById<RecyclerView>(R.id.view_contacts_list_recycler_view).apply {
             adapter = ViewContactsAdapter(contactList)
             layoutManager = LinearLayoutManager(activity)
+        }
+
+        // Inflate the layout for this fragment
+        //val binding = FragmentViewContactsListBinding.inflate(layoutInflater, container, false);
+
+        val newContactButton = view.findViewById<Button>(R.id.view_contacts_create_new_contact)//binding.viewContactsCreateNewContact
+
+        newContactButton.setOnClickListener(){ // This button does not work
+            val intent: Intent = Contact.getCreateContact(
+                name = "",
+                phone = "",
+                email = ""
+            )
+            startActivity(intent)
         }
 
         return view

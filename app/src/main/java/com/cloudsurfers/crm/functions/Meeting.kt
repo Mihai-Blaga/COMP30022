@@ -27,6 +27,7 @@ class Meeting() {
     var contactName: String? = null
     var contactEmail: String? = null
     var contact: Contact? = null
+    var location: String? = null
 
     private constructor(
         eventID: String,
@@ -36,7 +37,8 @@ class Meeting() {
         endDate: LocalDateTime,
         contactName: String?,
         contactEmail: String?,
-        contact: Contact?
+        contact: Contact?,
+        location: String?
     ) : this() {
         this.eventID = eventID
         this.title = title
@@ -46,6 +48,7 @@ class Meeting() {
         this.contactEmail = contactEmail
         this.contactName = contactName
         this.contact = contact
+        this.location = location
     }
 
     val meetingTime: String
@@ -88,6 +91,7 @@ class Meeting() {
                 ", contactEmail='" + contactEmail + '\'' +
                 ", eventID='" + eventID + '\'' +
                 ", contact=" + contact +
+                ", location='" + location + '\'' +
                 '}'
     }
 
@@ -118,7 +122,8 @@ class Meeting() {
                     CalendarContract.Events.DESCRIPTION,
                     CalendarContract.Events.DTSTART,
                     CalendarContract.Events.DTEND,
-                    CalendarContract.Events.ALL_DAY
+                    CalendarContract.Events.ALL_DAY,
+                    CalendarContract.Events.EVENT_LOCATION
                 ),
                 null,
                 null,
@@ -131,6 +136,7 @@ class Meeting() {
             val idStart = 3
             val idEnd = 4
             val idAllDay = 5
+            val idLocation = 6
             val meetings = ArrayList<Meeting>()
             if (calendarCursor!!.moveToFirst()) {
                 do {
@@ -141,9 +147,12 @@ class Meeting() {
                     val eventId = calendarCursor!!.getString(idEvent)
                     val title = calendarCursor!!.getString(idTitle)
                     val desc = calendarCursor!!.getString(idDesc)
+
                     // fetch the dates in milliseconds and convert into LocalDateTime Objects
                     val startDate = LocalDateTime.ofInstant(Instant.ofEpochMilli(calendarCursor!!.getLong(idStart)), ZoneId.systemDefault())
                     val endDate = LocalDateTime.ofInstant(Instant.ofEpochMilli(calendarCursor!!.getLong(idEnd)), ZoneId.systemDefault())
+                    val location = calendarCursor!!.getString(idLocation)
+
                     // create a cursor query for attendees and fetch attendee name and email
                     val eventAttendeesCursor = context.contentResolver.query(
                         CalendarContract.Attendees.CONTENT_URI, arrayOf(
@@ -176,7 +185,8 @@ class Meeting() {
                         endDate,
                         attendeeName,
                         attendeeEmail,
-                        contact
+                        contact,
+                        location
                     )
                     meetings.add(newMeeting)
                 } while (calendarCursor!!.moveToNext())
