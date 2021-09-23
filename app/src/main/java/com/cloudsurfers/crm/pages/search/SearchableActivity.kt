@@ -6,6 +6,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.SearchView
+import androidx.appcompat.widget.SearchView.SearchAutoComplete
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.cloudsurfers.crm.R
@@ -24,6 +26,10 @@ class SearchableActivity : MainActivity() {
             setSearchableInfo(searchManager.getSearchableInfo(componentName))
         }
 
+        // Change colour of hint and icon in search view
+//        val searchAutoComplete: SearchAutoComplete = findViewById<SearchAutoComplete>(R.id.search_src_text);
+//        searchAutoComplete.setHintTextColor(ContextCompat.getColor(this, R.color.light_white));
+//        searchAutoComplete.setTextColor(ContextCompat.getColor(this, R.color.light_white));
 
         handleIntent(intent)
     }

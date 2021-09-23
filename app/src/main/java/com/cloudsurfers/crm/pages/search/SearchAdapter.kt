@@ -1,15 +1,17 @@
 package com.cloudsurfers.crm.pages.search
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat.startActivity
 import androidx.core.os.bundleOf
-import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.cloudsurfers.crm.R
 import com.cloudsurfers.crm.functions.Contact
+import com.cloudsurfers.crm.pages.main.MainActivity
 
 class SearchAdapter(private val contacts: ArrayList<Contact>):
     RecyclerView.Adapter<SearchAdapter.ViewHolder>() {
@@ -30,7 +32,11 @@ class SearchAdapter(private val contacts: ArrayList<Contact>):
 
                 val bundle = bundleOf("name" to c.name, "email" to c.email, "mobile" to c.phone, "notes" to c.note)
 
-//                Navigation.findNavController(view).navigate(R.id., bundle)
+                val viewContactIntent: Intent = Intent(activity, MainActivity::class.java).apply {
+                    action = Intent.ACTION_SEARCH
+                    putExtras(bundle)
+                }
+                activity.startActivity(viewContactIntent)
             }
         }
     }
