@@ -3,13 +3,14 @@ package com.cloudsurfers.crm.pages.main
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.widget.Toolbar
-import androidx.core.app.NavUtils
-import androidx.navigation.Navigation
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.cloudsurfers.crm.R
+import com.cloudsurfers.crm.pages.search.SearchableActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 open class MainActivity : AppCompatActivity() {
@@ -29,10 +30,22 @@ open class MainActivity : AppCompatActivity() {
         val appBarConfiguration = AppBarConfiguration(navController.graph)
         val toolbar = findViewById<Toolbar>(R.id.toolbar).apply {
             setupWithNavController(navController, appBarConfiguration)
+            inflateMenu(R.menu.top_app_bar_contact_list)
         }
         navController.addOnDestinationChangedListener { _, destination, _ ->
+            // Only show back icon when not in view meetings (home page)
             if (destination.id != R.id.viewMeetingsFragment)
                 findViewById<Toolbar>(R.id.toolbar).setNavigationIcon(R.drawable.ic_back)
+            // Make not visible
+            toolbar.findViewById<View>(R.id.view_contacts_list_search_icon_button).isVisible =
+                destination.id == R.id.viewContactsList
+        }
+
+        // Set search button to only show when in view contacts list page
+        toolbar.setOnMenuItemClickListener {
+            if (it.itemId == R.id.view_contacts_list_search_icon_button)
+                startActivity(Intent(this, SearchableActivity::class.java))
+            true
         }
 
         // Override the back-button of the toolbar to be the same as the up android up button

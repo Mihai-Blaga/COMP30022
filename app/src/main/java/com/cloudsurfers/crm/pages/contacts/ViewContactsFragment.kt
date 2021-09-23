@@ -106,12 +106,6 @@ class ViewContactsList : Fragment() {
             layoutManager = LinearLayoutManager(activity)
         }
 
-        // Configure search button
-        view.findViewById<Button>(R.id.view_contacts_list_search_button).setOnClickListener {
-            val searchIntent =  Intent(activity, SearchableActivity::class.java)
-            startActivity(searchIntent)
-        }
-
         return view
     }
 
