@@ -5,6 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        tools:ignore="MissingConstraints"
+        android:id="@+id/dummy_focus_view_add_meeting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
+    <requestFocus/>
+    </TextView>
+
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/topAppBarLayout"
         android:layout_width="match_parent"
