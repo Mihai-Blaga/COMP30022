@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import com.cloudsurfers.crm.functions.CalendarUtil
 import com.cloudsurfers.crm.databinding.FragmentAddNewMeetingBinding
+import com.cloudsurfers.crm.functions.Util
 import java.util.*
 
 // TODO: Rename parameter arguments, choose names that match
@@ -67,18 +68,34 @@ class AddMeetingFragment : Fragment() {
         }
 
         // On Click Listeners
-        binding.outlinedTextFieldMeetingDate.editText?.setOnClickListener(){
-            DatePickerDialog(requireActivity(), dateSetListener,
-                cal.get(Calendar.YEAR),
-                cal.get(Calendar.MONTH),
-                cal.get(Calendar.DAY_OF_MONTH)).show()
+//        binding.outlinedTextFieldMeetingDate.editText?.setOnClickListener(){
+//            DatePickerDialog(requireActivity(), dateSetListener,
+//                cal.get(Calendar.YEAR),
+//                cal.get(Calendar.MONTH),
+//                cal.get(Calendar.DAY_OF_MONTH)).show()
+//        }
+        binding.outlinedTextFieldMeetingDate.editText?.setOnFocusChangeListener(){ v, b ->
+            // This line prevents keyboard from showing
+            Util.hideKeyboard(v, requireContext())
+            if (b){
+                DatePickerDialog(requireActivity(), dateSetListener,
+                    cal.get(Calendar.YEAR),
+                    cal.get(Calendar.MONTH),
+                    cal.get(Calendar.DAY_OF_MONTH)).show()
+            }
+
         }
 
-        binding.outlinedTextFieldMeetingTime.editText?.setOnClickListener(){
-            TimePickerDialog(requireActivity(), timeSetListener,
-                cal.get(Calendar.HOUR_OF_DAY),
-                cal.get(Calendar.MINUTE),
-            false).show()
+        binding.outlinedTextFieldMeetingTime.editText?.setOnFocusChangeListener(){ v, b ->
+            // This line prevents keyboard from showing
+            Util.hideKeyboard(v, requireContext())
+            if (b){
+                TimePickerDialog(requireActivity(), timeSetListener,
+                    cal.get(Calendar.HOUR_OF_DAY),
+                    cal.get(Calendar.MINUTE),
+                    false).show()
+            }
+
         }
 
         binding.addMeetingButton.setOnClickListener(){
@@ -87,8 +104,15 @@ class AddMeetingFragment : Fragment() {
             val meetingLocation = binding.outlinedTextFieldMeetingLocation.editText?.text.toString()
             val meetingNotes = binding.outlinedTextFieldMeetingNotes.editText?.text.toString()
 
-            val intent = CalendarUtil.getInsertEventIntent(meetingName, meetingContact, meetingLocation, cal, meetingNotes)
-            startActivity(intent)
+//            val intent = CalendarUtil.getInsertEventIntent(meetingName, meetingContact, meetingLocation, cal, meetingNotes)
+//            startActivity(intent)
+
+            val eventID = CalendarUtil.addEvent(requireActivity(), meetingName, meetingContact, meetingLocation, cal, meetingNotes)
+
+            if (eventID >= 0){
+                requireActivity().onBackPressed()
+            }
+
         }
 
 

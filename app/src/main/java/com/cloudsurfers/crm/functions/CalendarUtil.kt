@@ -50,37 +50,41 @@ class CalendarUtil{
         }
 
         @RequiresApi(Build.VERSION_CODES.N)
-        fun addEvent(activity: Activity) : Long {
+        fun addEvent(activity: Activity, title: String, contactEmail: String, location: String, dateTime: Calendar,  desc: String) : Long {
             if (activity.checkSelfPermission(Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED){
                 val requestCode = 1;
                 activity.requestPermissions(arrayOf(Manifest.permission.WRITE_CALENDAR), requestCode);
             }
 
-            val calID = 3;
-            val startMillis: Long = Calendar.getInstance().run {
-                set(2021, 7, 21, 7, 30)
-                timeInMillis
-            }
-            val endMillis: Long = Calendar.getInstance().run {
-                set(2021, 7, 21, 8, 45)
-                timeInMillis
-            }
+            // TODO configure calID?
+            val calID = 1;
+            val startMillis: Long = dateTime.timeInMillis
+            val endMillis: Long = startMillis + ONE_HOUR_IN_MILLI;
 
-            val values = ContentValues().apply {
+            val eventValues = ContentValues().apply {
                 put(CalendarContract.Events.DTSTART, startMillis)
                 put(CalendarContract.Events.DTEND, endMillis)
-                put(CalendarContract.Events.TITLE, "Jazzercise")
-                put(CalendarContract.Events.DESCRIPTION, "Group workout")
+                put(CalendarContract.Events.TITLE, title)
+                put(CalendarContract.Events.DESCRIPTION, desc)
                 put(CalendarContract.Events.CALENDAR_ID, calID)
-                put(CalendarContract.Events.EVENT_TIMEZONE, "Australia/Sydney")
+                put(CalendarContract.Events.EVENT_TIMEZONE, dateTime.timeZone.displayName)
+                put(CalendarContract.Events.EVENT_LOCATION, location)
             }
-            val uri: Uri? = activity.contentResolver.insert(CalendarContract.Events.CONTENT_URI, values)
-            var eventID: Long = -1
+            val uri: Uri? = activity.contentResolver.insert(CalendarContract.Events.CONTENT_URI, eventValues)
+            var eventId: Long = -1
             if (uri != null){
-                eventID = uri.lastPathSegment?.toLong() ?: -1
+                eventId = uri.lastPathSegment?.toLong() ?: -1
             }
 
-            return eventID
+            if (eventId < 0) return eventId;
+
+            val attendeeValues = ContentValues().apply {
+                put(CalendarContract.Attendees.ATTENDEE_EMAIL, contactEmail);
+                put(CalendarContract.Attendees.EVENT_ID, eventId);
+            }
+            activity.contentResolver.insert(CalendarContract.Attendees.CONTENT_URI, attendeeValues)
+
+            return eventId
         }
     }
 }
