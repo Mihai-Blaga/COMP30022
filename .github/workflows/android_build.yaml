@@ -5,20 +5,24 @@ on:
   push:
     tags:
       - 'v*'
+  pull_request:
+    branches:
+      - master
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      # 1
       - name: Checkout code
         uses: actions/checkout@v2
-      # 2
+
+      - name: Unit tests
+        run: ./gradlew test
+
       - name: Generate Release APK
         run: ./gradlew assembleRelease
-      # 3
+
       - name: Sign APK
         uses: r0adkll/sign-android-release@v1
-        # ID used to access action output
         id: sign_app
         with:
           releaseDirectory: app/build/outputs/apk/release
