@@ -3,6 +3,7 @@ package com.cloudsurfers.crm.pages.contacts
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
@@ -20,6 +21,7 @@ class ViewContactsAdapter(private val contacts: ArrayList<Contact>) :
      */
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val contactNameTextView: TextView = view.findViewById(R.id.view_contacts_list_item_contact_name_text_view)
+        val contactImageView: ImageView = view.findViewById(R.id.view_contacts_list_item_icon_imageView)
         lateinit var contact: Contact
 
         init {
@@ -63,6 +65,7 @@ class ViewContactsAdapter(private val contacts: ArrayList<Contact>) :
         // contents of the view with that element
         viewHolder.contactNameTextView.text = contacts[position].name
         viewHolder.contact = contacts[position]
+//        viewHolder.contactImageView = contacts[position]
     }
 
     // Return the size of your dataset (invoked by the layout manager)
