@@ -52,4 +52,5 @@
 
     <string name="search_hint">Search</string>
     <string name="search_chip_default_text">Search chip</string>
+    <string name="search_view_no_data_text">No contacts were found</string>
 </resources>
