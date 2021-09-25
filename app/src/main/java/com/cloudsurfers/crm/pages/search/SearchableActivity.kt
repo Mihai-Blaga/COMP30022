@@ -3,16 +3,16 @@ package com.cloudsurfers.crm.pages.search
 import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.SearchView
-import androidx.appcompat.widget.SearchView.SearchAutoComplete
-import androidx.core.content.ContextCompat
+import androidx.core.view.children
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.cloudsurfers.crm.R
 import com.cloudsurfers.crm.functions.Contact
 import com.cloudsurfers.crm.pages.main.MainActivity
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 
 class SearchableActivity : MainActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,10 +26,23 @@ class SearchableActivity : MainActivity() {
             setSearchableInfo(searchManager.getSearchableInfo(componentName))
         }
 
-        // Change colour of hint and icon in search view
-//        val searchAutoComplete: SearchAutoComplete = findViewById<SearchAutoComplete>(R.id.search_src_text);
-//        searchAutoComplete.setHintTextColor(ContextCompat.getColor(this, R.color.light_white));
-//        searchAutoComplete.setTextColor(ContextCompat.getColor(this, R.color.light_white));
+        // Populate chip group with chips
+        val tags: ArrayList<String> = ArrayList<String>().apply {
+            add("Friend")
+            add("University")
+            add("COMP30022")
+            add("Kotlin")
+            add("Squid")
+            add("Game")
+        }
+
+        val chipGroup: ChipGroup = findViewById(R.id.search_chip_group)
+
+        for (tag: String in tags) {
+            val chip: Chip = layoutInflater.inflate(R.layout.search_chip, null, false) as Chip
+            chip.text = tag
+            chipGroup.addView(chip)
+        }
 
         handleIntent(intent)
     }
@@ -47,10 +60,33 @@ class SearchableActivity : MainActivity() {
         } as ArrayList<Contact>
     }
 
+    // Extract the selected tags as an array list
+    private fun getSelectedTags(): ArrayList<String> {
+        return findViewById<ChipGroup>(R.id.search_chip_group).children.filter {
+            (it as Chip).isChecked
+        }.map {
+            (it as Chip).text as String
+        }.toList() as ArrayList<String>
+    }
+
+    override fun startActivity(intent: Intent?) {
+        // Override to add tags to search query
+        if (Intent.ACTION_SEARCH == intent?.action) {
+            intent.putExtras(
+                Bundle().apply {
+                    putStringArrayList("tags", getSelectedTags())
+                 }
+            )
+        }
+
+        super.startActivity(intent)
+    }
+
     private fun handleIntent(intent: Intent) {
         if (Intent.ACTION_SEARCH == intent.action) {
             intent.getStringExtra(SearchManager.QUERY)?.also { query ->
                 // TODO: Perform The Search
+                val tags: ArrayList<String>? = intent.getStringArrayListExtra("tags")
                 val contacts: ArrayList<Contact> = basicContactSearch(query)
 
                 // Add the contents into an adapter class and put into RecyclerView
