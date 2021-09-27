@@ -1,16 +1,24 @@
 package com.cloudsurfers.crm.pages.contacts
 
+import android.graphics.Bitmap
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.*
+import androidx.core.graphics.createBitmap
 import androidx.core.os.bundleOf
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.cloudsurfers.crm.R
 import com.cloudsurfers.crm.functions.Contact
+import java.util.*
+import kotlin.collections.ArrayList
+
 
 class ViewContactsAdapter(private val contacts: ArrayList<Contact>) :
     RecyclerView.Adapter<ViewContactsAdapter.ViewHolder>() {
@@ -65,7 +73,32 @@ class ViewContactsAdapter(private val contacts: ArrayList<Contact>) :
         // contents of the view with that element
         viewHolder.contactNameTextView.text = contacts[position].name
         viewHolder.contact = contacts[position]
-//        viewHolder.contactImageView = contacts[position]
+
+        // For drawing the circles
+        val tempBitmap = ImageBitmap(50,50, ImageBitmapConfig.Argb8888)
+        val canvas = Canvas(tempBitmap)
+        val paint = Paint()
+        val rand = Random()
+
+        paint.color = Color(rand.nextInt(256), rand.nextInt(256), rand.nextInt(256))
+
+        canvas.drawCircle(Offset(25f,25f),25f, paint)
+
+        viewHolder.contactImageView.setImageBitmap(tempBitmap.asAndroidBitmap())
+
+        Log.i("debug",viewHolder.contactImageView.matrix.toString())
+
+        // Letter to appear in the centre of the circle
+        val letter: String? = contacts[position].name?.substring(0,1)
+
+//        viewHolder.contactImageView.apply {
+//            setImageResource(R.color.matte_orange)
+//        }
+
+    }
+
+    fun drawCircle() {
+
     }
 
     // Return the size of your dataset (invoked by the layout manager)
