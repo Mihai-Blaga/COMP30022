@@ -99,11 +99,14 @@ class ViewContactsAdapter(private val contacts: ArrayList<Contact>) :
 
 //        paint.color = Color(rand.nextInt(256), rand.nextInt(256), rand.nextInt(256)).toArgb()
         paint2.color = Color(rand.nextInt(256), rand.nextInt(256), rand.nextInt(256)).toArgb()
+        val textPaint = Paint()
+        textPaint.textAlign = Paint.Align.CENTER
+        textPaint.textSize = 16f
 
 //        canvas.drawCircle(Offset(25f,25f),25f, paint)
         canvas2.drawCircle(25f,25f,25f, paint2)
         if (letter != null) {
-            canvas2.drawText(letter,25f,25f,Paint())
+            canvas2.drawText(letter,25f,30f,textPaint)
         }
 
 //        val textPaint = TextPaint()
