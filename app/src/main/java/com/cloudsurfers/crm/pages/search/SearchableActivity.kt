@@ -23,10 +23,32 @@ class SearchableActivity : MainActivity() {
 
         val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
 
+        // Initialise recycler view with empty array list
+        findViewById<RecyclerView>(R.id.search_recycler_view).apply {
+            adapter = SearchAdapter(ArrayList())
+            layoutManager = LinearLayoutManager(this@SearchableActivity)
+        }
+
+
         // Set the searchable configuration of the SearchView
         findViewById<SearchView>(R.id.searchView).apply {
             setSearchableInfo(searchManager.getSearchableInfo(componentName))
             isIconified = false
+
+            setOnQueryTextListener(object: SearchView.OnQueryTextListener {
+                // Do nothing extra on submission
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    return false
+                }
+
+                // Change the adapter with updated query data every time the string is changed
+                override fun onQueryTextChange(query: String?): Boolean {
+                    this@SearchableActivity.findViewById<RecyclerView>(R.id.search_recycler_view).apply {
+                        adapter = SearchAdapter(basicContactSearch(query!!))
+                    }
+                    return false
+                }
+            })
 
         }
 
@@ -59,8 +81,9 @@ class SearchableActivity : MainActivity() {
 
     // Filter contacts by first letter in name and query
     private fun basicContactSearch(query: String): ArrayList<Contact> {
+        if (query == "") return ArrayList()
         return Contact.readContacts(this)?.filter { c ->
-            c.name?.lowercase()?.startsWith(query.lowercase())  == true
+            c.name?.lowercase()?.startsWith(query.lowercase()) == true
         } as ArrayList<Contact>
     }
 
@@ -91,7 +114,7 @@ class SearchableActivity : MainActivity() {
         if (Intent.ACTION_SEARCH == intent.action) {
             intent.getStringExtra(SearchManager.QUERY)?.also { query ->
                 // TODO: Perform The Search
-                val tags: ArrayList<String>? = intent.getStringArrayListExtra("tags")
+//                val tags: ArrayList<String>? = intent.getStringArrayListExtra("tags")
                 val queryContacts: ArrayList<Contact> = basicContactSearch(query)
 
                 val recyclerView = findViewById<RecyclerView>(R.id.search_recycler_view)
@@ -114,4 +137,6 @@ class SearchableActivity : MainActivity() {
             }
         }
     }
+
+
 }
