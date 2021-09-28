@@ -1,7 +1,6 @@
 package com.cloudsurfers.crm.pages.contacts
 
 import android.graphics.Bitmap
-import android.text.Layout
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -9,23 +8,15 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.*
 import android.graphics.Canvas
 import android.graphics.Paint
-import androidx.core.graphics.createBitmap
 import androidx.core.os.bundleOf
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.cloudsurfers.crm.R
 import com.cloudsurfers.crm.functions.Contact
-import java.util.*
 import kotlin.collections.ArrayList
-import android.text.StaticLayout
-import android.text.TextPaint
-
-
-
 
 
 class ViewContactsAdapter(private val contacts: ArrayList<Contact>) :
@@ -49,18 +40,6 @@ class ViewContactsAdapter(private val contacts: ArrayList<Contact>) :
                 val bundle = bundleOf("name" to c.name, "email" to c.email, "mobile" to c.phone, "notes" to c.note)
 
                 Navigation.findNavController(view).navigate(R.id.action_viewContactsList_to_viewContactFragment, bundle)
-
-//                activity.supportFragmentManager.commit {
-//                    setReorderingAllowed(true)
-//
-//                    val c: Contact = Contact.readContact(contact, activity)
-//
-//                    // Replace whatever is in the fragment_container view with this fragment
-//
-//
-//                    replace(R.id.nav_host_fragment_container, ViewContactFragment.newInstance(
-//                        c.name!!, c.email!!, c.phone!!, c.note!!))
-//                }
             }
         }
     }
@@ -87,6 +66,7 @@ class ViewContactsAdapter(private val contacts: ArrayList<Contact>) :
 
     }
 
+    // Draws the icons into the ImageView in the layout page
     private fun drawIcons(imageView: ImageView, letter: String?) {
 
         // For drawing the circle
@@ -111,6 +91,7 @@ class ViewContactsAdapter(private val contacts: ArrayList<Contact>) :
 
     }
 
+    // Chooses the colour of the icon from a predefined array of the colours
     private fun chooseColour(letter: String?): Int {
 
         // Chooses which colour to pick
@@ -134,5 +115,4 @@ class ViewContactsAdapter(private val contacts: ArrayList<Contact>) :
 
     // Return the size of your dataset (invoked by the layout manager)
     override fun getItemCount() = contacts.size
-
 }
