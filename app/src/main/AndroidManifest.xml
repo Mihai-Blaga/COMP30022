@@ -20,15 +20,19 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CRM">
         <activity
-            android:name="com.cloudsurfers.crm.pages.main.MainActivity"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.CRM"
+            android:name=".pages.login.LoginActivity"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            </activity>
+        <activity
+            android:name=".pages.main.MainActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.CRM">
+
         </activity>
     </application>
 
