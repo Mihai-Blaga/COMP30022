@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.util.Log
@@ -14,6 +15,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.cloudsurfers.crm.R
 import com.cloudsurfers.crm.databinding.FragmentViewContactsListBinding
 import com.cloudsurfers.crm.functions.Contact
+import com.cloudsurfers.crm.functions.Group
 import com.cloudsurfers.crm.pages.search.SearchableActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
@@ -46,16 +49,16 @@ class ViewContactsList : Fragment() {
             ActivityResultContracts.RequestPermission()
         ) { isGranted: Boolean ->
             if (isGranted) {
-                android.util.Log.i("ViewContactsFragment", "Read permission granted")
+                Log.i("ViewContactsFragment", "Read permission granted")
 
                 //Refresh page to enable viewing contact functionality
                 this.findNavController().navigate(R.id.viewContactsList)
             } else {
-                android.util.Log.w("ViewContactsFragment", "Read permission denied")
+                Log.w("ViewContactsFragment", "Read permission denied")
             }
         }
 
-    //Used to check if reading contact permission is granted. Otherwise displays permission request
+    //Used to check if reading and writing contact permission is granted. Otherwise displays permission request
     //popup.
     //Returns boolean on whether permission was granted
     private fun requestPermission(activity: Activity): Boolean{
@@ -65,7 +68,7 @@ class ViewContactsList : Fragment() {
                 activity,
                 per
             ) == PackageManager.PERMISSION_GRANTED -> {
-                return true
+
             }
             shouldShowRequestPermissionRationale(per) -> {
                 //TODO: Explain to user why permission is needed
@@ -76,7 +79,24 @@ class ViewContactsList : Fragment() {
             }
         }
 
+        val per2 = Manifest.permission.WRITE_CONTACTS
+        when {
+            ContextCompat.checkSelfPermission(
+                activity,
+                per2
+            ) == PackageManager.PERMISSION_GRANTED -> {
+            }
+            shouldShowRequestPermissionRationale(per2) -> {
+                //TODO: Explain to user why permission is needed
+                requestContactPermissionLauncher.launch(per2)
+            }
+            else -> {
+                requestContactPermissionLauncher.launch(per2)
+            }
+        }
+
         return (ContextCompat.checkSelfPermission(activity, per)
+                == PackageManager.PERMISSION_GRANTED) && (ContextCompat.checkSelfPermission(activity, per2)
                 == PackageManager.PERMISSION_GRANTED)
     }
 
