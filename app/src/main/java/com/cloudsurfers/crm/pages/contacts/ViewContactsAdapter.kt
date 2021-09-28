@@ -74,6 +74,7 @@ class ViewContactsAdapter(private val contacts: ArrayList<Contact>) :
         val canvas = Canvas(bitmap)
         val paint = Paint()
         paint.color = chooseColour(letter)
+        paint.isAntiAlias = true
 
         // For drawing the letter
         val textPaint = Paint()
