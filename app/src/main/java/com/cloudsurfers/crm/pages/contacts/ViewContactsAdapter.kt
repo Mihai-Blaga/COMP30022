@@ -22,7 +22,6 @@ import com.cloudsurfers.crm.functions.Contact
 import java.util.*
 import kotlin.collections.ArrayList
 import android.text.StaticLayout
-
 import android.text.TextPaint
 
 
@@ -83,56 +82,57 @@ class ViewContactsAdapter(private val contacts: ArrayList<Contact>) :
         viewHolder.contactNameTextView.text = contacts[position].name
         viewHolder.contact = contacts[position]
 
-        // For drawing the circles
-//        val tempBitmap = ImageBitmap(50,50, ImageBitmapConfig.Argb8888)
-//        val canvas = Canvas(tempBitmap)
-//        val paint = Paint()
+        // Draws the icon in the ImageView
+        drawIcons(viewHolder.contactImageView, contacts[position].name?.substring(0,1))
+
+    }
+
+    private fun drawIcons(imageView: ImageView, letter: String?) {
+
         val rand = Random()
 
-        // Using a different library
-        val bitmap2 = Bitmap.createBitmap(50,50,Bitmap.Config.ARGB_8888)
-        val canvas2 = Canvas(bitmap2)
-        val paint2 = Paint()
+        // For drawing the circle
+        val bitmap = Bitmap.createBitmap(50,50,Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        val paint = Paint()
+        paint.color = chooseColour(letter)//Color(rand.nextInt(256), rand.nextInt(256), rand.nextInt(256)).toArgb()
 
-        // Letter to appear in the centre of the circle
-        val letter: String? = contacts[position].name?.substring(0,1)
-
-//        paint.color = Color(rand.nextInt(256), rand.nextInt(256), rand.nextInt(256)).toArgb()
-        paint2.color = Color(rand.nextInt(256), rand.nextInt(256), rand.nextInt(256)).toArgb()
+        // For drawing the letter
         val textPaint = Paint()
         textPaint.textAlign = Paint.Align.CENTER
-        textPaint.textSize = 16f
+        textPaint.textSize = 20f
+        textPaint.setARGB(255,255,255,255)
+        textPaint.isFakeBoldText = true
 
-//        canvas.drawCircle(Offset(25f,25f),25f, paint)
-        canvas2.drawCircle(25f,25f,25f, paint2)
+        // Actually rendering the icon
+        canvas.drawCircle(25f,25f,25f, paint)
         if (letter != null) {
-            canvas2.drawText(letter,25f,30f,textPaint)
+            canvas.drawText(letter,24.5f,31.5f,textPaint)
         }
-
-//        val textPaint = TextPaint()
-//        textPaint.isAntiAlias = true
-//        textPaint.textSize = 16f * R.style.Theme_MaterialComponents_Dialog_FixedSize
-//        textPaint.color = -0x1000000
-//
-//        val width = textPaint.measureText(letter).toInt()
-//        val staticLayout = StaticLayout(
-//            letter, textPaint,
-//            width, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0, false
-//        )
-//        staticLayout.draw(canvas2)
-
-//        viewHolder.contactImageView.setImageBitmap(tempBitmap.asAndroidBitmap())
-        viewHolder.contactImageView.setImageBitmap(bitmap2)
-
-        Log.i("debug",viewHolder.contactImageView.matrix.toString()+"   ,   "+letter)
-
-
+        imageView.setImageBitmap(bitmap)
 
     }
 
-    fun drawCircle() {
+    private fun chooseColour(letter: String?): Int {
+        val rand = Random()
+        val charNum = letter?.get(0)?.uppercaseChar()?.code?.rem(7)
 
+        Log.i("debug", charNum.toString())
+
+        val colours = arrayOf<Int>(Color(103, 159, 56).toArgb(),
+            Color(177, 86, 73).toArgb(),
+            Color(238, 110, 2).toArgb(),
+            Color(236, 64, 122).toArgb(),
+            Color(242, 81, 29).toArgb(),
+            Color(93, 65, 56).toArgb(),
+            Color(81, 47, 170).toArgb()
+//            Color(, , ).toArgb()
+        )
+
+
+        return colours[charNum!!]
     }
+
 
     // Return the size of your dataset (invoked by the layout manager)
     override fun getItemCount() = contacts.size
