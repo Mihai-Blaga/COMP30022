@@ -46,12 +46,9 @@ class Contact() {
 
     //Additional functionality provided by companion object
     companion object {
-        var groupLookup: HashMap<String, ArrayList<Contact>> = hashMapOf()
-
         //Provides an immutable (read-only) list of all contacts
         @RequiresApi(Build.VERSION_CODES.N)
         fun readContacts(activity: Activity): List<Contact>? {
-            groupLookup = hashMapOf()
             val tempMap = hashMapOf<String, Contact>()
 
             //lookup keys are preferred to RAW_CONTACT_IDs as these can change.
@@ -90,20 +87,6 @@ class Contact() {
                         c.uri = uriCursor.getString(1)
 
                         tempMap[uriCursor.getString(0)] = readContact(c, activity)
-                        val lookupTable = groupLookup
-                        for (group in c.groups!!) {
-                            if (lookupTable.containsKey(group)) {
-                                val groupList = lookupTable[group]
-                                if (groupList != null) {
-                                    if (!groupList.stream().anyMatch { it.id == c.id }) {
-                                        lookupTable[group]?.add(c)
-                                    }
-                                }
-                            } else {
-                                lookupTable[group] = arrayListOf()
-                                lookupTable[group]?.add(c)
-                            }
-                        }
                     }
                 }
             }
@@ -222,21 +205,6 @@ class Contact() {
 
             mCursor.close()
             return c
-        }
-
-        @RequiresApi(Build.VERSION_CODES.N)
-        fun readContactsFromGroup(
-            gId: String = "0",
-            activity: Activity,
-            redoGroupLookup: Boolean
-        ): ArrayList<Contact>? {
-            if (redoGroupLookup) {
-                groupLookup = hashMapOf()
-            }
-            if (groupLookup.size == 0) {
-                readContacts(activity)
-            }
-            return if (groupLookup.containsKey(gId)) groupLookup[gId] else null
         }
 
         fun getCreateContact(name: String, phone: String, email: String): Intent {
