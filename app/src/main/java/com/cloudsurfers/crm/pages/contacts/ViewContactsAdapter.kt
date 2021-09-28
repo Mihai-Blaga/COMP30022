@@ -89,13 +89,11 @@ class ViewContactsAdapter(private val contacts: ArrayList<Contact>) :
 
     private fun drawIcons(imageView: ImageView, letter: String?) {
 
-        val rand = Random()
-
         // For drawing the circle
         val bitmap = Bitmap.createBitmap(50,50,Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         val paint = Paint()
-        paint.color = chooseColour(letter)//Color(rand.nextInt(256), rand.nextInt(256), rand.nextInt(256)).toArgb()
+        paint.color = chooseColour(letter)
 
         // For drawing the letter
         val textPaint = Paint()
@@ -114,8 +112,9 @@ class ViewContactsAdapter(private val contacts: ArrayList<Contact>) :
     }
 
     private fun chooseColour(letter: String?): Int {
-        val rand = Random()
-        val charNum = letter?.get(0)?.uppercaseChar()?.code?.rem(7)
+
+        // Chooses which colour to pick
+        val charNum = letter!![0].code.rem(7)
 
         Log.i("debug", charNum.toString())
 
@@ -128,7 +127,6 @@ class ViewContactsAdapter(private val contacts: ArrayList<Contact>) :
             Color(81, 47, 170).toArgb()
 //            Color(, , ).toArgb()
         )
-
 
         return colours[charNum!!]
     }
