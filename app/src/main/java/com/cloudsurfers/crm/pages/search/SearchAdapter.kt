@@ -1,36 +1,42 @@
-package com.cloudsurfers.crm.pages.contacts
+package com.cloudsurfers.crm.pages.search
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat.startActivity
 import androidx.core.os.bundleOf
-import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.cloudsurfers.crm.R
 import com.cloudsurfers.crm.functions.Contact
+import com.cloudsurfers.crm.pages.main.MainActivity
 
-class ViewContactsAdapter(private val contacts: ArrayList<Contact>):
-    RecyclerView.Adapter<ViewContactsAdapter.ViewHolder>() {
+class SearchAdapter(private val contacts: ArrayList<Contact>):
+    RecyclerView.Adapter<SearchAdapter.ViewHolder>() {
 
     /**
      * Provide a reference to the type of views that you are using
      * (custom ViewHolder).
      */
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val contactNameTextView: TextView = view.findViewById(R.id.view_contacts_list_item_contact_name_text_view)
+        val searchItemTextView: TextView = view.findViewById(R.id.search_list_item_text_view)
         lateinit var contact: Contact
 
         init {
             // Define click listener for the ViewHolder's View.
-            view.setOnClickListener() {
+            view.setOnClickListener {
                 val activity: AppCompatActivity = view.context as AppCompatActivity
                 val c: Contact = Contact.readContact(contact, activity)
 
                 val bundle = bundleOf("name" to c.name, "email" to c.email, "mobile" to c.phone, "notes" to c.note)
 
-                Navigation.findNavController(view).navigate(R.id.action_viewContactsList_to_viewContactFragment, bundle)
+                val viewContactIntent: Intent = Intent(activity, MainActivity::class.java).apply {
+                    action = Intent.ACTION_SEARCH
+                    putExtras(bundle)
+                }
+                activity.startActivity(viewContactIntent)
             }
         }
     }
@@ -39,7 +45,7 @@ class ViewContactsAdapter(private val contacts: ArrayList<Contact>):
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
         // Create a new view, which defines the UI of the list item
         val view = LayoutInflater.from(viewGroup.context)
-            .inflate(R.layout.view_contacts_list_item, viewGroup, false)
+            .inflate(R.layout.search_list_item, viewGroup, false)
 
         return ViewHolder(view)
     }
@@ -49,7 +55,7 @@ class ViewContactsAdapter(private val contacts: ArrayList<Contact>):
 
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
-        viewHolder.contactNameTextView.text = contacts[position].name
+        viewHolder.searchItemTextView.text = contacts[position].name
         viewHolder.contact = contacts[position]
     }
 

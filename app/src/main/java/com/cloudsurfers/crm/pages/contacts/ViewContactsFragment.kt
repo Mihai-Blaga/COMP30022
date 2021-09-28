@@ -9,6 +9,7 @@ import android.provider.ContactsContract
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
@@ -20,6 +21,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.cloudsurfers.crm.R
 import com.cloudsurfers.crm.databinding.FragmentViewContactsListBinding
 import com.cloudsurfers.crm.functions.Contact
+import com.cloudsurfers.crm.pages.search.SearchableActivity
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -94,13 +97,13 @@ class ViewContactsList : Fragment() {
         val view: View = inflater.inflate(R.layout.fragment_view_contacts_list, container, false)
         val activity: Activity = activity as Activity
 
-
         var contactList: ArrayList<Contact> = ArrayList()
 
         if (requestPermission(activity)) {
             contactList = Contact.readContacts(activity) as ArrayList<Contact>
         }
 
+        // Configure list view
         view.findViewById<RecyclerView>(R.id.view_contacts_list_recycler_view).apply {
             adapter = ViewContactsAdapter(contactList)
             layoutManager = LinearLayoutManager(activity)
