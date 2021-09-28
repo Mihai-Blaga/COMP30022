@@ -30,11 +30,11 @@ class Meeting() {
     var location: String? = null
 
     private constructor(
-        eventID: String,
-        title: String,
-        description: String,
-        beginDate: LocalDateTime,
-        endDate: LocalDateTime,
+        eventID: String?,
+        title: String?,
+        description: String?,
+        beginDate: LocalDateTime?,
+        endDate: LocalDateTime?,
         contactName: String?,
         contactEmail: String?,
         contact: Contact?,
