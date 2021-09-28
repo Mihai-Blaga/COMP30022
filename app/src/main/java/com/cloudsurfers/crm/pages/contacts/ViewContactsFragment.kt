@@ -6,11 +6,9 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.provider.ContactsContract
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
@@ -21,11 +19,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.cloudsurfers.crm.R
-import com.cloudsurfers.crm.databinding.FragmentViewContactsListBinding
 import com.cloudsurfers.crm.functions.Contact
-import com.cloudsurfers.crm.functions.Group
-import com.cloudsurfers.crm.pages.search.SearchableActivity
-import com.google.android.material.bottomnavigation.BottomNavigationView
+
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -109,10 +104,11 @@ class ViewContactsList : Fragment() {
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         val view: View = inflater.inflate(R.layout.fragment_view_contacts_list, container, false)
         val activity: Activity = activity as Activity
@@ -134,7 +130,7 @@ class ViewContactsList : Fragment() {
 
         val newContactButton = view.findViewById<Button>(R.id.view_contacts_create_new_contact)//binding.viewContactsCreateNewContact
 
-        newContactButton.setOnClickListener(){ // This button does not work
+        newContactButton.setOnClickListener { // This button does not work
             val intent: Intent = Contact.getCreateContact(
                 name = "",
                 phone = "",
