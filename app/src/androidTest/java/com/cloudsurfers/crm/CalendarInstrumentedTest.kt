@@ -24,10 +24,10 @@ class CalendarInstrumentedTest {
         assertThat(intent).hasAction(Intent.ACTION_INSERT)
 
         val extras = intent.extras
-        assert(extras?.get(CalendarContract.Events.TITLE) == meetingName)
-        assert(extras?.get(Intent.EXTRA_EMAIL) == meetingContact)
-        assert(extras?.get(CalendarContract.Events.EVENT_LOCATION) == meetingLocation)
-        assert(extras?.get(CalendarContract.Events.DESCRIPTION) == meetingNotes)
+        assert(extras!!.get(CalendarContract.Events.TITLE) == meetingName)
+        assert(extras.get(Intent.EXTRA_EMAIL) == meetingContact)
+        assert(extras.get(CalendarContract.Events.EVENT_LOCATION) == meetingLocation)
+        assert(extras.get(CalendarContract.Events.DESCRIPTION) == meetingNotes)
 
     }
 }

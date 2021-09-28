@@ -1,6 +1,7 @@
 package com.cloudsurfers.crm
 
 import android.content.Intent
+import android.provider.ContactsContract
 import com.cloudsurfers.crm.functions.Contact
 //import org.hamcrest.MatcherAssert.assertThat
 import androidx.test.ext.truth.content.IntentSubject.assertThat
@@ -18,8 +19,8 @@ class ContactInstrumentedTest {
         assertThat(intent).hasAction(Intent.ACTION_INSERT)
 
         val extras = intent.extras
-        assert(extras?.get("name") == name)
-        assert(extras?.get("phone") == phone)
-        assert(extras?.get("email") == email)
+        assert(extras!!.get(ContactsContract.Intents.Insert.NAME) == name)
+        assert(extras.get(ContactsContract.Intents.Insert.PHONE) == phone)
+        assert(extras.get(ContactsContract.Intents.Insert.EMAIL) == email)
     }
 }
