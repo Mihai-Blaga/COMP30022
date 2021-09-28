@@ -26,6 +26,8 @@ class SearchableActivity : MainActivity() {
         // Set the searchable configuration of the SearchView
         findViewById<SearchView>(R.id.searchView).apply {
             setSearchableInfo(searchManager.getSearchableInfo(componentName))
+            isIconified = false
+
         }
 
         // Populate chip group with chips
@@ -73,6 +75,7 @@ class SearchableActivity : MainActivity() {
 
     override fun startActivity(intent: Intent?) {
         // Override to add tags to search query
+
         if (Intent.ACTION_SEARCH == intent?.action) {
             intent.putExtras(
                 Bundle().apply {
