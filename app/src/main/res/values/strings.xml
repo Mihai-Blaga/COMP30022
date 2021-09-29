@@ -50,14 +50,14 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
 
-<<<<<<< HEAD
+
     <!--    Auth stuff-->
     <string name="server_client_id">18199992145-o2ou71974ptrfom44ae4v6s9g451cacf.apps.googleusercontent.com</string>
     <!--    Login Stuff-->
     <string name="preference_file_key">cloud_surfers</string>
-=======
+<!--    Search-->
     <string name="search_hint">Search</string>
     <string name="search_chip_default_text">Search chip</string>
     <string name="search_view_no_data_text">No contacts were found</string>
->>>>>>> 771f07abd25e1a9e4c920e464dabad633bd50975
+
 </resources>
