@@ -15,7 +15,7 @@ class CalendarInstrumentedTest {
     @Test
     fun newCalendarIntent_regularInput() {
         val meetingName = "Test"
-        val meetingContact = "Adam"
+        val meetingContact = "adam@gmail.com"
         val meetingLocation = "UniMelb"
         val meetingNotes = "N/A"
         val cal = Calendar.getInstance()
