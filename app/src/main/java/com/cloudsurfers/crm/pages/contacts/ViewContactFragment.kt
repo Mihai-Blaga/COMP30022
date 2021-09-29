@@ -16,7 +16,6 @@ import com.cloudsurfers.crm.functions.ComposeEmail
 import androidx.annotation.RequiresApi
 
 
-// TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "name"
 private const val ARG_PARAM2 = "email"
@@ -28,7 +27,6 @@ private const val ARG_PARAM4 = "notes"
  * create an instance of this fragment.
  */
 class ViewContactFragment : Fragment() {
-    // TODO: Rename and change types of parameters
     private var name: String? = null
     private var email: String? = null
     private var mobile: String? = null
@@ -48,13 +46,13 @@ class ViewContactFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         // Inflate the layout for this fragment
-        val binding = FragmentViewContactBinding.inflate(layoutInflater, container, false);
+        val binding = FragmentViewContactBinding.inflate(layoutInflater, container, false)
         requireActivity().findViewById<com.google.android.material.appbar.MaterialToolbar>(R.id.toolbar).title = name
         val sendEmailButton = binding.viewContactSendEmailButton
-        sendEmailButton.setOnClickListener(){
+        sendEmailButton.setOnClickListener {
             val intent: Intent = ComposeEmail.getSendEmailIntent(email!!)
             startActivity(Intent.createChooser(intent, "Send mail using..."))
         }
@@ -62,7 +60,7 @@ class ViewContactFragment : Fragment() {
 
         // Create meeting button intent
         val createMeetingButton = binding.viewContactCreateMeetingButton
-        createMeetingButton.setOnClickListener(){
+        createMeetingButton.setOnClickListener {
             val intent: Intent = CalendarUtil.getInsertEventIntent(
                 title = "",
                 contactEmail = email!!,
@@ -83,8 +81,6 @@ class ViewContactFragment : Fragment() {
         view.findViewById<TextView>(R.id.view_contact_email_text).text = email
         view.findViewById<TextView>(R.id.view_contact_mobile_text).text = mobile
         view.findViewById<TextView>(R.id.view_contact_notes_text).text = notes
-
-
     }
 
     companion object {
@@ -96,7 +92,6 @@ class ViewContactFragment : Fragment() {
          * @param param2 Parameter 2.
          * @return A new instance of fragment ViewContactFragment.
          */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(name: String, email: String, mobile: String, notes: String) =
             ViewContactFragment().apply {

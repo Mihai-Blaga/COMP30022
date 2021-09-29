@@ -62,7 +62,7 @@
 
             <TextView
                 android:id="@+id/view_meetings_list_item_meeting_date_text_view"
-                android:layout_width="74dp"
+                android:layout_width="140dp"
                 android:layout_height="18dp"
                 android:text="@string/view_meetings_list_item_meeting_date_default_text"
                 android:textColor="@color/light_white"

@@ -20,20 +20,34 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CRM">
         <activity
+            android:name=".pages.search.SearchableActivity"
+            android:launchMode="singleTop"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+            <meta-data android:name="android.app.searchable"
+                android:resource="@xml/searchable"/>
+        </activity>
+        <activity
             android:name=".pages.login.LoginActivity"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            </activity>
+        </activity>
         <activity
             android:name=".pages.main.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.CRM">
+            </activity>
 
-        </activity>
+        <!--Test Libraries-->
+        <uses-library android:name="android.test.runner"
+            android:required="false" />
+
     </application>
 
 </manifest>

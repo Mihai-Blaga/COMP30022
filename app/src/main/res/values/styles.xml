@@ -42,4 +42,15 @@
         <item name="android:textColor">@color/light_white</item>
     </style>
 
+
+    <style name="AppSearchView" parent="Widget.AppCompat.SearchView" >
+        <!-- Query Text Color -->
+        <item name="android:textColorPrimary">@color/light_white</item>
+        <!-- Hint Color -->
+        <item name="android:textColorHint">@color/light_white</item>
+        <!-- Icon Color -->
+        <item name="android:tint">@color/light_white</item>
+
+    </style>
+
 </resources>
