@@ -20,6 +20,7 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 
 class SearchableActivity : MainActivity() {
+
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,30 +46,24 @@ class SearchableActivity : MainActivity() {
                     return false
                 }
 
-                // Change the adapter with updated query data every time the string is changed
+                // Change the adapter with updated query data after user finishes typing
                 override fun onQueryTextChange(query: String?): Boolean {
-                    this@SearchableActivity.findViewById<RecyclerView>(R.id.search_recycler_view).apply {
-                        adapter = SearchAdapter(basicContactSearchWithTags(query!!, getSelectedTags()))
-                    }
+                    handler.removeCallbacksAndMessages(null)
+                    handler.postDelayed({
+                        this@SearchableActivity.findViewById<RecyclerView>(R.id.search_recycler_view).apply {
+                            adapter = SearchAdapter(basicContactSearchWithTags(query!!, getSelectedTags()))
+                        }
+                    }, 250)
                     return false
                 }
             })
 
         }
 
-        // Populate chip group with dummy data
-//        val tags: ArrayList<String> = ArrayList<String>().apply {
-//            add("Friend")
-//            add("University")
-//            add("COMP30022")
-//            add("Kotlin")
-//            add("Squid")
-//            add("Game")
-//        }
         val tags: ArrayList<String> = Group.getAllGroupNames(this)
 
         // Update recycler view each time a new chip is pressed
-        val chipGroup: ChipGroup = findViewById<ChipGroup>(R.id.search_chip_group)
+        val chipGroup: ChipGroup = findViewById(R.id.search_chip_group)
 
         for (tag: String in tags) {
             val chip: Chip = layoutInflater.inflate(R.layout.search_chip, chipGroup, false).apply {
@@ -104,7 +99,7 @@ class SearchableActivity : MainActivity() {
     private fun basicContactSearch(query: String): ArrayList<Contact> {
         if (query == "") return ArrayList()
         return Contact.readContacts(this)?.filter { c ->
-            c.name?.lowercase()?.startsWith(query.lowercase()) == true
+            c.name?.lowercase()?.startsWith(query.lowercase()) == true || c.name?.lowercase()?.split(" ")?.get(1)?.startsWith(query.lowercase()) == true
         } as ArrayList<Contact>
     }
 
