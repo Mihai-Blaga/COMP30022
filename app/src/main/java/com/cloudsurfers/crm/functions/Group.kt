@@ -75,7 +75,16 @@ class Group(var id: String?, var title: String?) {
             if (groupIdLookup.isEmpty()) {
                 refresh(activity)
             }
-            return ArrayList(groupIdLookup.keys.stream().collect(Collectors.toList()))
+            // remove tags which do not have any associated contacts
+            val nonEmptyTags = arrayListOf<String>()
+            for(tag in groupIdLookup.keys){
+                val id = groupIdLookup[tag]
+                if (groupContactLookup.containsKey(id) && !groupContactLookup[id]?.isEmpty()!!){
+                    nonEmptyTags.add(tag)
+                }
+            }
+
+            return nonEmptyTags
 
         }
 
