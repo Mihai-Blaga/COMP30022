@@ -98,8 +98,8 @@ class SearchableActivity : MainActivity() {
     @RequiresApi(Build.VERSION_CODES.N)
     private fun basicContactSearch(query: String): ArrayList<Contact> {
         if (query == "") return ArrayList()
-        return Contact.readContacts(this)?.filter { c ->
-            c.name?.lowercase()?.startsWith(query.lowercase()) == true || c.name?.lowercase()?.split(" ")?.get(1)?.startsWith(query.lowercase()) == true
+        return Contact.readContacts(this)?.filter { c -> !(c.name == null || c.name.equals("")) }
+            ?.filter { c -> c.name!!.lowercase().split(" ").any { it.startsWith(query.lowercase()) }
         } as ArrayList<Contact>
     }
 
