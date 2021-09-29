@@ -1,18 +1,11 @@
 package com.cloudsurfers.crm.functions
 
-import android.Manifest
 import android.app.Activity
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Build
 import android.provider.ContactsContract
 import androidx.annotation.RequiresApi
 import android.net.Uri
-import android.util.Log
-import androidx.activity.ComponentActivity
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 
 
 /** Helper class to store all the relevant contact information so that it can be passed between
@@ -25,6 +18,7 @@ class Contact() {
     var email: String? = null
     var note: String? = null
     var uri: String? = null
+    var groups: ArrayList<String>? = arrayListOf()
 
     constructor (i: String?, nm: String?, p: String?, e: String?, nt: String?) : this() {
         id = i
@@ -34,7 +28,7 @@ class Contact() {
         note = nt
     }
 
-    constructor(i:String?) : this() {
+    constructor(i: String?) : this() {
         id = i
     }
 
@@ -45,15 +39,15 @@ class Contact() {
                 ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +
                 ", note='" + note + '\'' +
-                ", uri=" + uri +
+                ", uri=" + uri + '\'' +
+                ", groups=" + groups.toString() +
                 '}'
     }
 
     //Additional functionality provided by companion object
     companion object {
-
         //Provides an immutable (read-only) list of all contacts
-        @RequiresApi(Build.VERSION_CODES.M)
+        @RequiresApi(Build.VERSION_CODES.N)
         fun readContacts(activity: Activity): List<Contact>? {
             val tempMap = hashMapOf<String, Contact>()
 
@@ -107,14 +101,17 @@ class Contact() {
         fun readContact(c: Contact, activity: Activity): Contact {
             //TODO: check for empty c.id and c.uri
             val lookupUri = ContactsContract.Contacts.getLookupUri(c.id!!.toLong(), c.uri)
-            val contactDataUri = Uri.withAppendedPath(lookupUri,
-                ContactsContract.Contacts.Data.CONTENT_DIRECTORY)
+            val contactDataUri = Uri.withAppendedPath(
+                lookupUri,
+                ContactsContract.Contacts.Data.CONTENT_DIRECTORY
+            )
 
             // A "projection" defines the columns that will be returned for each row
             val mProjection: Array<String> = arrayOf(
                 ContactsContract.Data.RAW_CONTACT_ID,    // Contract class constant for the _ID column name
                 ContactsContract.Data.MIMETYPE,
                 ContactsContract.Data.DATA1,
+                ContactsContract.CommonDataKinds.GroupMembership.GROUP_ROW_ID
             )
 
             val mCursor = activity.contentResolver.query(
@@ -143,11 +140,20 @@ class Contact() {
                             ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE ->
                                 c.phone = mCursor.getString(2) ?: "Phone not found"
                             ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE ->
+
                                 c.email = mCursor.getString(2) ?: "Email not found"
                             ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE ->
                                 c.name = mCursor.getString(2) ?: "Name not found"
                             ContactsContract.CommonDataKinds.Note.CONTENT_ITEM_TYPE ->
                                 c.note = mCursor.getString(2) ?: "Note not found"
+                            ContactsContract.CommonDataKinds.GroupMembership.CONTENT_ITEM_TYPE -> {
+                                val group = mCursor.getString(2)
+                                if (c.groups != null) {
+                                    if (!c.groups!!.contains(group)) {
+                                        c.groups!!.add(group)
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -178,10 +184,14 @@ class Contact() {
                 null
             )
 
-            when (mCursor?.count){
-                null -> {return c}
+            when (mCursor?.count) {
+                null -> {
+                    return c
+                }
                 //TODO: let user know that no contact with this email was found
-                0 -> {return c}
+                0 -> {
+                    return c
+                }
                 else -> {
                     mCursor.moveToPosition(0)
 
@@ -193,6 +203,7 @@ class Contact() {
 
             c = readContact(c, activity)
 
+            mCursor.close()
             return c
         }
 
@@ -200,9 +211,12 @@ class Contact() {
             val contactIntent = Intent(ContactsContract.Intents.Insert.ACTION)
             contactIntent.type = ContactsContract.RawContacts.CONTENT_TYPE
             contactIntent
-                .putExtra(ContactsContract.Intents.Insert.NAME , name) // These just have to be strings
-                .putExtra(ContactsContract.Intents.Insert.PHONE , phone)
-                .putExtra(ContactsContract.Intents.Insert.EMAIL , email)
+                .putExtra(
+                    ContactsContract.Intents.Insert.NAME,
+                    name
+                ) // These just have to be strings
+                .putExtra(ContactsContract.Intents.Insert.PHONE, phone)
+                .putExtra(ContactsContract.Intents.Insert.EMAIL, email)
 //                .putExtra(ContactsContract.Intents.Insert.EXTRA_DATA_SET , "idfk what this is for")
 
             return contactIntent
