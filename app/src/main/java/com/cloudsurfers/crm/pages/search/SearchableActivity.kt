@@ -83,7 +83,6 @@ class SearchableActivity : MainActivity() {
                                 )
                             )
                         }
-                    println("TEST")
                 }
             } as Chip
             chip.text = tag

@@ -98,8 +98,6 @@ class ViewContactsAdapter(private val contacts: ArrayList<Contact>):
         // Chooses which colour to pick
         val charNum = letter!![0].code.rem(7)
 
-        Log.i("debug", charNum.toString())
-
         val colours = arrayOf<Int>(Color(103, 159, 56).toArgb(),
             Color(177, 86, 73).toArgb(),
             Color(238, 110, 2).toArgb(),
@@ -110,7 +108,7 @@ class ViewContactsAdapter(private val contacts: ArrayList<Contact>):
 //            Color(, , ).toArgb()
         )
 
-        return colours[charNum!!]
+        return colours[charNum]
     }
 
 
