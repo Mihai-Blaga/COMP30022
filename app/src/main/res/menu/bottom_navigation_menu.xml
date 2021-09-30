@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
+        android:id="@+id/viewMeetingsFragment"
+        android:enabled="true"
+        android:icon="@drawable/ic_calendar_icon"
+        android:title="@string/bottom_nav_menu_button_2" />
+    <item
         android:id="@+id/viewContactsList"
         android:enabled="true"
         android:icon="@drawable/ic_contact_icon"
@@ -10,10 +15,5 @@
         android:enabled="true"
         android:icon="@drawable/search_icon"
         android:title="@string/bottom_nav_menu_button_3"/>
-    <item
-        android:id="@+id/viewMeetingsFragment"
-        android:enabled="true"
-        android:icon="@drawable/ic_calendar_icon"
-        android:title="@string/bottom_nav_menu_button_2"/>
 
 </menu>

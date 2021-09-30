@@ -95,7 +95,6 @@ class ViewContactsAdapter(private val contacts: ArrayList<Contact>):
     private fun chooseColour(letter: String?): Int {
 
         // Chooses which colour to pick
-
         var charNum = 0
         if (letter != null && letter != "")
             charNum = letter[0].code.rem(7)
@@ -107,7 +106,7 @@ class ViewContactsAdapter(private val contacts: ArrayList<Contact>):
             Color(242, 81, 29).toArgb(),
             Color(93, 65, 56).toArgb(),
             Color(81, 47, 170).toArgb()
-//            Color(, , ).toArgb()
+//            Color(, , ).toArgb() Format for adding for colours
         )
 
         return colours[charNum]
