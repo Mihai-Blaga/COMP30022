@@ -61,4 +61,15 @@ open class MainActivity : AppCompatActivity() {
 
         }
     }
+
+
+    override fun onResume() {
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment_container) as NavHostFragment
+        val navController = navHostFragment.navController
+        if (navController.currentDestination?.id == R.id.viewMeetingsFragment) {
+            findViewById<BottomNavigationView>(R.id.bottom_navigation)?.selectedItemId= R.id.viewMeetingsFragment
+        }
+        super.onResume()
+    }
 }

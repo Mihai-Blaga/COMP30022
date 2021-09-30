@@ -5,7 +5,9 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.view.Menu
 import android.view.View
+import android.widget.ImageButton
 import android.widget.SearchView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
@@ -26,7 +28,6 @@ class SearchableActivity : MainActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_searchable)
 
-        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
 
         // Initialise recycler view with empty array list
         findViewById<RecyclerView>(R.id.search_recycler_view).apply {
@@ -36,7 +37,9 @@ class SearchableActivity : MainActivity() {
 
 
         // Set the searchable configuration of the SearchView
-        findViewById<SearchView>(R.id.searchView).apply {
+        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
+
+        val searchView = findViewById<SearchView>(R.id.searchView).apply {
             setSearchableInfo(searchManager.getSearchableInfo(componentName))
             isIconified = false
 
@@ -64,11 +67,9 @@ class SearchableActivity : MainActivity() {
 
         // Update recycler view each time a new chip is pressed
         val chipGroup: ChipGroup = findViewById(R.id.search_chip_group)
-
         for (tag: String in tags) {
             val chip: Chip = layoutInflater.inflate(R.layout.search_chip, chipGroup, false).apply {
                 setOnClickListener {
-                    val searchView = this@SearchableActivity.findViewById<SearchView>(R.id.searchView)
                     this@SearchableActivity.findViewById<RecyclerView>(R.id.search_recycler_view)
                         .apply {
                             adapter = SearchAdapter(
@@ -82,6 +83,13 @@ class SearchableActivity : MainActivity() {
             } as Chip
             chip.text = tag
             chipGroup.addView(chip)
+        }
+
+        // Set back button action
+        findViewById<ImageButton>(R.id.search_back_button).apply {
+            setOnClickListener {
+                this@SearchableActivity.onBackPressed()
+            }
         }
 
         handleIntent(intent)
@@ -138,7 +146,6 @@ class SearchableActivity : MainActivity() {
     private fun handleIntent(intent: Intent) {
         if (Intent.ACTION_SEARCH == intent.action) {
             intent.getStringExtra(SearchManager.QUERY)?.also { query ->
-                // TODO: Perform The Search
                 val tags: ArrayList<String>? = intent.getStringArrayListExtra("tags")
                 val queryContacts: ArrayList<Contact> = basicContactSearchWithTags(query, tags!!)
 

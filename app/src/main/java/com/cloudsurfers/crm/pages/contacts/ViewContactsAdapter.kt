@@ -1,7 +1,6 @@
 package com.cloudsurfers.crm.pages.contacts
 
 import android.graphics.Bitmap
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -96,9 +95,12 @@ class ViewContactsAdapter(private val contacts: ArrayList<Contact>):
     private fun chooseColour(letter: String?): Int {
 
         // Chooses which colour to pick
-        val charNum = letter!![0].code.rem(7)
 
-        val colours = arrayOf<Int>(Color(103, 159, 56).toArgb(),
+        var charNum = 0
+        if (letter != null && letter != "")
+            charNum = letter[0].code.rem(7)
+
+        val colours = arrayOf(Color(103, 159, 56).toArgb(),
             Color(177, 86, 73).toArgb(),
             Color(238, 110, 2).toArgb(),
             Color(236, 64, 122).toArgb(),
