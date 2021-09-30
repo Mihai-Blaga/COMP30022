@@ -52,7 +52,7 @@
 
 
     <!--    Auth stuff-->
-    <string name="server_client_id">18199992145-o2ou71974ptrfom44ae4v6s9g451cacf.apps.googleusercontent.com</string>
+    <string name="server_client_id">818199992145-o2ou71974ptrfom44ae4v6s9g451cacf.apps.googleusercontent.com</string>
     <!--    Login Stuff-->
     <string name="preference_file_key">cloud_surfers</string>
 <!--    Search-->

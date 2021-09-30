@@ -33,8 +33,9 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = LoginPageBinding.inflate(layoutInflater);
-
+        val clientID = getString(R.string.server_client_id)
         val gso: GoogleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(clientID)
             .requestEmail()
             .build()
 
