@@ -43,6 +43,20 @@ android {
             returnDefaultValues = true
         }
     }
+    signingConfigs {
+        debug {
+            storeFile file('../keystore/debug.keystore')
+            storePassword "android"
+            keyAlias "androiddebugkey"
+            keyPassword "android"
+        }
+        release {
+            storeFile file('../keystore/keystore.jks')
+            storePassword "cloudsurfersPass"
+            keyAlias "cloudsurfersAlias"
+            keyPassword "cloudsurfersPass"
+        }
+    }
 
 
     // Test libraries

@@ -50,9 +50,8 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
 
-
     <!--    Auth stuff-->
-    <string name="server_client_id">818199992145-i7jm3psp9p6reo06uktjfpicn1oqorjr.apps.googleusercontent.com</string>
+    <string name="server_client_id">818199992145-o2ou71974ptrfom44ae4v6s9g451cacf.apps.googleusercontent.com</string>
     <!--    Login Stuff-->
     <string name="preference_file_key">cloud_surfers</string>
 <!--    Search-->
