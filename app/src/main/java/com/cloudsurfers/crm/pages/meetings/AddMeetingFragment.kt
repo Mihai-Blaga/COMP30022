@@ -42,7 +42,7 @@ class AddMeetingFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         val binding = FragmentAddNewMeetingBinding.inflate(layoutInflater, container, false)
 
@@ -51,7 +51,7 @@ class AddMeetingFragment : Fragment() {
         val cal = Calendar.getInstance()
 
         // Date and Time Dialog Selectors
-        val dateSetListener = DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+        val dateSetListener = DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
             cal.set(Calendar.YEAR, year)
             cal.set(Calendar.MONTH, monthOfYear)
             cal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
@@ -61,7 +61,7 @@ class AddMeetingFragment : Fragment() {
             binding.outlinedTextFieldMeetingDate.editText?.setText(sdf.format(cal.time))
         }
 
-        val timeSetListener = TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
+        val timeSetListener = TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
             cal.set(Calendar.HOUR_OF_DAY, hourOfDay)
             cal.set(Calendar.MINUTE, minute)
             binding.outlinedTextFieldMeetingTime.editText?.setText("${hourOfDay}:${minute}")
@@ -74,7 +74,7 @@ class AddMeetingFragment : Fragment() {
 //                cal.get(Calendar.MONTH),
 //                cal.get(Calendar.DAY_OF_MONTH)).show()
 //        }
-        binding.outlinedTextFieldMeetingDate.editText?.setOnFocusChangeListener(){ v, b ->
+        binding.outlinedTextFieldMeetingDate.editText?.setOnFocusChangeListener { v, b ->
             // This line prevents keyboard from showing
             Util.hideKeyboard(v, requireContext())
             if (b){
@@ -86,7 +86,7 @@ class AddMeetingFragment : Fragment() {
 
         }
 
-        binding.outlinedTextFieldMeetingTime.editText?.setOnFocusChangeListener(){ v, b ->
+        binding.outlinedTextFieldMeetingTime.editText?.setOnFocusChangeListener { v, b ->
             // This line prevents keyboard from showing
             Util.hideKeyboard(v, requireContext())
             if (b){
@@ -98,7 +98,7 @@ class AddMeetingFragment : Fragment() {
 
         }
 
-        binding.addMeetingButton.setOnClickListener(){
+        binding.addMeetingButton.setOnClickListener {
             val meetingName = binding.outlinedTextFieldMeetingName.editText?.text.toString()
             val meetingContact  = binding.outlinedTextFieldMeetingContact.editText?.text.toString()
             val meetingLocation = binding.outlinedTextFieldMeetingLocation.editText?.text.toString()
@@ -116,7 +116,7 @@ class AddMeetingFragment : Fragment() {
         }
 
 
-        return binding.root;
+        return binding.root
     }
 
     companion object {

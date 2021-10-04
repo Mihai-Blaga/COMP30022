@@ -21,11 +21,7 @@ private const val ARG_PARAM1 = "name"
 private const val ARG_PARAM2 = "email"
 private const val ARG_PARAM3 = "mobile"
 private const val ARG_PARAM4 = "notes"
-/**
- * A simple [Fragment] subclass.
- * Use the [ViewContactFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
+
 class ViewContactFragment : Fragment() {
     private var name: String? = null
     private var email: String? = null
@@ -81,26 +77,5 @@ class ViewContactFragment : Fragment() {
         view.findViewById<TextView>(R.id.view_contact_email_text).text = email
         view.findViewById<TextView>(R.id.view_contact_mobile_text).text = mobile
         view.findViewById<TextView>(R.id.view_contact_notes_text).text = notes
-    }
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment ViewContactFragment.
-         */
-        @JvmStatic
-        fun newInstance(name: String, email: String, mobile: String, notes: String) =
-            ViewContactFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, name)
-                    putString(ARG_PARAM2, email)
-                    putString(ARG_PARAM3, mobile)
-                    putString(ARG_PARAM4, notes)
-                }
-            }
     }
 }
