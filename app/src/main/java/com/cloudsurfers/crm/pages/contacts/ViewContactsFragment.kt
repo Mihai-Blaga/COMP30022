@@ -15,6 +15,7 @@ import android.widget.Button
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -128,15 +129,10 @@ class ViewContactsList : Fragment() {
         // Inflate the layout for this fragment
         //val binding = FragmentViewContactsListBinding.inflate(layoutInflater, container, false);
 
-        val newContactButton = view.findViewById<Button>(R.id.view_contacts_create_new_contact)//binding.viewContactsCreateNewContact
+        val newContactButton = view.findViewById<Button>(R.id.createNewContactButton)
 
-        newContactButton.setOnClickListener { // This button does not work
-            val intent: Intent = Contact.getCreateContact(
-                name = "",
-                phone = "",
-                email = ""
-            )
-            startActivity(intent)
+        newContactButton.setOnClickListener {
+            Navigation.findNavController(view).navigate(R.id.contacts_list_to_add_contact)
         }
 
         return view

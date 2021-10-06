@@ -83,7 +83,6 @@ class CalendarUtil{
                 put(CalendarContract.Attendees.EVENT_ID, eventId);
             }
             activity.contentResolver.insert(CalendarContract.Attendees.CONTENT_URI, attendeeValues)
-
             return eventId
         }
     }

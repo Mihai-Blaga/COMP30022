@@ -1,11 +1,25 @@
 package com.cloudsurfers.crm.functions
 
+import android.Manifest
 import android.app.Activity
+import android.content.ContentValues
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Build
 import android.provider.ContactsContract
 import androidx.annotation.RequiresApi
 import android.net.Uri
+import android.provider.CalendarContract
+import android.content.ContentProviderOperation
+
+import android.provider.ContactsContract.CommonDataKinds.StructuredName
+
+import android.accounts.AccountManager
+
+import android.provider.ContactsContract.RawContacts
+
+
+
 
 
 /** Helper class to store all the relevant contact information so that it can be passed between
@@ -220,6 +234,65 @@ class Contact() {
 //                .putExtra(ContactsContract.Intents.Insert.EXTRA_DATA_SET , "idfk what this is for")
 
             return contactIntent
+        }
+
+        fun createContact(activity: Activity, name: String, phone: String, email: String, notes: String){
+            if (activity.checkSelfPermission(Manifest.permission.WRITE_CONTACTS) != PackageManager.PERMISSION_GRANTED){
+                val requestCode = 1;
+                activity.requestPermissions(arrayOf(Manifest.permission.WRITE_CALENDAR), requestCode);
+            }
+
+            val ops = ArrayList<ContentProviderOperation>()
+            val rawContactInsertIndex: Int = ops.size
+            ops.add(
+                ContentProviderOperation.newInsert(RawContacts.CONTENT_URI)
+                    .withValue(RawContacts.ACCOUNT_TYPE, AccountManager.KEY_ACCOUNT_TYPE)
+                    .withValue(RawContacts.ACCOUNT_NAME, AccountManager.KEY_ACCOUNT_NAME)
+                    .build()
+            )
+
+            ops.add(
+                ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
+                    .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, rawContactInsertIndex)
+                    .withValue(ContactsContract.Data.MIMETYPE, StructuredName.CONTENT_ITEM_TYPE)
+                    .withValue(StructuredName.DISPLAY_NAME, name)
+                    .build()
+            )
+
+            ops.add(
+                ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
+                    .withValueBackReference(
+                        ContactsContract.Data.RAW_CONTACT_ID,
+                        rawContactInsertIndex
+                    )
+                    .withValue(
+                        ContactsContract.Data.MIMETYPE,
+                        ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE
+                    )
+                    .withValue(ContactsContract.CommonDataKinds.Phone.NUMBER, phone)
+                    .build()
+            )
+
+            ops.add(
+                ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
+                    .withValueBackReference(
+                        ContactsContract.Data.RAW_CONTACT_ID,
+                        rawContactInsertIndex
+                    )
+                    .withValue(
+                        ContactsContract.Data.MIMETYPE,
+                        ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE
+                    )
+                    .withValue(ContactsContract.CommonDataKinds.Email.DATA, email)
+                    .build()
+            )
+
+            try{
+                var results = activity.contentResolver.applyBatch(ContactsContract.AUTHORITY, ops)
+            } catch (e : Exception){
+                e.printStackTrace()
+            }
+
         }
 
     }
