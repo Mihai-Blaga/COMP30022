@@ -131,12 +131,13 @@ class ViewContactsList : Fragment() {
         val newContactButton = view.findViewById<Button>(R.id.view_contacts_create_new_contact)//binding.viewContactsCreateNewContact
 
         newContactButton.setOnClickListener { // This button does not work
-            val intent: Intent = Contact.getCreateContact(
-                name = "",
-                phone = "",
-                email = ""
-            )
-            startActivity(intent)
+//            val intent: Intent = Contact.getCreateContact(
+//                name = "",
+//                phone = "",
+//                email = ""
+//            )
+//            startActivity(intent)
+
         }
 
         return view

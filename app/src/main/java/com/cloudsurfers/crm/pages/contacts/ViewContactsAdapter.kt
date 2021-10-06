@@ -10,6 +10,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.ui.graphics.*
 import android.graphics.Canvas
 import android.graphics.Paint
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.core.os.bundleOf
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
@@ -25,6 +27,7 @@ class ViewContactsAdapter(private val contacts: ArrayList<Contact>):
      * Provide a reference to the type of views that you are using
      * (custom ViewHolder).
      */
+    @RequiresApi(Build.VERSION_CODES.N)
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val contactNameTextView: TextView = view.findViewById(R.id.view_contacts_list_item_contact_name_text_view)
         val contactImageView: ImageView = view.findViewById(R.id.view_contacts_list_item_icon_imageView)
@@ -36,14 +39,15 @@ class ViewContactsAdapter(private val contacts: ArrayList<Contact>):
                 val activity: AppCompatActivity = view.context as AppCompatActivity
                 val c: Contact = Contact.readContact(contact, activity)
 
-                val bundle = bundleOf("name" to c.name, "email" to c.email, "mobile" to c.phone, "notes" to c.note, "tags" to c.groups)
-
+                val bundle = bundleOf("name" to c.name, "email" to c.email, "mobile" to c.phone, "notes" to c.note, "tags" to c.getGroupNames(activity))
+                println(c.getGroupNames(activity))
                 Navigation.findNavController(view).navigate(R.id.action_viewContactsList_to_viewContactFragment, bundle)
             }
         }
     }
 
     // Create new views (invoked by the layout manager)
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
         // Create a new view, which defines the UI of the list item
         val view = LayoutInflater.from(viewGroup.context)
