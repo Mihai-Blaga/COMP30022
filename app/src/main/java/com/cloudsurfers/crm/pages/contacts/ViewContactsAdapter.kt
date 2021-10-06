@@ -36,7 +36,7 @@ class ViewContactsAdapter(private val contacts: ArrayList<Contact>):
                 val activity: AppCompatActivity = view.context as AppCompatActivity
                 val c: Contact = Contact.readContact(contact, activity)
 
-                val bundle = bundleOf("name" to c.name, "email" to c.email, "mobile" to c.phone, "notes" to c.note)
+                val bundle = bundleOf("name" to c.name, "email" to c.email, "mobile" to c.phone, "notes" to c.note, "tags" to c.groups)
 
                 Navigation.findNavController(view).navigate(R.id.action_viewContactsList_to_viewContactFragment, bundle)
             }

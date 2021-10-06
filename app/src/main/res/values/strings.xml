@@ -58,4 +58,7 @@
     <string name="search_chip_default_text">Search chip</string>
     <string name="search_view_no_data_text">No contacts were found</string>
 
+    <string name="chip_hint">add tags</string>
+    <string name="chip_label_text">Tags</string>
+
 </resources>
