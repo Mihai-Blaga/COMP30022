@@ -44,6 +44,18 @@ class Contact() {
                 '}'
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
+    fun getGroupNames(activity: Activity): ArrayList<String> {
+        val groups = arrayListOf<String>()
+        for (id in groups){
+            val name = Group.getGroupNameFromId(id, activity)
+            if(name != ""){
+                groups.add(name)
+            }
+        }
+        return groups
+    }
+
     //Additional functionality provided by companion object
     companion object {
         //Provides an immutable (read-only) list of all contacts
