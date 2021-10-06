@@ -18,6 +18,7 @@ class Group(var id: String?, var title: String?) {
         private var accountName: String? = null
         private var accountType: String? = null
         private var groupIdLookup: HashMap<String, String> = hashMapOf()
+        private var groupNameLookup: HashMap<String, String> = hashMapOf()
         private var groupContactLookup: HashMap<String, ArrayList<Contact>> = hashMapOf()
 
         @RequiresApi(Build.VERSION_CODES.N)
@@ -137,6 +138,14 @@ class Group(var id: String?, var title: String?) {
         }
 
         @RequiresApi(Build.VERSION_CODES.N)
+        fun getGroupNameFromId(id: String, activity: Activity): String{
+            if (groupNameLookup.isEmpty()){
+                refresh(activity)
+            }
+            return if (groupNameLookup.containsKey(id)) groupNameLookup[id]!! else ""
+        }
+
+        @RequiresApi(Build.VERSION_CODES.N)
         fun refresh(activity: Activity) {
             fetchAllGroupNames(activity)
             fetchContactsByGroups(activity)
@@ -170,6 +179,7 @@ class Group(var id: String?, var title: String?) {
         private fun fetchAllGroupNames(activity: Activity) {
             // reset the lookup and groups list
             groupIdLookup = hashMapOf()
+            groupNameLookup = hashMapOf()
             groups = arrayListOf()
 
             val projection = arrayOf(
@@ -201,10 +211,15 @@ class Group(var id: String?, var title: String?) {
                         uriCursor.moveToPosition(i)
                         val group = Group((uriCursor.getInt(0)).toString(), uriCursor.getString(1))
                         if (group.id != null && group.title != null) {
-                            if (groupIdLookup.containsKey(group.id)) {
+                            if (groupIdLookup.containsKey(group.title)) {
                                 groupIdLookup.replace(group.title!!, group.id!!)
                             } else {
                                 groupIdLookup[group.title!!] = group.id!!
+                            }
+                            if (groupNameLookup.containsKey(group.id)) {
+                                groupNameLookup.replace(group.id!!, group.title!!)
+                            } else {
+                                groupNameLookup[group.id!!] = group.title!!
                             }
                         }
                         groups.add(group)

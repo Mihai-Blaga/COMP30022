@@ -2,24 +2,20 @@ package com.cloudsurfers.crm.functions
 
 import android.Manifest
 import android.app.Activity
-import android.content.ContentValues
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.provider.ContactsContract
 import androidx.annotation.RequiresApi
 import android.net.Uri
 import android.provider.CalendarContract
-import android.content.ContentProviderOperation
 
 import android.provider.ContactsContract.CommonDataKinds.StructuredName
 
 import android.accounts.AccountManager
+import android.content.*
 
 import android.provider.ContactsContract.RawContacts
-
-
-
+import com.cloudsurfers.crm.R
 
 
 /** Helper class to store all the relevant contact information so that it can be passed between
@@ -56,6 +52,18 @@ class Contact() {
                 ", uri=" + uri + '\'' +
                 ", groups=" + groups.toString() +
                 '}'
+    }
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    fun getGroupNames(activity: Activity): ArrayList<String> {
+        val groupNames = arrayListOf<String>()
+        for (id in groups!!){
+            val name = Group.getGroupNameFromId(id, activity)
+            if(name != ""){
+                groupNames.add(name)
+            }
+        }
+        return groupNames
     }
 
     //Additional functionality provided by companion object
@@ -236,18 +244,33 @@ class Contact() {
             return contactIntent
         }
 
-        fun createContact(activity: Activity, name: String, phone: String, email: String, notes: String){
+        @RequiresApi(Build.VERSION_CODES.N)
+        fun createContact(activity: Activity, name: String, phone: String, email: String, notes: String, tags: ArrayList<String>): Boolean{
             if (activity.checkSelfPermission(Manifest.permission.WRITE_CONTACTS) != PackageManager.PERMISSION_GRANTED){
                 val requestCode = 1;
-                activity.requestPermissions(arrayOf(Manifest.permission.WRITE_CALENDAR), requestCode);
+                activity.requestPermissions(arrayOf(Manifest.permission.WRITE_CONTACTS), requestCode);
+            }
+            if (activity.checkSelfPermission(Manifest.permission.GET_ACCOUNTS) != PackageManager.PERMISSION_GRANTED){
+                val requestCode = 1;
+                activity.requestPermissions(arrayOf(Manifest.permission.GET_ACCOUNTS), requestCode);
             }
 
             val ops = ArrayList<ContentProviderOperation>()
-            val rawContactInsertIndex: Int = ops.size
+            val rawContactInsertIndex: Int = 0
+
+            val accManager = AccountManager.get(activity)
+                val accounts = accManager.accounts
+
+            val sharedPref = activity.getSharedPreferences(activity.getString(R.string.preference_file_key), Context.MODE_PRIVATE)
+            val currEmail = sharedPref.getString("email", "")
+            val account = accounts.filter {
+                it.name == currEmail
+            }[0]
+
             ops.add(
                 ContentProviderOperation.newInsert(RawContacts.CONTENT_URI)
-                    .withValue(RawContacts.ACCOUNT_TYPE, AccountManager.KEY_ACCOUNT_TYPE)
-                    .withValue(RawContacts.ACCOUNT_NAME, AccountManager.KEY_ACCOUNT_NAME)
+                    .withValue(RawContacts.ACCOUNT_TYPE, account.type)
+                    .withValue(RawContacts.ACCOUNT_NAME, account.name)
                     .build()
             )
 
@@ -287,12 +310,51 @@ class Contact() {
                     .build()
             )
 
+            ops.add(
+                ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
+                    .withValueBackReference(
+                        ContactsContract.Data.RAW_CONTACT_ID,
+                        rawContactInsertIndex
+                    )
+                    .withValue(
+                        ContactsContract.Data.MIMETYPE,
+                        ContactsContract.CommonDataKinds.Note.CONTENT_ITEM_TYPE
+                    )
+                    .withValue(ContactsContract.CommonDataKinds.Note.NOTE, notes)
+                    .build()
+            )
+
+            for (tag in tags){
+
+                var tagId : String? = Group.getGroupByTitle(tag, activity)?.id
+                if (tagId == null){
+                    tagId = Group.createNewGroup(activity, tag)!!.id
+                }
+                ops.add(
+                    ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
+                        .withValueBackReference(
+                            ContactsContract.Data.RAW_CONTACT_ID,
+                            rawContactInsertIndex
+                        )
+                        .withValue(
+                            ContactsContract.Data.MIMETYPE,
+                            ContactsContract.CommonDataKinds.GroupMembership.CONTENT_ITEM_TYPE
+                        )
+
+                        .withValue(ContactsContract.CommonDataKinds.GroupMembership.GROUP_ROW_ID, tagId!!)
+                        .build()
+                )
+            }
+
+
             try{
                 var results = activity.contentResolver.applyBatch(ContactsContract.AUTHORITY, ops)
+                return ops.size == results.size
             } catch (e : Exception){
                 e.printStackTrace()
             }
 
+            return false;
         }
 
     }

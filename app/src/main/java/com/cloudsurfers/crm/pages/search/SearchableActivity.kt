@@ -28,7 +28,6 @@ class SearchableActivity : MainActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_searchable)
 
-
         // Initialise recycler view with empty array list
         findViewById<RecyclerView>(R.id.search_recycler_view).apply {
             adapter = SearchAdapter(ArrayList())
