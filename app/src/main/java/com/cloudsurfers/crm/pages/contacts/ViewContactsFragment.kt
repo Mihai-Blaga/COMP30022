@@ -135,7 +135,7 @@ class ViewContactsList : Fragment() {
         }
 
         setFragmentResultListener("requestKey") { _, bundle ->
-            val refreshContacts = bundle.getBoolean("refreshContacts")
+            val refreshContacts = bundle.getBoolean("refreshContacts", false)
             if (refreshContacts) getContacts(activity)
         }
 

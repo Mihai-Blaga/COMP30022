@@ -349,7 +349,7 @@ class Contact() {
 
             try{
                 var results = activity.contentResolver.applyBatch(ContactsContract.AUTHORITY, ops)
-                Group.refresh()
+                Group.refresh(activity)
                 return ops.size == results.size
             } catch (e : Exception){
                 e.printStackTrace()
