@@ -15,6 +15,7 @@ import android.widget.Button
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -38,6 +39,8 @@ class ViewContactsList : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+
+    var contactList: ArrayList<Contact> = ArrayList()
 
     //Launches popup requesting access to reading contacts
     private val requestContactPermissionLauncher =
@@ -114,12 +117,7 @@ class ViewContactsList : Fragment() {
         val view: View = inflater.inflate(R.layout.fragment_view_contacts_list, container, false)
         val activity: Activity = activity as Activity
 
-        var contactList: ArrayList<Contact> = ArrayList()
-
-        if (requestPermission(activity)) {
-            contactList = Contact.readContacts(activity) as ArrayList<Contact>
-            contactList.sortWith(compareBy { it.name })
-        }
+        getContacts(activity)
 
         // Configure list view
         view.findViewById<RecyclerView>(R.id.view_contacts_list_recycler_view).apply {
@@ -136,7 +134,20 @@ class ViewContactsList : Fragment() {
             Navigation.findNavController(view).navigate(R.id.contacts_list_to_add_contact)
         }
 
+        setFragmentResultListener("requestKey") { _, bundle ->
+            val refreshContacts = bundle.getBoolean("refreshContacts")
+            if (refreshContacts) getContacts(activity)
+        }
+
         return view
+    }
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    private fun getContacts(activity: Activity){
+        if (requestPermission(activity)) {
+            contactList = Contact.readContacts(activity) as ArrayList<Contact>
+            contactList.sortWith(compareBy { it.name })
+        }
     }
 
     companion object {

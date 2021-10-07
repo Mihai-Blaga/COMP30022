@@ -15,7 +15,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.core.os.bundleOf
 import androidx.core.view.children
+import androidx.fragment.app.setFragmentResult
+import androidx.navigation.fragment.findNavController
+import com.cloudsurfers.crm.R
 import com.cloudsurfers.crm.databinding.FragmentAddNewContactBinding
 import com.cloudsurfers.crm.functions.CalendarUtil
 import com.cloudsurfers.crm.databinding.FragmentAddNewMeetingBinding
@@ -92,7 +96,8 @@ class AddContactFragment : Fragment() {
             var notes = binding.outlinedTextFieldNotes.editText?.text.toString()
             val success = Contact.createContact(requireActivity(), name, phone, email, notes, getTags(binding.addContactChipGroup))
             if (success){
-                requireActivity().onBackPressed()
+                setFragmentResult("requestKey", bundleOf("refreshContacts" to true))
+                findNavController().popBackStack()
             }
             else{
                 val text = "Failed to add Contact. Please retry!"
