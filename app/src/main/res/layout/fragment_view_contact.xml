@@ -119,6 +119,9 @@
         android:background="@drawable/chips_layout_border"
         android:orientation="horizontal"
         app:layout_constraintTop_toBottomOf="@+id/viewContactOutlinedTextFieldNotes"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
         tools:layout_editor_absoluteX="16dp">
 
         <com.google.android.flexbox.FlexboxLayout
@@ -126,6 +129,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+
             app:alignItems="stretch"
             app:dividerDrawable="@drawable/divider"
             app:flexWrap="wrap"
