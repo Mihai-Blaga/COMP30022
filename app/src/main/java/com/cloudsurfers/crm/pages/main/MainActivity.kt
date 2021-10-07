@@ -58,7 +58,6 @@ open class MainActivity : AppCompatActivity() {
             val bundle: Bundle? = intent.extras
             navController.popBackStack()  // Pop back-stack so that navigation takes back to the search page instead
             navController.navigate(R.id.viewContactFragment, bundle)
-
         }
     }
 

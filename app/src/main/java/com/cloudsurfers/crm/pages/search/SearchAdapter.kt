@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat.startActivity
 import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.RecyclerView
 import com.cloudsurfers.crm.R
@@ -35,6 +34,7 @@ class SearchAdapter(private val contacts: ArrayList<Contact>):
 
                 val bundle = bundleOf("name" to c.name, "email" to c.email, "mobile" to c.phone, "notes" to c.note, "tags" to c.getGroupNames(activity))
 
+                println(c.getGroupNames(activity))
                 val viewContactIntent: Intent = Intent(activity, MainActivity::class.java).apply {
                     action = Intent.ACTION_SEARCH
                     putExtras(bundle)
@@ -45,6 +45,7 @@ class SearchAdapter(private val contacts: ArrayList<Contact>):
     }
 
     // Create new views (invoked by the layout manager)
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
         // Create a new view, which defines the UI of the list item
         val view = LayoutInflater.from(viewGroup.context)
