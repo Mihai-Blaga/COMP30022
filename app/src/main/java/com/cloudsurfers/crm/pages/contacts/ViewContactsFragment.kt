@@ -118,6 +118,7 @@ class ViewContactsList : Fragment() {
 
         if (requestPermission(activity)) {
             contactList = Contact.readContacts(activity) as ArrayList<Contact>
+            contactList.sortWith(compareBy { it.name })
         }
 
         // Configure list view
