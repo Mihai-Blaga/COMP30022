@@ -73,7 +73,9 @@ class Group(var id: String?, var title: String?) {
 
         @RequiresApi(Build.VERSION_CODES.N)
         fun getAllGroupNames(activity: Activity): ArrayList<String>{
-            refresh(activity)
+            if(groupContactLookup.isEmpty()) {
+                refresh(activity)
+            }
             // remove tags which do not have any associated contacts
             val nonEmptyTags = arrayListOf<String>()
             for(tag in groupIdLookup.keys){
