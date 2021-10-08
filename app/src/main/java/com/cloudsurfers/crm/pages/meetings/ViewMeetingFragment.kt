@@ -135,7 +135,7 @@ class ViewMeetingFragment : Fragment() {
             }
         }
 
-        binding.viewMeetingSaveMeetingButton.setOnClickListener {
+        binding.viewMeetingEditMeetingButton.setOnClickListener {
             val meetingName =
                 binding.viewMeetingOutlinedTextFieldMeetingName.editText?.text.toString()
             val meetingContact =

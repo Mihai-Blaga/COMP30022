@@ -86,42 +86,42 @@ class CalendarUtil{
             return eventId
         }
 
-        @RequiresApi(Build.VERSION_CODES.N)
-        fun updateEvent(activity: Activity, title: String, contactEmail: String, location: String, dateTime: Calendar,  desc: String) : Long {
-            if (activity.checkSelfPermission(Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED){
-                val requestCode = 1;
-                activity.requestPermissions(arrayOf(Manifest.permission.WRITE_CALENDAR), requestCode);
-            }
-
-            // TODO configure calID?
-            val calID = 1;
-            val startMillis: Long = dateTime.timeInMillis
-            val endMillis: Long = startMillis + ONE_HOUR_IN_MILLI;
-
-            val eventValues = ContentValues().apply {
-                put(CalendarContract.Events.DTSTART, startMillis)
-                put(CalendarContract.Events.DTEND, endMillis)
-                put(CalendarContract.Events.TITLE, title)
-                put(CalendarContract.Events.DESCRIPTION, desc)
-                put(CalendarContract.Events.CALENDAR_ID, calID)
-                put(CalendarContract.Events.EVENT_TIMEZONE, dateTime.timeZone.displayName)
-                put(CalendarContract.Events.EVENT_LOCATION, location)
-            }
-            val uri: Uri? = activity.contentResolver.insert(CalendarContract.Events.CONTENT_URI, eventValues)
-            var eventId: Long = -1
-            if (uri != null){
-                eventId = uri.lastPathSegment?.toLong() ?: -1
-            }
-
-            if (eventId < 0) return eventId;
-
-            val attendeeValues = ContentValues().apply {
-                put(CalendarContract.Attendees.ATTENDEE_EMAIL, contactEmail);
-                put(CalendarContract.Attendees.EVENT_ID, eventId);
-            }
-            activity.contentResolver.insert(CalendarContract.Attendees.CONTENT_URI, attendeeValues)
-
-            return eventId
-        }
+//        @RequiresApi(Build.VERSION_CODES.N)
+//        fun updateEvent(activity: Activity, title: String, contactEmail: String, location: String, dateTime: Calendar,  desc: String) : Long {
+//            if (activity.checkSelfPermission(Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED){
+//                val requestCode = 1;
+//                activity.requestPermissions(arrayOf(Manifest.permission.WRITE_CALENDAR), requestCode);
+//            }
+//
+//            // TODO configure calID?
+//            val calID = 1;
+//            val startMillis: Long = dateTime.timeInMillis
+//            val endMillis: Long = startMillis + ONE_HOUR_IN_MILLI;
+//
+//            val eventValues = ContentValues().apply {
+//                put(CalendarContract.Events.DTSTART, startMillis)
+//                put(CalendarContract.Events.DTEND, endMillis)
+//                put(CalendarContract.Events.TITLE, title)
+//                put(CalendarContract.Events.DESCRIPTION, desc)
+//                put(CalendarContract.Events.CALENDAR_ID, calID)
+//                put(CalendarContract.Events.EVENT_TIMEZONE, dateTime.timeZone.displayName)
+//                put(CalendarContract.Events.EVENT_LOCATION, location)
+//            }
+//            val uri: Uri? = activity.contentResolver.update(CalendarContract.Events.CONTENT_URI, eventValues)
+//            var eventId: Long = -1
+//            if (uri != null){
+//                eventId = uri.lastPathSegment?.toLong() ?: -1
+//            }
+//
+//            if (eventId < 0) return eventId;
+//
+//            val attendeeValues = ContentValues().apply {
+//                put(CalendarContract.Attendees.ATTENDEE_EMAIL, contactEmail);
+//                put(CalendarContract.Attendees.EVENT_ID, eventId);
+//            }
+//            activity.contentResolver.update(CalendarContract.Attendees.CONTENT_URI, attendeeValues)
+//
+//            return eventId
+//        }
     }
 }
