@@ -3,17 +3,32 @@ import android.Manifest
 import android.app.Activity
 import android.content.ContentUris
 import android.content.ContentValues
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.database.Cursor
 import android.icu.util.Calendar
 import android.net.Uri
 import android.os.Build
 import android.provider.CalendarContract
 import androidx.annotation.RequiresApi
+import com.cloudsurfers.crm.R
 
 
 class CalendarUtil{
     companion object{
+        private val EVENT_PROJECTION: Array<String> = arrayOf(
+            CalendarContract.Calendars._ID,                     // 0
+            CalendarContract.Calendars.ACCOUNT_NAME,            // 1
+            CalendarContract.Calendars.CALENDAR_DISPLAY_NAME,   // 2
+            CalendarContract.Calendars.OWNER_ACCOUNT            // 3
+        )
+
+        // The indices for the projection array above.
+        private const val PROJECTION_ID_INDEX: Int = 0
+        private const val PROJECTION_ACCOUNT_NAME_INDEX: Int = 1
+        private const val PROJECTION_DISPLAY_NAME_INDEX: Int = 2
+        private const val PROJECTION_OWNER_ACCOUNT_INDEX: Int = 3
         private const val ONE_HOUR_IN_MILLI : Long = 60 * 60 * 1000;
 
         @RequiresApi(Build.VERSION_CODES.N)
@@ -49,6 +64,21 @@ class CalendarUtil{
             return Intent(Intent.ACTION_VIEW).setData(builder.build())
         }
 
+        fun getCalendarId(activity: Activity) : Long{
+            val uri: Uri = CalendarContract.Calendars.CONTENT_URI
+            val sharedPref = activity.getSharedPreferences(activity.getString(R.string.preference_file_key), Context.MODE_PRIVATE)
+            val currEmail = sharedPref.getString("email", "")
+            val cursor: Cursor? = activity.contentResolver.query(uri, EVENT_PROJECTION, null, null, null)
+
+            while (cursor!!.moveToNext()) {
+                // Get the field values
+                val calID: Long = cursor.getLong(PROJECTION_ID_INDEX)
+                val accountName: String = cursor.getString(PROJECTION_ACCOUNT_NAME_INDEX)
+                if (accountName == currEmail) return calID
+            }
+            return -1
+        }
+
         @RequiresApi(Build.VERSION_CODES.N)
         fun addEvent(activity: Activity, title: String, contactEmail: String, location: String, dateTime: Calendar,  desc: String) : Long {
             if (activity.checkSelfPermission(Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED){
@@ -56,8 +86,9 @@ class CalendarUtil{
                 activity.requestPermissions(arrayOf(Manifest.permission.WRITE_CALENDAR), requestCode);
             }
 
-            // TODO configure calID?
-            val calID = 1;
+            val calID = getCalendarId(activity)
+            if (calID < 0) return calID
+
             val startMillis: Long = dateTime.timeInMillis
             val endMillis: Long = startMillis + ONE_HOUR_IN_MILLI;
 
