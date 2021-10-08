@@ -14,6 +14,7 @@ import android.widget.Button
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.cloudsurfers.crm.R
 import com.cloudsurfers.crm.functions.CalendarUtil
 import com.cloudsurfers.crm.functions.Meeting
+import java.time.LocalDateTime
 import kotlin.collections.ArrayList
 
 
@@ -38,6 +40,8 @@ class ViewMeetingsFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+
+    var meetingsList: ArrayList<Meeting> = ArrayList()
 
     //Launches popup requesting access to reading contacts
     private val requestPermissionLauncher =
@@ -98,12 +102,7 @@ class ViewMeetingsFragment : Fragment() {
 
         val activity: Activity = activity as Activity
 
-        var meetingsList: ArrayList<Meeting> = ArrayList()
-
-        if (requestPermission(activity, Manifest.permission.READ_CALENDAR) &&
-            requestPermission(activity, Manifest.permission.READ_CONTACTS)) {
-            meetingsList = Meeting.fetchAllMeetings(activity) as ArrayList<Meeting>
-        }
+        getMeetings(activity)
 
         view.findViewById<RecyclerView>(R.id.view_meetings_list_recycler_view).apply {
             adapter = ViewMeetingsAdapter(meetingsList)
@@ -121,7 +120,23 @@ class ViewMeetingsFragment : Fragment() {
             startActivity(intent)
         }
 
+        setFragmentResultListener("requestKey") { _, bundle ->
+            val refreshMeetings = bundle.getBoolean("refreshMeetings", false)
+            if (refreshMeetings) getMeetings(activity)
+        }
+
         return view
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun getMeetings(activity: Activity){
+        if (requestPermission(activity, Manifest.permission.READ_CALENDAR) &&
+            requestPermission(activity, Manifest.permission.READ_CONTACTS)) {
+            meetingsList = Meeting.fetchAllMeetings(activity) as ArrayList<Meeting>
+            meetingsList = meetingsList.filter {
+                LocalDateTime.now().isBefore(if (it.beginDate != null) it.beginDate else LocalDateTime.now())
+            } as ArrayList<Meeting>
+        }
     }
 
     companion object {

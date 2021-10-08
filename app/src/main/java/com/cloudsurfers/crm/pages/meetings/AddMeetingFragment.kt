@@ -11,6 +11,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
+import androidx.core.os.bundleOf
+import androidx.fragment.app.setFragmentResult
+import androidx.navigation.fragment.findNavController
 import com.cloudsurfers.crm.functions.CalendarUtil
 import com.cloudsurfers.crm.databinding.FragmentAddNewMeetingBinding
 import com.cloudsurfers.crm.functions.Util
@@ -110,7 +113,8 @@ class AddMeetingFragment : Fragment() {
             val eventID = CalendarUtil.addEvent(requireActivity(), meetingName, meetingContact, meetingLocation, cal, meetingNotes)
 
             if (eventID >= 0){
-                requireActivity().onBackPressed()
+                setFragmentResult("requestKey", bundleOf("refreshMeetings" to true))
+                findNavController().popBackStack()
             }
 
         }
