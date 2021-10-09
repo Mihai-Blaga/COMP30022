@@ -97,7 +97,7 @@ class ViewMeetingsFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val view: View = inflater.inflate(R.layout.fragment_view_meetings, container, false)
 
         val activity: Activity = activity as Activity
@@ -105,7 +105,7 @@ class ViewMeetingsFragment : Fragment() {
         getMeetings(activity)
 
         view.findViewById<RecyclerView>(R.id.view_meetings_list_recycler_view).apply {
-            adapter = ViewMeetingsAdapter(meetingsList)
+            adapter = ViewMeetingsAdapter(meetingsList, false)
             layoutManager = LinearLayoutManager(activity)
         }
 

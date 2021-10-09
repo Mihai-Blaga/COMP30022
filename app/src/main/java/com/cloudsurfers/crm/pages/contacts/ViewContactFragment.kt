@@ -1,5 +1,6 @@
 package com.cloudsurfers.crm.pages.contacts
 
+import android.app.Activity
 import android.content.Intent
 import android.icu.util.Calendar
 import android.os.Build
@@ -18,11 +19,12 @@ import com.cloudsurfers.crm.databinding.FragmentViewContactBinding
 import com.cloudsurfers.crm.functions.ComposeEmail
 import androidx.annotation.RequiresApi
 import androidx.core.view.children
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.cloudsurfers.crm.functions.Meeting
+import com.cloudsurfers.crm.pages.meetings.ViewMeetingsAdapter
 import com.google.android.flexbox.FlexboxLayout
 import com.google.android.material.chip.Chip
-
-
-
+import java.time.LocalDateTime
 
 
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -50,7 +52,7 @@ class ViewContactFragment : Fragment() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -76,6 +78,16 @@ class ViewContactFragment : Fragment() {
                 desc = ""
             )
             startActivity(intent)
+        }
+
+        // Populate RecyclerView with upcoming meetings
+
+        val meetings = getMeetingsForContact(activity as Activity)
+        if (meetings.isEmpty())
+            binding.viewContactUpcomingMeetingsLabel.text = resources.getString(R.string.view_contact_upcoming_meeting_label_no_meetings)
+        binding.viewContactUpcomingMeetingsRecyclerView.apply {
+            adapter = ViewMeetingsAdapter(meetings, true)
+            layoutManager = LinearLayoutManager(activity)
         }
 
         // Add tags to the chip group
@@ -108,6 +120,14 @@ class ViewContactFragment : Fragment() {
 
 
         return binding.root
+    }
+
+    // Retrieve the upcoming meetings for the contact
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun getMeetingsForContact(activity: Activity): ArrayList<Meeting> {
+        return Meeting.fetchAllMeetings(activity)?.filter {
+            LocalDateTime.now().isBefore(if (it.beginDate != null) it.beginDate else LocalDateTime.now()) && it.contactEmail.equals(email)
+        } as ArrayList<Meeting>
     }
 
     // Retrieve an ArrayList<String> of selected tags
