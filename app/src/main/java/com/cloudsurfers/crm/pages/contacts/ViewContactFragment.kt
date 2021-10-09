@@ -81,8 +81,12 @@ class ViewContactFragment : Fragment() {
         }
 
         // Populate RecyclerView with upcoming meetings
+
+        val meetings = getMeetingsForContact(activity as Activity)
+        if (meetings.isEmpty())
+            binding.viewContactUpcomingMeetingsLabel.text = resources.getString(R.string.view_contact_upcoming_meeting_label_no_meetings)
         binding.viewContactUpcomingMeetingsRecyclerView.apply {
-            adapter = ViewMeetingsAdapter(getMeetingsForContact(activity as Activity), true)
+            adapter = ViewMeetingsAdapter(meetings, true)
             layoutManager = LinearLayoutManager(activity)
         }
 
