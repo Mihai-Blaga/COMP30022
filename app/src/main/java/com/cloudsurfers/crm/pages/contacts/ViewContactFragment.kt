@@ -1,5 +1,6 @@
 package com.cloudsurfers.crm.pages.contacts
 
+import android.app.Activity
 import android.content.Intent
 import android.icu.util.Calendar
 import android.os.Build
@@ -18,6 +19,9 @@ import com.cloudsurfers.crm.databinding.FragmentViewContactBinding
 import com.cloudsurfers.crm.functions.ComposeEmail
 import androidx.annotation.RequiresApi
 import androidx.core.view.children
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.cloudsurfers.crm.functions.Meeting
+import com.cloudsurfers.crm.pages.meetings.ViewMeetingsAdapter
 import com.google.android.flexbox.FlexboxLayout
 import com.google.android.material.chip.Chip
 
@@ -50,7 +54,7 @@ class ViewContactFragment : Fragment() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -76,6 +80,12 @@ class ViewContactFragment : Fragment() {
                 desc = ""
             )
             startActivity(intent)
+        }
+
+        // Populate RecyclerView with upcoming meetings
+        binding.viewContactUpcomingMeetingsRecyclerView.apply {
+            adapter = ViewMeetingsAdapter(Meeting.fetchAllMeetings(activity as Activity)!!, true)
+            layoutManager = LinearLayoutManager(activity)
         }
 
         // Add tags to the chip group
@@ -109,6 +119,9 @@ class ViewContactFragment : Fragment() {
 
         return binding.root
     }
+
+
+
 
     // Retrieve an ArrayList<String> of selected tags
     private fun getTags(chipGroup: FlexboxLayout): ArrayList<String> {
