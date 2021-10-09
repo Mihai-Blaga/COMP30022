@@ -24,9 +24,7 @@ import com.cloudsurfers.crm.functions.Meeting
 import com.cloudsurfers.crm.pages.meetings.ViewMeetingsAdapter
 import com.google.android.flexbox.FlexboxLayout
 import com.google.android.material.chip.Chip
-
-
-
+import java.time.LocalDateTime
 
 
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -84,7 +82,7 @@ class ViewContactFragment : Fragment() {
 
         // Populate RecyclerView with upcoming meetings
         binding.viewContactUpcomingMeetingsRecyclerView.apply {
-            adapter = ViewMeetingsAdapter(Meeting.fetchAllMeetings(activity as Activity)!!, true)
+            adapter = ViewMeetingsAdapter(getMeetingsForContact(activity as Activity), true)
             layoutManager = LinearLayoutManager(activity)
         }
 
@@ -120,8 +118,13 @@ class ViewContactFragment : Fragment() {
         return binding.root
     }
 
-
-
+    // Retrieve the upcoming meetings for the contact
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun getMeetingsForContact(activity: Activity): ArrayList<Meeting> {
+        return Meeting.fetchAllMeetings(activity)?.filter {
+            LocalDateTime.now().isBefore(if (it.beginDate != null) it.beginDate else LocalDateTime.now()) && it.contactEmail.equals(email)
+        } as ArrayList<Meeting>
+    }
 
     // Retrieve an ArrayList<String> of selected tags
     private fun getTags(chipGroup: FlexboxLayout): ArrayList<String> {

@@ -61,6 +61,8 @@
     <string name="chip_hint">Add Tags</string>
     <string name="chip_label_text">Tags</string>
 
+    <string name="view_contact_upcoming_meeting_label_text">Upcoming meetings</string>
+
     <string name="add_contact_save_button_text">Save</string>
 
 </resources>
