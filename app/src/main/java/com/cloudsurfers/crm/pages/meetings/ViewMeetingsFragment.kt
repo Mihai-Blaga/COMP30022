@@ -134,7 +134,7 @@ class ViewMeetingsFragment : Fragment() {
             requestPermission(activity, Manifest.permission.READ_CONTACTS)) {
             meetingsList = Meeting.fetchAllMeetings(activity) as ArrayList<Meeting>
             meetingsList = meetingsList.filter {
-                LocalDateTime.now().isBefore(if (it.beginDate != null) it.beginDate else LocalDateTime.now())
+                LocalDateTime.now().isBefore(if (it.endDate != null) it.endDate else LocalDateTime.now())
             } as ArrayList<Meeting>
         }
     }
