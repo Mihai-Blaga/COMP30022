@@ -8,6 +8,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.Cursor
 import android.icu.util.Calendar
+import android.icu.util.TimeZone
 import android.net.Uri
 import android.os.Build
 import android.provider.CalendarContract
@@ -17,6 +18,7 @@ import com.cloudsurfers.crm.R
 
 class CalendarUtil{
     companion object{
+        private val emailRegex = Regex("[a-z0-9!#\$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#\$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
         private val EVENT_PROJECTION: Array<String> = arrayOf(
             CalendarContract.Calendars._ID,                     // 0
             CalendarContract.Calendars.ACCOUNT_NAME,            // 1
@@ -69,13 +71,15 @@ class CalendarUtil{
             val sharedPref = activity.getSharedPreferences(activity.getString(R.string.preference_file_key), Context.MODE_PRIVATE)
             val currEmail = sharedPref.getString("email", "")
             val cursor: Cursor? = activity.contentResolver.query(uri, EVENT_PROJECTION, null, null, null)
-
-            while (cursor!!.moveToNext()) {
-                // Get the field values
-                val calID: Long = cursor.getLong(PROJECTION_ID_INDEX)
-                val accountName: String = cursor.getString(PROJECTION_ACCOUNT_NAME_INDEX)
-                if (accountName == currEmail) return calID
+            if(cursor!!.moveToFirst()){
+                while (cursor.moveToNext()) {
+                    // Get the field values
+                    val calID: Long = cursor.getLong(PROJECTION_ID_INDEX)
+                    val accountName: String = cursor.getString(PROJECTION_OWNER_ACCOUNT_INDEX)
+                    if (accountName == currEmail) return calID
+                }
             }
+
             return -1
         }
 
@@ -98,7 +102,7 @@ class CalendarUtil{
                 put(CalendarContract.Events.TITLE, title)
                 put(CalendarContract.Events.DESCRIPTION, desc)
                 put(CalendarContract.Events.CALENDAR_ID, calID)
-                put(CalendarContract.Events.EVENT_TIMEZONE, dateTime.timeZone.displayName)
+                put(CalendarContract.Events.EVENT_TIMEZONE, TimeZone.getDefault().id)
                 put(CalendarContract.Events.EVENT_LOCATION, location)
             }
             val uri: Uri? = activity.contentResolver.insert(CalendarContract.Events.CONTENT_URI, eventValues)
@@ -109,11 +113,15 @@ class CalendarUtil{
 
             if (eventId < 0) return eventId;
 
-            val attendeeValues = ContentValues().apply {
-                put(CalendarContract.Attendees.ATTENDEE_EMAIL, contactEmail);
-                put(CalendarContract.Attendees.EVENT_ID, eventId);
+            if (emailRegex.matches(contactEmail)){
+                val attendeeValues = ContentValues().apply {
+                    put(CalendarContract.Attendees.ATTENDEE_EMAIL, contactEmail);
+                    put(CalendarContract.Attendees.EVENT_ID, eventId);
+                }
+                activity.contentResolver.insert(CalendarContract.Attendees.CONTENT_URI, attendeeValues)
+
             }
-            activity.contentResolver.insert(CalendarContract.Attendees.CONTENT_URI, attendeeValues)
+
             return eventId
         }
     }
