@@ -43,29 +43,10 @@ class ContactUnitTest {
 
         val exampleCursor = MatrixCursor(lookupArray)
 
-        val types = arrayOf(ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE,
-            ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE,
-            ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE,
-            ContactsContract.CommonDataKinds.Note.CONTENT_ITEM_TYPE)
-
-        val values = arrayOf("0411111111",
-            "name@email.com",
-            "John Doe",
-            "Note")
-
-        for (i in 0 until 4){
-            exampleCursor.newRow()
-                .add(ContactsContract.Data.RAW_CONTACT_ID, "1")
-                .add(ContactsContract.Data.MIMETYPE, types[i])
-                .add(ContactsContract.Data.DATA1, values[i])
-        }
-
         exampleCursor.addRow(arrayOf("1", ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE, "0411111111", 1))
         exampleCursor.addRow(arrayOf("1", ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE, "name@email.com", 1))
         exampleCursor.addRow(arrayOf("1", ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE, "John Doe", 1))
         exampleCursor.addRow(arrayOf("1", ContactsContract.CommonDataKinds.Note.CONTENT_ITEM_TYPE, "Note", 1))
-
-        assertEquals(4, exampleCursor.count)
 
         val c = Contact("1")
 
