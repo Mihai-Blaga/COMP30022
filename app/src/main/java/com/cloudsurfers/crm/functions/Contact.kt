@@ -108,12 +108,69 @@ class Contact() {
                         c.id = uriCursor.getString(0)
                         c.uri = uriCursor.getString(1)
 
-                        tempMap[uriCursor.getString(0)] = readContact(c, activity)
+                        tempMap[uriCursor.getString(0)] = c
                     }
                 }
             }
 
             uriCursor.close()
+
+            //lookup keys are preferred to RAW_CONTACT_IDs as these can change.
+            val mQuery = arrayOf(
+                ContactsContract.Data.RAW_CONTACT_ID,    // Contract class constant for the _ID column name
+                ContactsContract.Data.MIMETYPE,
+                ContactsContract.Data.DATA1,
+                ContactsContract.CommonDataKinds.GroupMembership.GROUP_ROW_ID
+            )
+
+            val mCursor = activity.contentResolver.query(
+                ContactsContract.Data.CONTENT_URI,
+                mQuery,
+                null,
+                emptyArray<String>(),
+                null
+            )
+
+            when (mCursor?.count) {
+                null -> {
+                    android.util.Log.e("Contact.readContact", "Error connecting to contacts")
+                }
+                0 -> {
+                    android.util.Log.e("Contact.readContact", "Contact not found")
+                    //TODO: notify user that search was unsuccessful
+                }
+                else -> {
+                    mCursor.moveToFirst()
+
+                    for (i in 0 until mCursor.count) {
+                        mCursor.moveToPosition(i)
+                        var c = tempMap[mCursor.getString(0)]
+
+                        when (mCursor.getString(1)) {
+                            ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE ->
+                                c!!.phone = mCursor.getString(2) ?: "Phone not found"
+                            ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE ->
+                                c!!.email = mCursor.getString(2) ?: "Email not found"
+                            ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE ->
+                                c!!.name = mCursor.getString(2) ?: "Name not found"
+                            ContactsContract.CommonDataKinds.Note.CONTENT_ITEM_TYPE ->
+                                c!!.note = mCursor.getString(2) ?: "Note not found"
+                            ContactsContract.CommonDataKinds.GroupMembership.CONTENT_ITEM_TYPE -> {
+                                val group = mCursor.getString(2)
+                                if (c!!.groups != null) {
+                                    if (!c.groups!!.contains(group)) {
+                                        c.groups!!.add(group)
+                                    }
+                                }
+                            }
+                        }
+
+                        tempMap[mCursor.getString(0)] = c!!
+                    }
+                }
+            }
+
+            mCursor?.close()
 
             return tempMap.values.toList()
         }
@@ -162,7 +219,6 @@ class Contact() {
                             ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE ->
                                 c.phone = mCursor.getString(2) ?: "Phone not found"
                             ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE ->
-
                                 c.email = mCursor.getString(2) ?: "Email not found"
                             ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE ->
                                 c.name = mCursor.getString(2) ?: "Name not found"
