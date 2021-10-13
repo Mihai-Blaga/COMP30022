@@ -12,10 +12,13 @@ import android.provider.CalendarContract
 import android.provider.ContactsContract.CommonDataKinds.StructuredName
 
 import android.accounts.AccountManager
+import android.annotation.SuppressLint
 import android.content.*
 
 import android.provider.ContactsContract.RawContacts
 import com.cloudsurfers.crm.R
+import android.content.ContentResolver
+import android.database.Cursor
 
 
 /** Helper class to store all the relevant contact information so that it can be passed between
@@ -259,7 +262,7 @@ class Contact() {
             val rawContactInsertIndex: Int = 0
 
             val accManager = AccountManager.get(activity)
-                val accounts = accManager.accounts
+            val accounts = accManager.accounts
 
             val sharedPref = activity.getSharedPreferences(activity.getString(R.string.preference_file_key), Context.MODE_PRIVATE)
             val currEmail = sharedPref.getString("email", "")
@@ -356,6 +359,39 @@ class Contact() {
             }
 
             return false;
+        }
+
+        fun deleteContact(activity: Activity, contactID: String): Boolean{
+            val uriQuery = arrayOf(
+                ContactsContract.Data.RAW_CONTACT_ID,
+                ContactsContract.Contacts.LOOKUP_KEY
+            )
+
+            val cur = activity.contentResolver.query(
+                ContactsContract.Data.CONTENT_URI,
+                uriQuery,
+                null,
+                null,
+                null
+            )
+            val cr: ContentResolver = activity.contentResolver
+            while (cur!!.moveToNext()) {
+                try {
+                    if (contactID.equals(cur.getString(0))){
+                        val lookupKey: String = cur.getString(1)
+                        val uri = Uri.withAppendedPath(
+                            ContactsContract.Contacts.CONTENT_LOOKUP_URI,
+                            lookupKey
+                        )
+                        cr.delete(uri, null, null)
+                        return true
+                    }
+
+                } catch (e: java.lang.Exception) {
+                    println(e.stackTrace)
+                }
+            }
+            return false
         }
 
     }
