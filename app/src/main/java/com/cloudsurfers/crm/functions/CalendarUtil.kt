@@ -66,7 +66,7 @@ class CalendarUtil{
             return Intent(Intent.ACTION_VIEW).setData(builder.build())
         }
 
-        fun getCalendarId(activity: Activity) : Long{
+        private fun getCalendarId(activity: Activity) : Long{
             val uri: Uri = CalendarContract.Calendars.CONTENT_URI
             val sharedPref = activity.getSharedPreferences(activity.getString(R.string.preference_file_key), Context.MODE_PRIVATE)
             val currEmail = sharedPref.getString("email", "")
@@ -123,6 +123,12 @@ class CalendarUtil{
             }
 
             return eventId
+        }
+
+        public fun deleteEvent(activity: Activity, eventID: Long): Boolean{
+            val deleteUri: Uri = ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, eventID)
+            val rows: Int = activity.contentResolver.delete(deleteUri, null, null)
+            return rows > 0
         }
     }
 }

@@ -62,5 +62,6 @@
     <string name="chip_label_text">Tags</string>
 
     <string name="add_contact_save_button_text">Save</string>
+    <string name="delete_contact_button_text">Delete</string>
 
 </resources>

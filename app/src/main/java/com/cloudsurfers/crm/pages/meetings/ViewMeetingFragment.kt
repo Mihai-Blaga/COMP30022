@@ -9,8 +9,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
+import androidx.navigation.fragment.findNavController
 import com.cloudsurfers.crm.databinding.FragmentViewMeetingBinding
 import com.cloudsurfers.crm.functions.CalendarUtil
 import com.cloudsurfers.crm.functions.Util
@@ -24,6 +28,7 @@ private const val ARG_PARAM3 = "date"
 private const val ARG_PARAM4 = "time"
 private const val ARG_PARAM5 = "location"
 private const val ARG_PARAM6 = "notes"
+private const val ARG_PARAM7 = "eventID"
 
 /**
  * A simple [Fragment] subclass.
@@ -37,6 +42,7 @@ class ViewMeetingFragment : Fragment() {
     private var time: String? = null
     private var location: String? = null
     private var notes: String? = null
+    private var eventID: Long? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,6 +54,7 @@ class ViewMeetingFragment : Fragment() {
             time = it.getString(ARG_PARAM4)
             location = it.getString(ARG_PARAM5)
             notes = it.getString(ARG_PARAM6)
+            eventID = it.getString(ARG_PARAM7)?.toLong()
         }
     }
 
@@ -157,11 +164,23 @@ class ViewMeetingFragment : Fragment() {
                 meetingNotes
             )
 
-            if (eventID >= 0) {
-                requireActivity().onBackPressed()
+            if (eventID >= 0){
+                setFragmentResult("requestKey", bundleOf("refreshMeetings" to true))
+                findNavController().popBackStack()
             }
         }
 
+        binding.viewMeetingDeleteMeetingButton.setOnClickListener {
+            val success = CalendarUtil.deleteEvent(requireActivity(), eventID!!)
+            if (success){
+                setFragmentResult("requestKey", bundleOf("refreshMeetings" to true))
+                findNavController().popBackStack()
+            }
+            else{
+                Toast.makeText(activity,"Failed to delete meeting, please try again.",Toast.LENGTH_SHORT).show()
+            }
+
+        }
 
         return binding.root
     }
