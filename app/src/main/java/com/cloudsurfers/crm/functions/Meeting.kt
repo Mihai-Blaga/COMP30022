@@ -100,10 +100,17 @@ class Meeting() {
     companion object {
         private var calendarCursor: Cursor? = null
         private var emailLookup: HashMap<String, ArrayList<Meeting>> = hashMapOf()
+        private var allMeetings: HashSet<Meeting> = hashSetOf()
 
         @RequiresApi(Build.VERSION_CODES.O)
-        @JvmStatic
-        fun fetchAllMeetings(context: Context): ArrayList<Meeting>? {
+        fun refresh(context: Context){
+            emailLookup = hashMapOf()
+            allMeetings = hashSetOf()
+            searchAllMeetings(context)
+        }
+
+        @RequiresApi(Build.VERSION_CODES.O)
+        fun searchAllMeetings(context: Context): ArrayList<Meeting>? {
             // first check if the permission to read Calendar has been granted
             if (ActivityCompat.checkSelfPermission(
                     context,
@@ -142,6 +149,7 @@ class Meeting() {
             val idLocation = 6
             // reset the static variable
             emailLookup = hashMapOf()
+            allMeetings = hashSetOf()
             val meetings = ArrayList<Meeting>()
             if (calendarCursor!!.moveToFirst()) {
                 do {
@@ -194,6 +202,7 @@ class Meeting() {
                         location
                     )
                     meetings.add(newMeeting)
+                    allMeetings.add(newMeeting)
                     // add email lookup as well
                     if(!emailLookup.containsKey(attendeeEmail)){
                         if (attendeeEmail != null) {
@@ -206,6 +215,18 @@ class Meeting() {
             calendarCursor!!.close()
 
             // sort and return meetings
+            meetings.sortWith { meeting, t1 -> meeting.beginDate!!.compareTo(t1.beginDate) }
+            return meetings
+        }
+
+        @RequiresApi(Build.VERSION_CODES.O)
+        @JvmStatic
+        fun fetchAllMeetings(context: Context): ArrayList<Meeting>? {
+            if (allMeetings.isEmpty()){
+                return searchAllMeetings(context)
+            }
+            val meetings = arrayListOf<Meeting>()
+            meetings.addAll(allMeetings)
             meetings.sortWith { meeting, t1 -> meeting.beginDate!!.compareTo(t1.beginDate) }
             return meetings
         }

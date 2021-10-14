@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.view.Menu
 import android.view.View
 import android.widget.ImageButton
 import android.widget.SearchView
@@ -20,6 +19,8 @@ import com.cloudsurfers.crm.functions.Group
 import com.cloudsurfers.crm.pages.main.MainActivity
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
+import java.util.*
+import kotlin.collections.ArrayList
 
 class SearchableActivity : MainActivity() {
 
@@ -61,9 +62,9 @@ class SearchableActivity : MainActivity() {
             })
 
         }
-
+        val a = Calendar.getInstance().timeInMillis
         val tags: ArrayList<String> = Group.getAllGroupNames(this)
-
+        println(Calendar.getInstance().timeInMillis-a)
         // Update recycler view each time a new chip is pressed
         val chipGroup: ChipGroup = findViewById(R.id.search_chip_group)
         for (tag: String in tags) {
@@ -105,8 +106,8 @@ class SearchableActivity : MainActivity() {
     @RequiresApi(Build.VERSION_CODES.N)
     private fun basicContactSearch(query: String): ArrayList<Contact> {
         if (query == "") return ArrayList()
-        return Contact.readContacts(this)?.filter { c -> !(c.name == null || c.name.equals("")) }
-            ?.filter { c -> c.name!!.lowercase().split(" ").any { it.startsWith(query.lowercase()) }
+        return Contact.readContacts(this).filter { c -> !(c.name == null || c.name.equals("")) }
+            .filter { c -> c.name!!.lowercase().split(" ").any { it.startsWith(query.lowercase()) }
         } as ArrayList<Contact>
     }
 
@@ -132,8 +133,8 @@ class SearchableActivity : MainActivity() {
     private fun handleIntent(intent: Intent) {
         if (Intent.ACTION_SEARCH == intent.action) {
             intent.getStringExtra(SearchManager.QUERY)?.also { query ->
-                val tags: ArrayList<String>? = getSelectedTags()
-                val queryContacts: ArrayList<Contact> = basicContactSearchWithTags(query, tags!!)
+                val tags: ArrayList<String> = getSelectedTags()
+                val queryContacts: ArrayList<Contact> = basicContactSearchWithTags(query, tags)
 
                 val recyclerView = findViewById<RecyclerView>(R.id.search_recycler_view)
                 val emptyTextView = findViewById<TextView>(R.id.search_no_data_text_view)
