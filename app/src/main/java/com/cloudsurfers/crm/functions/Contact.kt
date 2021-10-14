@@ -15,6 +15,7 @@ import android.annotation.SuppressLint
 import android.content.*
 
 import android.provider.ContactsContract.RawContacts
+import android.util.Log
 import com.cloudsurfers.crm.R
 import java.util.*
 import kotlin.collections.ArrayList
@@ -61,9 +62,9 @@ class Contact() {
     @RequiresApi(Build.VERSION_CODES.N)
     fun getGroupNames(activity: Activity): ArrayList<String> {
         val groupNames = arrayListOf<String>()
-        for (id in groups!!){
+        for (id in groups!!) {
             val name = Group.getGroupNameFromId(id, activity)
-            if(name != ""){
+            if (name != "") {
                 groupNames.add(name)
             }
         }
@@ -76,65 +77,89 @@ class Contact() {
         private var allContacts: HashSet<Contact> = hashSetOf()
         private var emailContacts: HashMap<String, Contact> = hashMapOf()
 
-        fun refresh(activity: Activity){
+        fun refresh(activity: Activity) {
             allContacts = hashSetOf()
             emailContacts = hashMapOf()
             readAllContacts(activity)
         }
 
         @SuppressLint("Recycle")
-        fun readAllContacts(activity: Activity){
+        private fun readAllContacts(activity: Activity) {
             //lookup keys are preferred to RAW_CONTACT_IDs as these can change.
-            val uriQuery = arrayOf(
-                ContactsContract.Data.RAW_CONTACT_ID,
-                ContactsContract.Contacts.LOOKUP_KEY
+            val mQuery = arrayOf(
+                ContactsContract.Data.RAW_CONTACT_ID,    // Contract class constant for the _ID column name
+                ContactsContract.Data.MIMETYPE,
+                ContactsContract.Data.DATA1,
+                ContactsContract.CommonDataKinds.GroupMembership.GROUP_ROW_ID
             )
 
-            val uriCursor = activity.contentResolver.query(
+            val mCursor = activity.contentResolver.query(
                 ContactsContract.Data.CONTENT_URI,
-                uriQuery,
+                mQuery,
                 null,
                 emptyArray<String>(),
                 null
             )
-
-            when (uriCursor?.count) {
+            val tempMap = hashMapOf<String,Contact>()
+            when (mCursor?.count) {
                 null -> {
-                    android.util.Log.e("ContactUtils", "Error connecting to contacts")
+                    Log.e("Contact.readContact", "Error connecting to contacts")
                 }
                 0 -> {
-                    android.util.Log.e("ContactUtils", "Contact not found")
+                    Log.e("Contact.readContact", "Contact not found")
                     //TODO: notify user that search was unsuccessful
                 }
                 else -> {
-                    //processing can be optimised but this is the simplest and most readable
-                    uriCursor.moveToFirst()
-                    val seenIDs = hashSetOf<String>()
-                    for (j in 0 until uriCursor.count) {
-                        uriCursor.moveToPosition(j)
-                        var c = Contact()
-                        c.id = uriCursor.getString(0)
-                        c.uri = uriCursor.getString(1)
-
-                        // skip over ids which have already been searched for
-                        if (seenIDs.contains(c.id)){
-                            continue
+                    mCursor.moveToFirst()
+                    for (i in 0 until mCursor.count) {
+                        mCursor.moveToPosition(i)
+                        val id = mCursor.getString(0)
+                        val c :Contact
+                        if (tempMap.containsKey(id)){
+                            c = tempMap[id]!!
                         }
-                        // otherwise lookup content for the particular contact
-                        c = readContact(c, activity)
-                        seenIDs.add(c.id!!)
-                        allContacts.add(c)
-                        c.email?.let { emailContacts.put(it, c) }
+                        else{
+                            c = Contact()
+                            c.id = id
+                        }
+                        // skip over ids which have been visited
+                        when (mCursor.getString(1)) {
+                            ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE ->
+                                c.phone = mCursor.getString(2) ?: "Phone not found"
+                            ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE ->
+                                c.email = mCursor.getString(2) ?: "Email not found"
+                            StructuredName.CONTENT_ITEM_TYPE ->
+                                c.name = mCursor.getString(2) ?: "Name not found"
+                            ContactsContract.CommonDataKinds.Note.CONTENT_ITEM_TYPE ->
+                                c.note = mCursor.getString(2) ?: "Note not found"
+                            ContactsContract.CommonDataKinds.GroupMembership.CONTENT_ITEM_TYPE -> {
+                                val group = mCursor.getString(2)
+                                if (c.groups != null) {
+                                    if (!c.groups!!.contains(group)) {
+                                        c.groups!!.add(group)
+                                    }
+                                }
+                                else{
+                                    c.groups = arrayListOf()
+                                    c.groups!!.add(group)
+                                }
+                            }
+                        }
+                        tempMap[c.id!!] = c
                     }
                 }
             }
-            uriCursor?.close()
+            mCursor?.close()
+            for(c in tempMap.values) {
+                allContacts.add(c)
+                c.email?.let { emailContacts.put(it, c) }
+            }
         }
 
         //Provides an immutable (read-only) list of all contacts
         @RequiresApi(Build.VERSION_CODES.N)
         fun readContacts(activity: Activity): List<Contact> {
-            if (allContacts.isEmpty()){
+            if (allContacts.isEmpty()) {
                 refresh(activity)
             }
             return allContacts.toList()
@@ -169,10 +194,10 @@ class Contact() {
             // Some providers return null if an error occurs, others throw an exception
             when (mCursor?.count) {
                 null -> {
-                    android.util.Log.e("Contact.readContact", "Error connecting to contacts")
+                    Log.e("Contact.readContact", "Error connecting to contacts")
                 }
                 0 -> {
-                    android.util.Log.e("Contact.readContact", "Contact not found")
+                    Log.e("Contact.readContact", "Contact not found")
                     //TODO: notify user that search was unsuccessful
                 }
                 else -> {
@@ -208,13 +233,12 @@ class Contact() {
         }
 
         fun readContactFromEmail(email: String = "alex@example.com", activity: Activity): Contact? {
-            if (emailContacts.isEmpty()){
+            if (emailContacts.isEmpty()) {
                 refresh(activity)
             }
-            if(emailContacts.containsKey(email)) {
-               return emailContacts[email]
-            }
-            else{
+            if (emailContacts.containsKey(email)) {
+                return emailContacts[email]
+            } else {
                 return null
             }
         }
@@ -235,12 +259,22 @@ class Contact() {
         }
 
         @RequiresApi(Build.VERSION_CODES.N)
-        fun createContact(activity: Activity, name: String, phone: String, email: String, notes: String, tags: ArrayList<String>): Boolean{
-            if (activity.checkSelfPermission(Manifest.permission.WRITE_CONTACTS) != PackageManager.PERMISSION_GRANTED){
+        fun createContact(
+            activity: Activity,
+            name: String,
+            phone: String,
+            email: String,
+            notes: String,
+            tags: ArrayList<String>
+        ): Boolean {
+            if (activity.checkSelfPermission(Manifest.permission.WRITE_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
                 val requestCode = 1
-                activity.requestPermissions(arrayOf(Manifest.permission.WRITE_CONTACTS), requestCode)
+                activity.requestPermissions(
+                    arrayOf(Manifest.permission.WRITE_CONTACTS),
+                    requestCode
+                )
             }
-            if (activity.checkSelfPermission(Manifest.permission.GET_ACCOUNTS) != PackageManager.PERMISSION_GRANTED){
+            if (activity.checkSelfPermission(Manifest.permission.GET_ACCOUNTS) != PackageManager.PERMISSION_GRANTED) {
                 val requestCode = 1
                 activity.requestPermissions(arrayOf(Manifest.permission.GET_ACCOUNTS), requestCode)
             }
@@ -249,9 +283,12 @@ class Contact() {
             val rawContactInsertIndex = 0
 
             val accManager = AccountManager.get(activity)
-                val accounts = accManager.accounts
+            val accounts = accManager.accounts
 
-            val sharedPref = activity.getSharedPreferences(activity.getString(R.string.preference_file_key), Context.MODE_PRIVATE)
+            val sharedPref = activity.getSharedPreferences(
+                activity.getString(R.string.preference_file_key),
+                Context.MODE_PRIVATE
+            )
             val currEmail = sharedPref.getString("email", "")
             val account = accounts.filter {
                 it.name == currEmail
@@ -266,7 +303,10 @@ class Contact() {
 
             ops.add(
                 ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
-                    .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, rawContactInsertIndex)
+                    .withValueBackReference(
+                        ContactsContract.Data.RAW_CONTACT_ID,
+                        rawContactInsertIndex
+                    )
                     .withValue(ContactsContract.Data.MIMETYPE, StructuredName.CONTENT_ITEM_TYPE)
                     .withValue(StructuredName.DISPLAY_NAME, name)
                     .build()
@@ -321,10 +361,10 @@ class Contact() {
             c.groups = arrayListOf()
             allContacts.add(c)
             emailContacts.put(c.email!!, c)
-            for (tag in tags){
+            for (tag in tags) {
 
-                var tagId : String? = Group.getGroupByTitle(tag, activity)?.id
-                if (tagId == null){
+                var tagId: String? = Group.getGroupByTitle(tag, activity)?.id
+                if (tagId == null) {
                     tagId = Group.createNewGroup(activity, tag)!!.id
                 }
                 if (tagId != null) {
@@ -341,17 +381,20 @@ class Contact() {
                             ContactsContract.CommonDataKinds.GroupMembership.CONTENT_ITEM_TYPE
                         )
 
-                        .withValue(ContactsContract.CommonDataKinds.GroupMembership.GROUP_ROW_ID, tagId!!)
+                        .withValue(
+                            ContactsContract.CommonDataKinds.GroupMembership.GROUP_ROW_ID,
+                            tagId!!
+                        )
                         .build()
                 )
             }
 
 
-            try{
+            try {
                 val results = activity.contentResolver.applyBatch(ContactsContract.AUTHORITY, ops)
                 Group.refresh(activity)
                 return ops.size == results.size
-            } catch (e : Exception){
+            } catch (e: Exception) {
                 e.printStackTrace()
             }
 
