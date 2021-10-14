@@ -62,10 +62,7 @@ class SearchableActivity : MainActivity() {
             })
 
         }
-        val a = Calendar.getInstance().timeInMillis
-        val tags: ArrayList<String> = Group.getAllGroupNames(this)
-        println(Calendar.getInstance().timeInMillis-a)
-        // Update recycler view each time a new chip is pressed
+        val tags: ArrayList<String> = Group.getAllGroupNames(this) // Update recycler view each time a new chip is pressed
         val chipGroup: ChipGroup = findViewById(R.id.search_chip_group)
         for (tag: String in tags) {
             val chip: Chip = layoutInflater.inflate(R.layout.search_chip, chipGroup, false).apply {
