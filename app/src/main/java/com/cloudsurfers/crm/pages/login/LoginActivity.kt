@@ -1,6 +1,7 @@
 package com.cloudsurfers.crm.pages.login
 
 import android.R.attr
+import android.R.attr.*
 import android.app.Activity
 import android.app.Instrumentation
 import android.content.Context
@@ -19,10 +20,12 @@ import android.content.Intent
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import android.R.attr.data
 import android.util.Log
+import android.widget.TextView
+import androidx.core.view.setPadding
 import com.cloudsurfers.crm.R
 import com.cloudsurfers.crm.pages.main.MainActivity
+import com.google.android.gms.common.SignInButton
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.common.api.ApiException
 
@@ -44,7 +47,7 @@ class LoginActivity : AppCompatActivity() {
         updateUI(account)
         resultLauncher = this.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
-                val data = result.data
+//                val data = result.data
 
                 val task: Task<GoogleSignInAccount> =
                     GoogleSignIn.getSignedInAccountFromIntent(result.data)
@@ -56,7 +59,6 @@ class LoginActivity : AppCompatActivity() {
         binding.loginButton.setOnClickListener{
             signIn()
         }
-        setContentView(binding.root)
     }
 
     private fun signIn() {
