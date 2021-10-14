@@ -16,6 +16,8 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 
 class Meeting() {
@@ -97,6 +99,7 @@ class Meeting() {
 
     companion object {
         private var calendarCursor: Cursor? = null
+        private var emailLookup: HashMap<String, ArrayList<Meeting>> = hashMapOf()
 
         @RequiresApi(Build.VERSION_CODES.O)
         @JvmStatic
@@ -137,6 +140,8 @@ class Meeting() {
             val idEnd = 4
             val idAllDay = 5
             val idLocation = 6
+            // reset the static variable
+            emailLookup = hashMapOf()
             val meetings = ArrayList<Meeting>()
             if (calendarCursor!!.moveToFirst()) {
                 do {
@@ -189,6 +194,13 @@ class Meeting() {
                         location
                     )
                     meetings.add(newMeeting)
+                    // add email lookup as well
+                    if(!emailLookup.containsKey(attendeeEmail)){
+                        if (attendeeEmail != null) {
+                            emailLookup[attendeeEmail] = arrayListOf()
+                        }
+                    }
+                    emailLookup[attendeeEmail]?.add(newMeeting)
                 } while (calendarCursor!!.moveToNext())
             }
             calendarCursor!!.close()
@@ -196,6 +208,17 @@ class Meeting() {
             // sort and return meetings
             meetings.sortWith { meeting, t1 -> meeting.beginDate!!.compareTo(t1.beginDate) }
             return meetings
+        }
+
+        @RequiresApi(Build.VERSION_CODES.O)
+        fun fetchMeetingsByEmail(email: String,activity: Activity): ArrayList<Meeting>? {
+            if (emailLookup.isEmpty()){
+                fetchAllMeetings(activity)
+            }
+            if (emailLookup.containsKey(email)) {
+                return emailLookup[email]
+            }
+            return arrayListOf()
         }
     }
 }
