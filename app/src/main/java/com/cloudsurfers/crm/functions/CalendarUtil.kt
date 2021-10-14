@@ -125,7 +125,11 @@ class CalendarUtil{
             return eventId
         }
 
-        public fun deleteEvent(activity: Activity, eventID: Long): Boolean{
+        fun deleteEvent(activity: Activity, eventID: Long): Boolean{
+            if (activity.checkSelfPermission(Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED){
+                val requestCode = 1;
+                activity.requestPermissions(arrayOf(Manifest.permission.WRITE_CALENDAR), requestCode);
+            }
             val deleteUri: Uri = ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, eventID)
             val rows: Int = activity.contentResolver.delete(deleteUri, null, null)
             return rows > 0
