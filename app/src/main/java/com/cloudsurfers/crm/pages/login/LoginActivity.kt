@@ -47,7 +47,7 @@ class LoginActivity : AppCompatActivity() {
         updateUI(account)
         resultLauncher = this.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
-//                val data = result.data
+                val data = result.data
 
                 val task: Task<GoogleSignInAccount> =
                     GoogleSignIn.getSignedInAccountFromIntent(result.data)
@@ -59,6 +59,8 @@ class LoginActivity : AppCompatActivity() {
         binding.loginButton.setOnClickListener{
             signIn()
         }
+
+        setContentView(binding.root)
     }
 
     private fun signIn() {
