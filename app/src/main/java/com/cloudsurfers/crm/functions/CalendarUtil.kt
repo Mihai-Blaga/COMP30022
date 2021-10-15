@@ -3,6 +3,7 @@ import android.Manifest
 import android.app.Activity
 import android.content.ContentUris
 import android.content.ContentValues
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.icu.util.Calendar
@@ -14,12 +15,12 @@ import androidx.annotation.RequiresApi
 
 class CalendarUtil{
     companion object{
-        private const val ONE_HOUR_IN_MILLI : Long = 60 * 60 * 1000;
+        private const val ONE_HOUR_IN_MILLI : Long = 60 * 60 * 1000
 
         @RequiresApi(Build.VERSION_CODES.N)
         fun getInsertEventIntent(title: String, contactEmail: String, location: String, dateTime: Calendar,  desc: String): Intent{
             val startMillis: Long = dateTime.timeInMillis
-            val endMillis: Long = startMillis + ONE_HOUR_IN_MILLI;
+            val endMillis: Long = startMillis + ONE_HOUR_IN_MILLI
             val intent: Intent = Intent(Intent.ACTION_INSERT)
                 .setData(CalendarContract.Events.CONTENT_URI)
                 .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, startMillis)
@@ -52,14 +53,14 @@ class CalendarUtil{
         @RequiresApi(Build.VERSION_CODES.N)
         fun addEvent(activity: Activity, title: String, contactEmail: String, location: String, dateTime: Calendar,  desc: String) : Long {
             if (activity.checkSelfPermission(Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED){
-                val requestCode = 1;
-                activity.requestPermissions(arrayOf(Manifest.permission.WRITE_CALENDAR), requestCode);
+                val requestCode = 1
+                activity.requestPermissions(arrayOf(Manifest.permission.WRITE_CALENDAR), requestCode)
             }
 
             // TODO configure calID?
-            val calID = 1;
+            val calID = 1
             val startMillis: Long = dateTime.timeInMillis
-            val endMillis: Long = startMillis + ONE_HOUR_IN_MILLI;
+            val endMillis: Long = startMillis + ONE_HOUR_IN_MILLI
 
             val eventValues = ContentValues().apply {
                 put(CalendarContract.Events.DTSTART, startMillis)
@@ -76,13 +77,16 @@ class CalendarUtil{
                 eventId = uri.lastPathSegment?.toLong() ?: -1
             }
 
-            if (eventId < 0) return eventId;
+            if (eventId < 0) return eventId
 
             val attendeeValues = ContentValues().apply {
-                put(CalendarContract.Attendees.ATTENDEE_EMAIL, contactEmail);
-                put(CalendarContract.Attendees.EVENT_ID, eventId);
+                put(CalendarContract.Attendees.ATTENDEE_EMAIL, contactEmail)
+                put(CalendarContract.Attendees.EVENT_ID, eventId)
             }
             activity.contentResolver.insert(CalendarContract.Attendees.CONTENT_URI, attendeeValues)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                Meeting.refresh(activity as Context)
+            }
             return eventId
         }
     }
