@@ -17,7 +17,6 @@ import android.content.*
 import android.provider.ContactsContract.RawContacts
 import android.util.Log
 import com.cloudsurfers.crm.R
-import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 import kotlin.collections.HashSet
@@ -236,10 +235,10 @@ class Contact() {
             if (emailContacts.isEmpty()) {
                 refresh(activity)
             }
-            if (emailContacts.containsKey(email)) {
-                return emailContacts[email]
+            return if (emailContacts.containsKey(email)) {
+                emailContacts[email]
             } else {
-                return null
+                null
             }
         }
 
@@ -359,8 +358,6 @@ class Contact() {
             c.email = email
             c.note = notes
             c.groups = arrayListOf()
-            allContacts.add(c)
-            emailContacts.put(c.email!!, c)
             for (tag in tags) {
 
                 var tagId: String? = Group.getGroupByTitle(tag, activity)?.id
@@ -388,16 +385,16 @@ class Contact() {
                         .build()
                 )
             }
-
-
+            allContacts.add(c)
+            emailContacts[c.email!!] = c
             try {
                 val results = activity.contentResolver.applyBatch(ContactsContract.AUTHORITY, ops)
                 Group.refresh(activity)
+                refresh(activity)
                 return ops.size == results.size
             } catch (e: Exception) {
                 e.printStackTrace()
             }
-
             return false
         }
 
