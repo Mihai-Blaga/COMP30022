@@ -28,7 +28,6 @@ class SearchableActivity : MainActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_searchable)
 
-
         // Initialise recycler view with empty array list
         findViewById<RecyclerView>(R.id.search_recycler_view).apply {
             adapter = SearchAdapter(ArrayList())
@@ -129,24 +128,11 @@ class SearchableActivity : MainActivity() {
         }.toList())
     }
 
-    // Override to add tags to search query
-    override fun startActivity(intent: Intent?) {
-        if (Intent.ACTION_SEARCH == intent?.action) {
-            intent.putExtras(
-                Bundle().apply {
-                    putStringArrayList("tags", getSelectedTags())
-                 }
-            )
-        }
-
-        super.startActivity(intent)
-    }
-
     @RequiresApi(Build.VERSION_CODES.N)
     private fun handleIntent(intent: Intent) {
         if (Intent.ACTION_SEARCH == intent.action) {
             intent.getStringExtra(SearchManager.QUERY)?.also { query ->
-                val tags: ArrayList<String>? = intent.getStringArrayListExtra("tags")
+                val tags: ArrayList<String>? = getSelectedTags()
                 val queryContacts: ArrayList<Contact> = basicContactSearchWithTags(query, tags!!)
 
                 val recyclerView = findViewById<RecyclerView>(R.id.search_recycler_view)

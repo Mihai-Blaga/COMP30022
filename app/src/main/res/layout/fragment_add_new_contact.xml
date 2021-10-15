@@ -12,16 +12,6 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent">
 
-
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/topAppBar"
-            style="@style/TopAppBarStyle"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:menu="@menu/top_app_bar_no_search"
-            app:navigationIcon="@drawable/ic_back"
-            app:title="@string/add_new_contact_page_title" />
-
     </com.google.android.material.appbar.AppBarLayout>
 
 
@@ -125,16 +115,53 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <LinearLayout
+        android:id="@+id/add_contact_chip_layout"
+        app:layout_constraintTop_toBottomOf="@+id/outlinedTextFieldNotes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_gravity="center_vertical"
+        android:background="@drawable/chips_layout_border"
+        android:orientation="horizontal">
+
+        <com.google.android.flexbox.FlexboxLayout
+            android:id="@+id/add_contact_chip_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            app:flexWrap="wrap"
+            app:alignItems="stretch"
+            app:showDivider="beginning|middle|end"
+            app:dividerDrawable="@drawable/divider">
+
+            <EditText
+                android:id="@+id/add_contact_chip_edit_text"
+                android:hint="@string/chip_hint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColorHint="#606060"
+                android:background="@android:color/transparent"
+                android:imeOptions="actionDone"
+                android:inputType="text"/>
+
+        </com.google.android.flexbox.FlexboxLayout>
+
+    </LinearLayout>
 
     <Button
-        android:id="@+id/button7"
+        android:id="@+id/addContactButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:text="@string/add_new_contact_button_text"
-        app:layout_constraintEnd_toEndOf="@+id/outlinedTextFieldNotes"
-        app:layout_constraintTop_toBottomOf="@+id/outlinedTextFieldNotes" />
+        app:layout_constraintEnd_toEndOf="@+id/add_contact_chip_layout"
+        app:layout_constraintTop_toBottomOf="@+id/add_contact_chip_layout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

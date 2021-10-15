@@ -1,12 +1,13 @@
 package com.cloudsurfers.crm.pages.search
 
 import android.content.Intent
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat.startActivity
 import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.RecyclerView
 import com.cloudsurfers.crm.R
@@ -20,6 +21,7 @@ class SearchAdapter(private val contacts: ArrayList<Contact>):
      * Provide a reference to the type of views that you are using
      * (custom ViewHolder).
      */
+    @RequiresApi(Build.VERSION_CODES.N)
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val searchItemTextView: TextView = view.findViewById(R.id.search_list_item_text_view)
         lateinit var contact: Contact
@@ -30,8 +32,9 @@ class SearchAdapter(private val contacts: ArrayList<Contact>):
                 val activity: AppCompatActivity = view.context as AppCompatActivity
                 val c: Contact = Contact.readContact(contact, activity)
 
-                val bundle = bundleOf("name" to c.name, "email" to c.email, "mobile" to c.phone, "notes" to c.note)
+                val bundle = bundleOf("name" to c.name, "email" to c.email, "mobile" to c.phone, "notes" to c.note, "tags" to c.getGroupNames(activity))
 
+                println(c.getGroupNames(activity))
                 val viewContactIntent: Intent = Intent(activity, MainActivity::class.java).apply {
                     action = Intent.ACTION_SEARCH
                     putExtras(bundle)
@@ -42,6 +45,7 @@ class SearchAdapter(private val contacts: ArrayList<Contact>):
     }
 
     // Create new views (invoked by the layout manager)
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
         // Create a new view, which defines the UI of the list item
         val view = LayoutInflater.from(viewGroup.context)
