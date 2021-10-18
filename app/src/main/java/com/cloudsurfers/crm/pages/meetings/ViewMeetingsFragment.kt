@@ -97,7 +97,7 @@ class ViewMeetingsFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val view: View = inflater.inflate(R.layout.fragment_view_meetings, container, false)
 
         val activity: Activity = activity as Activity
@@ -105,7 +105,7 @@ class ViewMeetingsFragment : Fragment() {
         getMeetings(activity)
 
         view.findViewById<RecyclerView>(R.id.view_meetings_list_recycler_view).apply {
-            adapter = ViewMeetingsAdapter(meetingsList)
+            adapter = ViewMeetingsAdapter(meetingsList, false)
             layoutManager = LinearLayoutManager(activity)
         }
 
@@ -134,7 +134,7 @@ class ViewMeetingsFragment : Fragment() {
             requestPermission(activity, Manifest.permission.READ_CONTACTS)) {
             meetingsList = Meeting.fetchAllMeetings(activity) as ArrayList<Meeting>
             meetingsList = meetingsList.filter {
-                LocalDateTime.now().isBefore(if (it.beginDate != null) it.beginDate else LocalDateTime.now())
+                LocalDateTime.now().isBefore(if (it.endDate != null) it.endDate else LocalDateTime.now())
             } as ArrayList<Meeting>
         }
     }

@@ -52,6 +52,9 @@
             android:name="notes"
             app:argType="string"
             app:nullable="true" />
+        <action
+            android:id="@+id/action_viewContactFragment_to_viewMeetingFragment"
+            app:destination="@id/viewMeetingFragment" />
     </fragment>
     <fragment
         android:id="@+id/addMeetingFragment"
