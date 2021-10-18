@@ -46,7 +46,8 @@ class ViewMeetingsAdapter(private val meetingsList: ArrayList<Meeting>) :
                     "date" to date,
                     "time" to time,
                     "location" to meeting.location,
-                    "notes" to meeting.description?.substringBefore("\n-::~")?.substringBefore("-::~")
+                    "notes" to meeting.description?.substringBefore("\n-::~")?.substringBefore("-::~"),
+                    "eventID" to meeting.eventID
                 )
 
                 Navigation.findNavController(view).navigate(R.id.action_viewMeetingsFragment_to_viewMeetingFragment, bundle)

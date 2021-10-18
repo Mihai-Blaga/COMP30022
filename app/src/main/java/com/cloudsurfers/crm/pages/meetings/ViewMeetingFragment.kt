@@ -19,6 +19,7 @@ import java.util.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+private const val ARG_PARAM0 = "eventID"
 private const val ARG_PARAM1 = "contactEmail"
 private const val ARG_PARAM2 = "title"
 private const val ARG_PARAM3 = "date"
@@ -38,6 +39,7 @@ class ViewMeetingFragment : Fragment() {
     private var time: String? = null
     private var location: String? = null
     private var notes: String? = null
+    private var eventID: Long = -1
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,6 +51,7 @@ class ViewMeetingFragment : Fragment() {
             time = it.getString(ARG_PARAM4)
             location = it.getString(ARG_PARAM5)
             notes = it.getString(ARG_PARAM6)
+            eventID = it.getString(ARG_PARAM0)!!.toLong()
         }
     }
 
@@ -151,6 +154,7 @@ class ViewMeetingFragment : Fragment() {
 
             val eventID = CalendarUtil.updateEvent(
                 requireActivity(),
+                eventID,
                 meetingName,
                 meetingContact,
                 meetingLocation,

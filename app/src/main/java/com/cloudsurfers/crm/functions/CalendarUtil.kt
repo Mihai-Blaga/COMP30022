@@ -12,6 +12,7 @@ import android.icu.util.TimeZone
 import android.net.Uri
 import android.os.Build
 import android.provider.CalendarContract
+import android.util.Log
 import androidx.annotation.RequiresApi
 import com.cloudsurfers.crm.R
 
@@ -105,6 +106,9 @@ class CalendarUtil{
                 put(CalendarContract.Events.EVENT_LOCATION, location)
             }
             val uri: Uri? = activity.contentResolver.insert(CalendarContract.Events.CONTENT_URI, eventValues)
+
+            Log.i("ddddd", uri.toString())
+
             var eventId: Long = -1
             if (uri != null){
                 eventId = uri.lastPathSegment?.toLong() ?: -1
@@ -125,7 +129,7 @@ class CalendarUtil{
         }
 
         @RequiresApi(Build.VERSION_CODES.N)
-        fun updateEvent(activity: Activity, title: String, contactEmail: String, location: String, dateTime: Calendar,  desc: String) : Long {
+        fun updateEvent(activity: Activity, eventId: Long, title: String, contactEmail: String, location: String, dateTime: Calendar,  desc: String) : Long {
             if (activity.checkSelfPermission(Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED){
                 val requestCode = 1;
                 activity.requestPermissions(arrayOf(Manifest.permission.WRITE_CALENDAR), requestCode);
@@ -135,6 +139,10 @@ class CalendarUtil{
             val calID = 1;
             val startMillis: Long = dateTime.timeInMillis
             val endMillis: Long = startMillis + ONE_HOUR_IN_MILLI;
+
+            Log.i("ddddd", CalendarContract.Events.CONTENT_URI.toString())
+
+            return -1
 
             val eventValues = ContentValues().apply {
                 put(CalendarContract.Events.DTSTART, startMillis)
@@ -150,11 +158,9 @@ class CalendarUtil{
             }
 
             val uri: Uri? = CalendarContract.Events.CONTENT_URI
-
-            var eventId: Long = -1
-            if (uri != null){
-                eventId = uri.lastPathSegment?.toLong() ?: -1
-            }
+//            if (uri != null){
+//                eventId = uri.lastPathSegment?.toLong() ?: -1
+//            }
 
             if (eventId < 0) return eventId;
 
