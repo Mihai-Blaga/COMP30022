@@ -151,6 +151,9 @@ class CalendarUtil{
                 put(CalendarContract.Events.EVENT_LOCATION, location)
             }
 
+            var updateUri: Uri = ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, eventID)
+            activity.contentResolver.update(updateUri, eventValues, null, null)
+
             if (!contactEmail.isNullOrBlank()){
                 if (!prevContactEmail.isNullOrBlank()){
                     val selection =
@@ -158,6 +161,7 @@ class CalendarUtil{
                     val selectionArgs = arrayOf(eventID.toString() + "", prevContactEmail)
                     activity.contentResolver.delete(Attendees.CONTENT_URI, selection, selectionArgs)
                 }
+
 
                 val attendeeValues = ContentValues().apply {
                     put(CalendarContract.Attendees.ATTENDEE_EMAIL, contactEmail);
