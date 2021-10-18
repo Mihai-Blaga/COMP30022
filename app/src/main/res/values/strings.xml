@@ -66,4 +66,10 @@
 
     <string name="add_contact_save_button_text">Save</string>
 
+
+    <string name="view_contact_delete_contact_button_text">Delete</string>
+
+    <string name="login_button_text">Sign-in with Google</string>
+
+
 </resources>

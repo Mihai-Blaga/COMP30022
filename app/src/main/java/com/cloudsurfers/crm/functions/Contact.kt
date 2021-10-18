@@ -7,6 +7,7 @@ import android.os.Build
 import android.provider.ContactsContract
 import androidx.annotation.RequiresApi
 import android.net.Uri
+import android.provider.CalendarContract
 
 import android.provider.ContactsContract.CommonDataKinds.StructuredName
 
@@ -20,6 +21,8 @@ import com.cloudsurfers.crm.R
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 import kotlin.collections.HashSet
+import android.content.ContentResolver
+import android.database.Cursor
 
 
 /** Helper class to store all the relevant contact information so that it can be passed between
@@ -103,9 +106,11 @@ class Contact() {
             when (mCursor?.count) {
                 null -> {
                     Log.e("Contact.readContact", "Error connecting to contacts")
+                    return
                 }
                 0 -> {
                     Log.e("Contact.readContact", "Contact not found")
+                    return
                     //TODO: notify user that search was unsuccessful
                 }
                 else -> {
@@ -267,15 +272,15 @@ class Contact() {
             tags: ArrayList<String>
         ): Boolean {
             if (activity.checkSelfPermission(Manifest.permission.WRITE_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
-                val requestCode = 1
+                val requestCode = 1;
                 activity.requestPermissions(
                     arrayOf(Manifest.permission.WRITE_CONTACTS),
                     requestCode
-                )
+                );
             }
             if (activity.checkSelfPermission(Manifest.permission.GET_ACCOUNTS) != PackageManager.PERMISSION_GRANTED) {
                 val requestCode = 1
-                activity.requestPermissions(arrayOf(Manifest.permission.GET_ACCOUNTS), requestCode)
+                activity.requestPermissions(arrayOf(Manifest.permission.GET_ACCOUNTS), requestCode);
             }
 
             val ops = ArrayList<ContentProviderOperation>()
@@ -388,12 +393,46 @@ class Contact() {
             allContacts.add(c)
             emailContacts[c.email!!] = c
             try {
-                val results = activity.contentResolver.applyBatch(ContactsContract.AUTHORITY, ops)
+                var results = activity.contentResolver.applyBatch(ContactsContract.AUTHORITY, ops)
                 Group.refresh(activity)
                 refresh(activity)
                 return ops.size == results.size
             } catch (e: Exception) {
                 e.printStackTrace()
+            }
+
+            return false;
+        }
+
+        fun deleteContact(activity: Activity, contactID: String): Boolean{
+            val uriQuery = arrayOf(
+                ContactsContract.Data.RAW_CONTACT_ID,
+                ContactsContract.Contacts.LOOKUP_KEY
+            )
+
+            val cur = activity.contentResolver.query(
+                ContactsContract.Data.CONTENT_URI,
+                uriQuery,
+                null,
+                null,
+                null
+            )
+            val cr: ContentResolver = activity.contentResolver
+            while (cur!!.moveToNext()) {
+                try {
+                    if (contactID.equals(cur.getString(0))){
+                        val lookupKey: String = cur.getString(1)
+                        val uri = Uri.withAppendedPath(
+                            ContactsContract.Contacts.CONTENT_LOOKUP_URI,
+                            lookupKey
+                        )
+                        cr.delete(uri, null, null)
+                        return true
+                    }
+
+                } catch (e: java.lang.Exception) {
+                    println(e.stackTrace)
+                }
             }
             return false
         }

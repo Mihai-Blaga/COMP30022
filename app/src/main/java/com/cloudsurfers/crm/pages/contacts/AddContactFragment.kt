@@ -63,7 +63,7 @@ class AddContactFragment : Fragment() {
 
         // Add tags to the chip group
         binding.addContactChipGroup.apply {
-            for (tag: String in tags!!) {
+            for (tag: String in tags) {
                 addNewChip(tag, this)
             }
         }
