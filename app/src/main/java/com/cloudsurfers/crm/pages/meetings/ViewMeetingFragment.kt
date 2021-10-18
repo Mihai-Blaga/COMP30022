@@ -11,7 +11,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
+import androidx.navigation.fragment.findNavController
 import com.cloudsurfers.crm.databinding.FragmentViewMeetingBinding
 import com.cloudsurfers.crm.functions.CalendarUtil
 import com.cloudsurfers.crm.functions.Util
@@ -63,6 +66,7 @@ class ViewMeetingFragment : Fragment() {
 
         val binding = FragmentViewMeetingBinding.inflate(layoutInflater, container, false)
 
+        val prevContactEmail = contactEmail;
         // Set value of text fields
         println("${contactEmail}, ${title}, ${date}, ${time}, ${location}, ${notes}")
         binding.viewMeetingOutlinedTextFieldMeetingContact.editText?.setText(contactEmail)
@@ -150,7 +154,6 @@ class ViewMeetingFragment : Fragment() {
             val meetingNotes =
                 binding.viewMeetingOutlinedTextFieldMeetingNotes.editText?.text.toString()
 
-            Log.i("chck for bttn","this has been clicked")
 
             val eventID = CalendarUtil.updateEvent(
                 requireActivity(),
@@ -159,11 +162,13 @@ class ViewMeetingFragment : Fragment() {
                 meetingContact,
                 meetingLocation,
                 cal,
-                meetingNotes
+                meetingNotes,
+                prevContactEmail
             )
 
-            if (eventID >= 0) {
-                requireActivity().onBackPressed()
+            if (eventID >= 0){
+                setFragmentResult("requestKey", bundleOf("refreshMeetings" to true))
+                findNavController().popBackStack()
             }
         }
 

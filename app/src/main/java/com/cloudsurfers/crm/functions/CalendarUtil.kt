@@ -15,6 +15,10 @@ import android.provider.CalendarContract
 import android.util.Log
 import androidx.annotation.RequiresApi
 import com.cloudsurfers.crm.R
+import android.provider.CalendarContract.Attendees
+
+
+
 
 class CalendarUtil{
     companion object{
@@ -129,51 +133,48 @@ class CalendarUtil{
         }
 
         @RequiresApi(Build.VERSION_CODES.N)
-        fun updateEvent(activity: Activity, eventId: Long, title: String, contactEmail: String, location: String, dateTime: Calendar,  desc: String) : Long {
+        fun updateEvent(activity: Activity, eventID: Long, title: String, contactEmail: String, location: String, dateTime: Calendar,  desc: String, prevContactEmail: String?) : Long {
             if (activity.checkSelfPermission(Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED){
                 val requestCode = 1;
                 activity.requestPermissions(arrayOf(Manifest.permission.WRITE_CALENDAR), requestCode);
             }
 
-            // TODO configure calID?
-            val calID = 1;
             val startMillis: Long = dateTime.timeInMillis
             val endMillis: Long = startMillis + ONE_HOUR_IN_MILLI;
-
-            Log.i("ddddd", CalendarContract.Events.CONTENT_URI.toString())
-
-            return -1
 
             val eventValues = ContentValues().apply {
                 put(CalendarContract.Events.DTSTART, startMillis)
                 put(CalendarContract.Events.DTEND, endMillis)
                 put(CalendarContract.Events.TITLE, title)
                 put(CalendarContract.Events.DESCRIPTION, desc)
-                put(CalendarContract.Events.CALENDAR_ID, calID)
                 put(CalendarContract.Events.EVENT_TIMEZONE, dateTime.timeZone.displayName)
                 put(CalendarContract.Events.EVENT_LOCATION, location)
             }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                activity.contentResolver.update(CalendarContract.Events.CONTENT_URI, eventValues, null)
+
+            if (!contactEmail.isNullOrBlank()){
+                if (!prevContactEmail.isNullOrBlank()){
+                    val selection =
+                        "(" + Attendees.EVENT_ID + " = ?) AND (" + Attendees.ATTENDEE_EMAIL + " = ?)"
+                    val selectionArgs = arrayOf(eventID.toString() + "", prevContactEmail)
+                    activity.contentResolver.delete(Attendees.CONTENT_URI, selection, selectionArgs)
+                }
+
+                val attendeeValues = ContentValues().apply {
+                    put(CalendarContract.Attendees.ATTENDEE_EMAIL, contactEmail);
+                    put(CalendarContract.Attendees.EVENT_ID, eventID);
+                }
+
+                if (emailRegex.matches(contactEmail)) {
+                    activity.contentResolver.insert(
+                        CalendarContract.Attendees.CONTENT_URI,
+                        attendeeValues
+                    )
+                }
+
             }
 
-            val uri: Uri? = CalendarContract.Events.CONTENT_URI
-//            if (uri != null){
-//                eventId = uri.lastPathSegment?.toLong() ?: -1
-//            }
 
-            if (eventId < 0) return eventId;
-
-            val attendeeValues = ContentValues().apply {
-                put(CalendarContract.Attendees.ATTENDEE_EMAIL, contactEmail);
-                put(CalendarContract.Attendees.EVENT_ID, eventId);
-            }
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                activity.contentResolver.update(CalendarContract.Attendees.CONTENT_URI, attendeeValues, null)
-            }
-
-            return eventId
+            return eventID
         }
     }
 }
