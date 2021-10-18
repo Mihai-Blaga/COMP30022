@@ -237,7 +237,12 @@ class Meeting() {
                 fetchAllMeetings(activity)
             }
             if (emailLookup.containsKey(email)) {
-                return emailLookup[email]
+                val meetings = emailLookup[email]
+                meetings?.filter {
+                    LocalDateTime.now().isBefore(if (it.endDate != null) it.endDate else LocalDateTime.now())
+                } as ArrayList<Meeting>
+                meetings.sortWith { meeting, t1 -> meeting.beginDate!!.compareTo(t1.beginDate) }
+                return meetings
             }
             return arrayListOf()
         }
