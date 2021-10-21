@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import com.cloudsurfers.crm.databinding.FragmentAddNewMeetingBinding
 import com.cloudsurfers.crm.databinding.FragmentViewMeetingBinding
 import com.cloudsurfers.crm.functions.CalendarUtil
 import com.cloudsurfers.crm.functions.Util
@@ -164,5 +165,44 @@ class ViewMeetingFragment : Fragment() {
 
 
         return binding.root
+    }
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    private fun validateFields(binding: FragmentAddNewMeetingBinding): Boolean {
+        val emailField = binding.outlinedTextFieldMeetingContact
+        val dateField = binding.outlinedTextFieldMeetingDate
+        val timeField = binding.outlinedTextFieldMeetingTime
+
+        var valid = true
+
+        if (!Util.isValidEmail(emailField.editText?.text.toString())) {
+            emailField.isErrorEnabled = true
+            emailField.error = "Invalid email"
+            valid = false
+        } else {
+            emailField.error = null
+            emailField.isErrorEnabled = false
+        }
+
+        if (!Util.isValidDate(dateField.editText?.text.toString())) {
+            dateField.isErrorEnabled = true
+            dateField.error = "Invalid date"
+            valid = false
+        } else {
+            dateField.error = null
+            dateField.isErrorEnabled = false
+        }
+
+        if (!Util.isValidTime(timeField.editText?.text.toString())) {
+            timeField.isErrorEnabled = true
+            timeField.error = "Invalid time"
+            valid = false
+        } else {
+            timeField.error = null
+            timeField.isErrorEnabled = false
+        }
+
+
+        return valid
     }
 }
