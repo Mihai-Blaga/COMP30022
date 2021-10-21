@@ -7,12 +7,12 @@
 
     <TextView
         tools:ignore="MissingConstraints"
-        android:id="@+id/dummy_focus_view_view_meeting"
+        android:id="@+id/dummy_focus_view_edit_meeting"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:focusable="true"
         android:focusableInTouchMode="true">
-    <requestFocus/>
+        <requestFocus/>
     </TextView>
 
     <com.google.android.material.appbar.AppBarLayout
@@ -23,7 +23,7 @@
 
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/view_meeting_outlinedTextFieldMeetingContact"
+        android:id="@+id/outlinedTextFieldMeetingContact"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -48,7 +48,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/view_meeting_outlinedTextFieldMeetingName"
+        android:id="@+id/outlinedTextFieldMeetingName"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -61,7 +61,7 @@
         app:boxStrokeColor="@color/light_white"
 
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view_meeting_outlinedTextFieldMeetingContact"
+        app:layout_constraintTop_toBottomOf="@+id/outlinedTextFieldMeetingContact"
 
         app:startIconDrawable="@drawable/ic_baseline_local_offer_24"
         app:startIconTint="@color/light_white">
@@ -73,7 +73,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/view_meeting_outlinedTextFieldMeetingDate"
+        android:id="@+id/outlinedTextFieldMeetingDate"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -86,7 +86,7 @@
         app:boxStrokeColor="@color/light_white"
 
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view_meeting_outlinedTextFieldMeetingName"
+        app:layout_constraintTop_toBottomOf="@+id/outlinedTextFieldMeetingName"
 
         app:startIconDrawable="@drawable/ic_baseline_access_time_24"
         app:startIconTint="@color/light_white">
@@ -98,7 +98,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/view_meeting_outlinedTextFieldMeetingTime"
+        android:id="@+id/outlinedTextFieldMeetingTime"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -111,7 +111,7 @@
         app:boxStrokeColor="@color/light_white"
 
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view_meeting_outlinedTextFieldMeetingDate"
+        app:layout_constraintTop_toBottomOf="@+id/outlinedTextFieldMeetingDate"
 
         app:startIconDrawable="@drawable/ic_baseline_access_time_24"
         app:startIconTint="@color/light_white">
@@ -124,7 +124,7 @@
 
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/view_meeting_outlinedTextFieldMeetingLocation"
+        android:id="@+id/outlinedTextFieldMeetingLocation"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -137,7 +137,7 @@
         app:boxStrokeColor="@color/light_white"
 
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view_meeting_outlinedTextFieldMeetingTime"
+        app:layout_constraintTop_toBottomOf="@+id/outlinedTextFieldMeetingTime"
 
         app:startIconDrawable="@drawable/ic_baseline_location_on_24"
         app:startIconTint="@color/light_white">
@@ -149,7 +149,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/view_meeting_outlinedTextFieldMeetingNotes"
+        android:id="@+id/outlinedTextFieldMeetingNotes"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -162,7 +162,7 @@
         app:boxStrokeColor="@color/light_white"
 
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view_meeting_outlinedTextFieldMeetingLocation"
+        app:layout_constraintTop_toBottomOf="@+id/outlinedTextFieldMeetingLocation"
 
         app:startIconDrawable="@drawable/ic_baseline_notes_24"
         app:startIconTint="@color/light_white">
@@ -174,22 +174,12 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:id="@+id/view_meeting_edit_meeting_button"
+        android:id="@+id/edit_meeting_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="@string/edit_contact_button_text"
-        app:icon="@android:drawable/ic_menu_edit"
-        app:layout_constraintEnd_toEndOf="@+id/view_meeting_outlinedTextFieldMeetingNotes"
-        app:layout_constraintTop_toBottomOf="@+id/view_meeting_outlinedTextFieldMeetingNotes" />
-
-    <Button
-        android:id="@+id/view_meeting_delete_meeting_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/delete_contact_button_text"
-        app:layout_constraintStart_toStartOf="@+id/view_meeting_outlinedTextFieldMeetingNotes"
-        app:layout_constraintTop_toBottomOf="@+id/view_meeting_outlinedTextFieldMeetingNotes" />
+        android:text="@string/add_new_contact_button_text"
+        app:layout_constraintEnd_toEndOf="@+id/outlinedTextFieldMeetingNotes"
+        app:layout_constraintTop_toBottomOf="@+id/outlinedTextFieldMeetingNotes" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

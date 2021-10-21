@@ -9,12 +9,10 @@ import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
-import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.RecyclerView
 import com.cloudsurfers.crm.R
 import com.cloudsurfers.crm.functions.Contact
 import com.cloudsurfers.crm.pages.main.MainActivity
-import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class SearchAdapter(private val contacts: ArrayList<Contact>):
     RecyclerView.Adapter<SearchAdapter.ViewHolder>() {
@@ -29,7 +27,7 @@ class SearchAdapter(private val contacts: ArrayList<Contact>):
         lateinit var contact: Contact
 
         init {
-            // Define click listener for the ViewHolder's View.j
+            // Define click listener for the ViewHolder's View.
             view.setOnClickListener {
                 val activity: AppCompatActivity = view.context as AppCompatActivity
 //                val c: Contact = Contact.readContact(contact, activity)
@@ -45,8 +43,6 @@ class SearchAdapter(private val contacts: ArrayList<Contact>):
             }
         }
     }
-
-
 
     // Create new views (invoked by the layout manager)
     @RequiresApi(Build.VERSION_CODES.N)

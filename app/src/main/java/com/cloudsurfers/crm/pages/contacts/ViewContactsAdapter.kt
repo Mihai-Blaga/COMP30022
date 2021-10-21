@@ -66,18 +66,18 @@ class ViewContactsAdapter(private val contacts: ArrayList<Contact>):
         viewHolder.contact = contacts[position]
 
         // Draws the icon in the ImageView
-        drawIcons(viewHolder.contactImageView, contacts[position].name?.substring(0,1))
+        drawIcons(viewHolder.contactImageView, contacts[position].name)
 
     }
 
     // Draws the icons into the ImageView in the layout page
-    private fun drawIcons(imageView: ImageView, letter: String?) {
+    private fun drawIcons(imageView: ImageView, name: String?) {
 
         // For drawing the circle
         val bitmap = Bitmap.createBitmap(50,50,Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         val paint = Paint()
-        paint.color = chooseColour(letter)
+        paint.color = chooseColour(name!!)
         paint.isAntiAlias = true
 
         // For drawing the letter
@@ -89,32 +89,46 @@ class ViewContactsAdapter(private val contacts: ArrayList<Contact>):
 
         // Actually rendering the icon
         canvas.drawCircle(25f,25f,25f, paint)
-        if (letter != null) {
-            canvas.drawText(letter,24.5f,31.5f,textPaint)
+        if (name.substring(0,1) != null) {
+            canvas.drawText(name.substring(0,1),24.5f,31.5f,textPaint)
         }
         imageView.setImageBitmap(bitmap)
 
     }
 
     // Chooses the colour of the icon from a predefined array of the colours
-    private fun chooseColour(letter: String?): Int {
+    private fun chooseColour(name: String): Int {
 
         // Chooses which colour to pick
-        var charNum = 0
-        if (letter != null && letter != "")
-            charNum = letter[0].code.rem(7)
+        var charHash = 0
 
-        val colours = arrayOf(Color(103, 159, 56).toArgb(),
+        for (letter: Char in name) {
+            charHash += letter.code
+        }
+
+        val colours = arrayOf(
+            Color(103, 159, 56).toArgb(),
             Color(177, 86, 73).toArgb(),
             Color(238, 110, 2).toArgb(),
             Color(236, 64, 122).toArgb(),
             Color(242, 81, 29).toArgb(),
             Color(93, 65, 56).toArgb(),
-            Color(81, 47, 170).toArgb()
-//            Color(, , ).toArgb() Format for adding for colours
+            Color(81, 47, 170).toArgb(),
+            Color(194, 24, 91).toArgb(),
+            Color(3, 136, 210).toArgb(),
+            Color(0, 87, 155).toArgb(),
+            Color(0, 153, 165).toArgb(),
+            Color(93, 106, 192).toArgb(),
+            Color(247, 105, 64).toArgb(),
+            Color(252, 133, 35).toArgb(),
+            Color(252, 169, 44).toArgb(),
+            Color(103, 159, 56).toArgb(),
+            Color(81, 125, 45).toArgb(),
+            Color(189, 52, 12).toArgb(),
+//            Color(, , ).toArgb(), Format for adding for colours
         )
 
-        return colours[charNum]
+        return colours[charHash.rem(colours.size)]
     }
 
 

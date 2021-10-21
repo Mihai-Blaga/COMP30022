@@ -427,6 +427,7 @@ class Contact() {
                             lookupKey
                         )
                         cr.delete(uri, null, null)
+                        refresh(activity)
                         return true
                     }
 
@@ -434,6 +435,7 @@ class Contact() {
                     println(e.stackTrace)
                 }
             }
+            refresh(activity)
             return false
         }
 
