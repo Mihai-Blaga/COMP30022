@@ -58,6 +58,12 @@ class ViewContactFragment : Fragment() {
             tags = it.getStringArrayList(ARG_PARAM5)
             contactID = it.getString(ARG_PARAM6)
 
+            if (name.isNullOrBlank() && !email.isNullOrBlank()) {
+                name = email
+            }
+            else if (name.isNullOrBlank() && !mobile.isNullOrBlank()) {
+                name = mobile
+            }
         }
     }
 

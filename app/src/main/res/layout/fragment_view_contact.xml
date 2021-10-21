@@ -186,25 +186,27 @@
         app:layout_constraintEnd_toEndOf="@+id/viewContactOutlinedTextFieldNotes"
         app:layout_constraintTop_toBottomOf="@+id/view_contact_upcoming_meetings_recycler_view" />
 
-    <Button
-        android:id="@+id/view_contact_send_email_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/view_contact_send_email_button_txt"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view_contact_delete_contact_button" />
+        <Button
+            android:id="@+id/view_contact_send_email_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/view_contact_send_email_button_txt"
+            app:icon="@drawable/ic_baseline_email_24"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view_contact_delete_contact_button" />
 
-    <Button
-        android:id="@+id/view_contact_delete_contact_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/view_contact_delete_contact_button_text"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view_contact_upcoming_meetings_recycler_view" />
+        <Button
+            android:id="@+id/view_contact_delete_contact_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/view_contact_delete_contact_button_text"
+            app:icon="@android:drawable/ic_menu_delete"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view_contact_upcoming_meetings_recycler_view" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
