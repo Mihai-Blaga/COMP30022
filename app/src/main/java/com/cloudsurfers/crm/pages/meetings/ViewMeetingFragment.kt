@@ -6,11 +6,15 @@ import android.icu.text.SimpleDateFormat
 import android.icu.util.Calendar
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
+import androidx.navigation.fragment.findNavController
 import com.cloudsurfers.crm.databinding.FragmentViewMeetingBinding
 import com.cloudsurfers.crm.functions.CalendarUtil
 import com.cloudsurfers.crm.functions.Util
@@ -18,6 +22,7 @@ import java.util.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+private const val ARG_PARAM0 = "eventID"
 private const val ARG_PARAM1 = "contactEmail"
 private const val ARG_PARAM2 = "title"
 private const val ARG_PARAM3 = "date"
@@ -37,6 +42,7 @@ class ViewMeetingFragment : Fragment() {
     private var time: String? = null
     private var location: String? = null
     private var notes: String? = null
+    private var eventID: Long = -1
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,6 +54,7 @@ class ViewMeetingFragment : Fragment() {
             time = it.getString(ARG_PARAM4)
             location = it.getString(ARG_PARAM5)
             notes = it.getString(ARG_PARAM6)
+            eventID = it.getString(ARG_PARAM0)!!.toLong()
         }
     }
 
@@ -59,6 +66,7 @@ class ViewMeetingFragment : Fragment() {
 
         val binding = FragmentViewMeetingBinding.inflate(layoutInflater, container, false)
 
+        val prevContactEmail = contactEmail;
         // Set value of text fields
         println("${contactEmail}, ${title}, ${date}, ${time}, ${location}, ${notes}")
         binding.viewMeetingOutlinedTextFieldMeetingContact.editText?.setText(contactEmail)
@@ -71,9 +79,10 @@ class ViewMeetingFragment : Fragment() {
 
         // Stores the date and time that can be changed by the user
         val cal = Calendar.getInstance().apply {
+            Log.i("ddddd", "date $date")
             if (date != null && date != "")
                 set(date!!.split(".")[2].toInt(),
-                    date!!.split(".")[1].toInt(),
+                    date!!.split(".")[1].toInt()-1,
                     date!!.split(".")[0].toInt())
             if (this@ViewMeetingFragment.time != null && this@ViewMeetingFragment.time != "") {
                 val hours = this@ViewMeetingFragment.time!!.split(":")[0].toInt()
@@ -108,6 +117,7 @@ class ViewMeetingFragment : Fragment() {
 //                cal.get(Calendar.MONTH),
 //                cal.get(Calendar.DAY_OF_MONTH)).show()
 //        }
+
         binding.viewMeetingOutlinedTextFieldMeetingDate.editText?.setOnFocusChangeListener { v, b ->
             // This line prevents keyboard from showing
             Util.hideKeyboard(v, requireContext())
@@ -135,7 +145,7 @@ class ViewMeetingFragment : Fragment() {
             }
         }
 
-        binding.viewMeetingSaveMeetingButton.setOnClickListener {
+        binding.viewMeetingEditMeetingButton.setOnClickListener {
             val meetingName =
                 binding.viewMeetingOutlinedTextFieldMeetingName.editText?.text.toString()
             val meetingContact =
@@ -145,20 +155,22 @@ class ViewMeetingFragment : Fragment() {
             val meetingNotes =
                 binding.viewMeetingOutlinedTextFieldMeetingNotes.editText?.text.toString()
 
-//            val intent = CalendarUtil.getInsertEventIntent(meetingName, meetingContact, meetingLocation, cal, meetingNotes)
-//            startActivity(intent)
+            Log.i("ddddd", "saved${cal.timeInMillis}")
 
-            val eventID = CalendarUtil.addEvent(
+            val eventID = CalendarUtil.updateEvent(
                 requireActivity(),
+                eventID,
                 meetingName,
                 meetingContact,
                 meetingLocation,
                 cal,
-                meetingNotes
+                meetingNotes,
+                prevContactEmail
             )
 
-            if (eventID >= 0) {
-                requireActivity().onBackPressed()
+            if (eventID >= 0){
+                setFragmentResult("requestKey", bundleOf("refreshMeetings" to true))
+                findNavController().popBackStack()
             }
         }
 
