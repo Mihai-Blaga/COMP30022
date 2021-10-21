@@ -91,7 +91,8 @@ class ViewMeetingsAdapter(private val meetingsList: ArrayList<Meeting>, private 
                 "date" to date,
                 "time" to time,
                 "location" to meeting.location,
-                "notes" to meeting.description?.substringBefore("\n-::~")?.substringBefore("-::~")
+                "notes" to meeting.description?.substringBefore("\n-::~")?.substringBefore("-::~"),
+                "eventID" to meeting.eventID
             )
 
             if (fromViewContact) {
