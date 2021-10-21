@@ -41,7 +41,7 @@ class ViewMeetingsFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
-    var meetingsList: ArrayList<Meeting> = ArrayList()
+    private var meetingsList: ArrayList<Meeting> = ArrayList()
 
     //Launches popup requesting access to reading contacts
     private val requestPermissionLauncher =
@@ -110,12 +110,12 @@ class ViewMeetingsFragment : Fragment() {
         }
 
         val addMeetingButton = view.findViewById<Button>(R.id.addMeetingButton)
-        addMeetingButton.setOnClickListener(){
+        addMeetingButton.setOnClickListener {
             Navigation.findNavController(view).navigate(R.id.view_meeting_to_add_meeting)
         }
 
         val viewMeetingButton = view.findViewById<Button>(R.id.viewCalendarButton)
-        viewMeetingButton.setOnClickListener(){
+        viewMeetingButton.setOnClickListener {
         val intent: Intent = CalendarUtil.getViewCalendarIntent()
             startActivity(intent)
         }

@@ -9,10 +9,12 @@ import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
+import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.RecyclerView
 import com.cloudsurfers.crm.R
 import com.cloudsurfers.crm.functions.Contact
 import com.cloudsurfers.crm.pages.main.MainActivity
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class SearchAdapter(private val contacts: ArrayList<Contact>):
     RecyclerView.Adapter<SearchAdapter.ViewHolder>() {
@@ -27,12 +29,12 @@ class SearchAdapter(private val contacts: ArrayList<Contact>):
         lateinit var contact: Contact
 
         init {
-            // Define click listener for the ViewHolder's View.
+            // Define click listener for the ViewHolder's View.j
             view.setOnClickListener {
                 val activity: AppCompatActivity = view.context as AppCompatActivity
 //                val c: Contact = Contact.readContact(contact, activity)
                 val c: Contact = contact
-                val bundle = bundleOf("name" to c.name, "email" to c.email, "mobile" to c.phone, "notes" to c.note, "tags" to c.getGroupNames(activity))
+                val bundle = bundleOf("name" to c.name, "email" to c.email, "mobile" to c.phone, "notes" to c.note, "tags" to c.getGroupNames(activity), "contactID" to c.id)
 
                 println(c.getGroupNames(activity))
                 val viewContactIntent: Intent = Intent(activity, MainActivity::class.java).apply {
@@ -43,6 +45,8 @@ class SearchAdapter(private val contacts: ArrayList<Contact>):
             }
         }
     }
+
+
 
     // Create new views (invoked by the layout manager)
     @RequiresApi(Build.VERSION_CODES.N)

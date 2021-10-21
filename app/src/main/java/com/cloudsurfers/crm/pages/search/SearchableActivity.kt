@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.view.Menu
 import android.view.View
 import android.widget.ImageButton
 import android.widget.SearchView
@@ -17,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.cloudsurfers.crm.R
 import com.cloudsurfers.crm.functions.Contact
 import com.cloudsurfers.crm.functions.Group
+import com.cloudsurfers.crm.functions.Meeting
 import com.cloudsurfers.crm.pages.main.MainActivity
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
@@ -50,8 +50,8 @@ class SearchableActivity : MainActivity() {
 
                 // Change the adapter with updated query data after user finishes typing
                 override fun onQueryTextChange(query: String?): Boolean {
-                    handler.removeCallbacksAndMessages(null)
-                    handler.postDelayed({
+                    handler?.removeCallbacksAndMessages(null)
+                    handler?.postDelayed({
                         this@SearchableActivity.findViewById<RecyclerView>(R.id.search_recycler_view).apply {
                             adapter = SearchAdapter(basicContactSearchWithTags(query!!, getSelectedTags()))
                         }
@@ -105,9 +105,9 @@ class SearchableActivity : MainActivity() {
     @RequiresApi(Build.VERSION_CODES.N)
     private fun basicContactSearch(query: String): ArrayList<Contact> {
         if (query == "") return ArrayList()
-        return Contact.readContacts(this)?.filter { c -> !(c.name == null || c.name.equals("")) }
-            ?.filter { c -> c.name!!.lowercase().split(" ").any { it.startsWith(query.lowercase()) }
-        } as ArrayList<Contact>
+        return Contact.readContacts(this).filter { c -> !(c.name == null || c.name.equals("")) }
+            .filter { c -> c.name!!.lowercase().split(" ").any { it.startsWith(query.lowercase()) }
+            } as ArrayList<Contact>
     }
 
     // Basic contact search with tags
@@ -132,8 +132,8 @@ class SearchableActivity : MainActivity() {
     private fun handleIntent(intent: Intent) {
         if (Intent.ACTION_SEARCH == intent.action) {
             intent.getStringExtra(SearchManager.QUERY)?.also { query ->
-                val tags: ArrayList<String>? = getSelectedTags()
-                val queryContacts: ArrayList<Contact> = basicContactSearchWithTags(query, tags!!)
+                val tags: ArrayList<String> = getSelectedTags()
+                val queryContacts: ArrayList<Contact> = basicContactSearchWithTags(query, tags)
 
                 val recyclerView = findViewById<RecyclerView>(R.id.search_recycler_view)
                 val emptyTextView = findViewById<TextView>(R.id.search_no_data_text_view)
@@ -156,5 +156,9 @@ class SearchableActivity : MainActivity() {
         }
     }
 
-
+//    override fun onResume() {
+//        super.onResume()
+//        finish();
+//        startActivity(intent);
+//    }
 }

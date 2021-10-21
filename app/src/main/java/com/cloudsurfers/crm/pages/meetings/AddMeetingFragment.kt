@@ -14,6 +14,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import androidx.navigation.fragment.findNavController
+import com.cloudsurfers.crm.databinding.FragmentAddNewContactBinding
 import com.cloudsurfers.crm.functions.CalendarUtil
 import com.cloudsurfers.crm.databinding.FragmentAddNewMeetingBinding
 import com.cloudsurfers.crm.functions.Util
@@ -67,7 +68,9 @@ class AddMeetingFragment : Fragment() {
         val timeSetListener = TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
             cal.set(Calendar.HOUR_OF_DAY, hourOfDay)
             cal.set(Calendar.MINUTE, minute)
-            binding.outlinedTextFieldMeetingTime.editText?.setText("${hourOfDay}:${minute}")
+            val minuteStr = minute.toString().padStart(2, '0')
+            val hourStr = hourOfDay.toString().padStart(2, '0')
+            binding.outlinedTextFieldMeetingTime.editText?.setText("${hourStr}:${minuteStr}")
         }
 
         // On Click Listeners
@@ -77,6 +80,10 @@ class AddMeetingFragment : Fragment() {
 //                cal.get(Calendar.MONTH),
 //                cal.get(Calendar.DAY_OF_MONTH)).show()
 //        }
+
+        binding.outlinedTextFieldMeetingContact.editText?.onFocusChangeListener =
+            View.OnFocusChangeListener { _, hasFocus -> if (!hasFocus) validateFields(binding)}
+
         binding.outlinedTextFieldMeetingDate.editText?.setOnFocusChangeListener { v, b ->
             // This line prevents keyboard from showing
             Util.hideKeyboard(v, requireContext())
@@ -86,9 +93,10 @@ class AddMeetingFragment : Fragment() {
                     cal.get(Calendar.MONTH),
                     cal.get(Calendar.DAY_OF_MONTH)).show()
             }
-
+            if (!b) validateFields(binding)
         }
 
+        // Data validation when losing focus
         binding.outlinedTextFieldMeetingTime.editText?.setOnFocusChangeListener { v, b ->
             // This line prevents keyboard from showing
             Util.hideKeyboard(v, requireContext())
@@ -98,7 +106,7 @@ class AddMeetingFragment : Fragment() {
                     cal.get(Calendar.MINUTE),
                     false).show()
             }
-
+            if (!b) validateFields(binding)
         }
 
         binding.addMeetingButton.setOnClickListener {
@@ -109,18 +117,57 @@ class AddMeetingFragment : Fragment() {
 
 //            val intent = CalendarUtil.getInsertEventIntent(meetingName, meetingContact, meetingLocation, cal, meetingNotes)
 //            startActivity(intent)
+            if (validateFields(binding)) {
+                val eventID = CalendarUtil.addEvent(requireActivity(), meetingName, meetingContact, meetingLocation, cal, meetingNotes)
 
-            val eventID = CalendarUtil.addEvent(requireActivity(), meetingName, meetingContact, meetingLocation, cal, meetingNotes)
-
-            if (eventID >= 0){
-                setFragmentResult("requestKey", bundleOf("refreshMeetings" to true))
-                findNavController().popBackStack()
+                if (eventID >= 0){
+                    setFragmentResult("requestKey", bundleOf("refreshMeetings" to true))
+                    findNavController().popBackStack()
+                }
             }
-
         }
 
 
         return binding.root
+    }
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    private fun validateFields(binding: FragmentAddNewMeetingBinding): Boolean {
+        val emailField = binding.outlinedTextFieldMeetingContact
+        val dateField = binding.outlinedTextFieldMeetingDate
+        val timeField = binding.outlinedTextFieldMeetingTime
+
+        var valid = true
+
+        if (!Util.isValidEmail(emailField.editText?.text.toString())) {
+            emailField.isErrorEnabled = true
+            emailField.error = "Invalid email"
+            valid = false
+        } else {
+            emailField.error = null
+            emailField.isErrorEnabled = false
+        }
+
+        if (!Util.isValidDate(dateField.editText?.text.toString())) {
+            dateField.isErrorEnabled = true
+            dateField.error = "Invalid date"
+            valid = false
+        } else {
+            dateField.error = null
+            dateField.isErrorEnabled = false
+        }
+
+        if (!Util.isValidTime(timeField.editText?.text.toString())) {
+            timeField.isErrorEnabled = true
+            timeField.error = "Invalid time"
+            valid = false
+        } else {
+            timeField.error = null
+            timeField.isErrorEnabled = false
+        }
+
+
+        return valid
     }
 
     companion object {
