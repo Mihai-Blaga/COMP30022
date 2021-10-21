@@ -11,7 +11,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
-import com.cloudsurfers.crm.databinding.FragmentAddNewMeetingBinding
 import com.cloudsurfers.crm.databinding.FragmentViewMeetingBinding
 import com.cloudsurfers.crm.functions.CalendarUtil
 import com.cloudsurfers.crm.functions.Util
@@ -61,7 +60,7 @@ class ViewMeetingFragment : Fragment() {
         val binding = FragmentViewMeetingBinding.inflate(layoutInflater, container, false)
 
         // Set value of text fields
-        println("${contactEmail}, ${title}, ${date}, ${time}, ${location}, ${notes}")
+        println("${contactEmail}, ${title}, ${date}, ${time}, ${location}, $notes")
         binding.viewMeetingOutlinedTextFieldMeetingContact.editText?.setText(contactEmail)
         binding.viewMeetingOutlinedTextFieldMeetingName.editText?.setText(title)
         binding.viewMeetingOutlinedTextFieldMeetingDate.editText?.setText(date)
@@ -99,7 +98,9 @@ class ViewMeetingFragment : Fragment() {
         val timeSetListener = TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
             cal.set(Calendar.HOUR_OF_DAY, hourOfDay)
             cal.set(Calendar.MINUTE, minute)
-            binding.viewMeetingOutlinedTextFieldMeetingTime.editText?.setText("${hourOfDay}:${minute}")
+            val minuteStr = minute.toString().padStart(2, '0')
+            val hourStr = hourOfDay.toString().padStart(2, '0')
+            binding.viewMeetingOutlinedTextFieldMeetingTime.editText?.setText("${hourStr}:${minuteStr}")
         }
 
         // On Click Listeners
@@ -109,6 +110,10 @@ class ViewMeetingFragment : Fragment() {
 //                cal.get(Calendar.MONTH),
 //                cal.get(Calendar.DAY_OF_MONTH)).show()
 //        }
+
+        binding.viewMeetingOutlinedTextFieldMeetingContact.editText?.onFocusChangeListener =
+            View.OnFocusChangeListener { _, hasFocus -> if (!hasFocus) validateFields(binding)}
+
         binding.viewMeetingOutlinedTextFieldMeetingDate.editText?.setOnFocusChangeListener { v, b ->
             // This line prevents keyboard from showing
             Util.hideKeyboard(v, requireContext())
@@ -120,7 +125,7 @@ class ViewMeetingFragment : Fragment() {
                     cal.get(Calendar.DAY_OF_MONTH)
                 ).show()
             }
-
+            if (!b) validateFields(binding)
         }
 
         binding.viewMeetingOutlinedTextFieldMeetingTime.editText?.setOnFocusChangeListener { v, b ->
@@ -134,6 +139,7 @@ class ViewMeetingFragment : Fragment() {
                     false
                 ).show()
             }
+            if (!b) validateFields(binding)
         }
 
         binding.viewMeetingSaveMeetingButton.setOnClickListener {
@@ -168,10 +174,10 @@ class ViewMeetingFragment : Fragment() {
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    private fun validateFields(binding: FragmentAddNewMeetingBinding): Boolean {
-        val emailField = binding.outlinedTextFieldMeetingContact
-        val dateField = binding.outlinedTextFieldMeetingDate
-        val timeField = binding.outlinedTextFieldMeetingTime
+    private fun validateFields(binding: FragmentViewMeetingBinding): Boolean {
+        val emailField = binding.viewMeetingOutlinedTextFieldMeetingContact
+        val dateField = binding.viewMeetingOutlinedTextFieldMeetingDate
+        val timeField = binding.viewMeetingOutlinedTextFieldMeetingTime
 
         var valid = true
 
