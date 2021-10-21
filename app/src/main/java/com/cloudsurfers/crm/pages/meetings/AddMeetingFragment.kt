@@ -120,7 +120,7 @@ class AddMeetingFragment : Fragment() {
             if (validateFields(binding)) {
                 val eventID = CalendarUtil.addEvent(requireActivity(), meetingName, meetingContact, meetingLocation, cal, meetingNotes)
 
-                if (eventID >= 0){
+                if (eventID >= 0) {
                     setFragmentResult("requestKey", bundleOf("refreshMeetings" to true))
                     findNavController().popBackStack()
                 }

@@ -33,8 +33,9 @@ class Util{
             try {
                 sdf.parse(date)
             } catch (e: ParseException) {
-                return false
+                return TextUtils.isEmpty(date)
             }
+
             return true
         }
 
@@ -45,7 +46,7 @@ class Util{
             try {
                 sdf.parse(date)
             } catch (e: ParseException) {
-                return false
+                return TextUtils.isEmpty(date)
             }
             return true
         }
