@@ -30,9 +30,9 @@ class SearchAdapter(private val contacts: ArrayList<Contact>):
             // Define click listener for the ViewHolder's View.
             view.setOnClickListener {
                 val activity: AppCompatActivity = view.context as AppCompatActivity
-                val c: Contact = Contact.readContact(contact, activity)
-
-                val bundle = bundleOf("name" to c.name, "email" to c.email, "mobile" to c.phone, "notes" to c.note, "tags" to c.getGroupNames(activity))
+//                val c: Contact = Contact.readContact(contact, activity)
+                val c: Contact = contact
+                val bundle = bundleOf("name" to c.name, "email" to c.email, "mobile" to c.phone, "notes" to c.note, "tags" to c.getGroupNames(activity),"contactID" to c.id)
 
                 println(c.getGroupNames(activity))
                 val viewContactIntent: Intent = Intent(activity, MainActivity::class.java).apply {

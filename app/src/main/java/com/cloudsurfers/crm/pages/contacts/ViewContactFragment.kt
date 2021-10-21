@@ -136,11 +136,11 @@ class ViewContactFragment : Fragment() {
     // Retrieve the upcoming meetings for the contact
     @RequiresApi(Build.VERSION_CODES.O)
     fun getMeetingsForContact(activity: Activity): ArrayList<Meeting> {
-        return Meeting.fetchAllMeetings(activity)?.filter {
-            LocalDateTime.now().isBefore(if (it.beginDate != null) it.beginDate else LocalDateTime.now()) && it.contactEmail.equals(email)
-        } as ArrayList<Meeting>
+        if (email== null){
+            return arrayListOf()
+        }
+        return email?.let { Meeting.fetchMeetingsByEmail(it,activity) }!!
     }
-
 
     // Retrieve an ArrayList<String> of selected tags
     private fun getTags(chipGroup: FlexboxLayout): ArrayList<String> {
