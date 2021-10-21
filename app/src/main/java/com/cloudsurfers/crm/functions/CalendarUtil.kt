@@ -142,6 +142,8 @@ class CalendarUtil{
             val startMillis: Long = dateTime.timeInMillis
             val endMillis: Long = startMillis + ONE_HOUR_IN_MILLI;
 
+            Log.i("ddddd", "edit${dateTime.time}")
+
             val eventValues = ContentValues().apply {
                 put(CalendarContract.Events.DTSTART, startMillis)
                 put(CalendarContract.Events.DTEND, endMillis)
@@ -154,7 +156,7 @@ class CalendarUtil{
             var updateUri: Uri = ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, eventID)
             activity.contentResolver.update(updateUri, eventValues, null, null)
 
-            if (!contactEmail.isNullOrBlank()){
+            if (!contactEmail.isNullOrBlank() && contactEmail != prevContactEmail){
                 if (!prevContactEmail.isNullOrBlank()){
                     val selection =
                         "(" + Attendees.EVENT_ID + " = ?) AND (" + Attendees.ATTENDEE_EMAIL + " = ?)"

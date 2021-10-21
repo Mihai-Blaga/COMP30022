@@ -79,9 +79,10 @@ class ViewMeetingFragment : Fragment() {
 
         // Stores the date and time that can be changed by the user
         val cal = Calendar.getInstance().apply {
+            Log.i("ddddd", "date $date")
             if (date != null && date != "")
                 set(date!!.split(".")[2].toInt(),
-                    date!!.split(".")[1].toInt(),
+                    date!!.split(".")[1].toInt()-1,
                     date!!.split(".")[0].toInt())
             if (this@ViewMeetingFragment.time != null && this@ViewMeetingFragment.time != "") {
                 val hours = this@ViewMeetingFragment.time!!.split(":")[0].toInt()
@@ -154,6 +155,7 @@ class ViewMeetingFragment : Fragment() {
             val meetingNotes =
                 binding.viewMeetingOutlinedTextFieldMeetingNotes.editText?.text.toString()
 
+            Log.i("ddddd", "saved${cal.timeInMillis}")
 
             val eventID = CalendarUtil.updateEvent(
                 requireActivity(),
