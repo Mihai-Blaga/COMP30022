@@ -34,6 +34,13 @@
 <!--        <item name="android:iconTint">@color/matte_black</item>-->
     </style>
 
+    <style name="LoginButton">
+        <item name="android:layout_width">160dp</item>
+        <item name="android:layout_height">58dp</item>
+        <item name="android:textSize">10sp</item>
+        <item name="android:textColor">@color/matte_black</item>
+    </style>
+
     <style name="MeetingsListItemsText">
         <item name="android:textColor">@color/light_white</item>
     </style>

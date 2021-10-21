@@ -1,5 +1,6 @@
 package com.cloudsurfers.crm.pages.meetings
 
+import android.icu.text.SimpleDateFormat
 import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
@@ -14,8 +15,8 @@ import com.cloudsurfers.crm.functions.Meeting
 import java.time.format.DateTimeFormatter
 import java.util.*
 
-class ViewMeetingsAdapter(private val meetingsList: ArrayList<Meeting>, private val fromViewContact: Boolean) :
-    RecyclerView.Adapter<ViewMeetingsAdapter.ViewHolder>() {
+class ViewContactMeetingsAdapter(private val meetingsList: ArrayList<Meeting>) :
+    RecyclerView.Adapter<ViewContactMeetingsAdapter.ViewHolder>() {
 
     /**
      * Provide a reference to the type of views that you are using
@@ -31,26 +32,27 @@ class ViewMeetingsAdapter(private val meetingsList: ArrayList<Meeting>, private 
 
         lateinit var meeting: Meeting
 
-//        init {
-//            view.setOnClickListener {
-//                // Format the start date
-//                val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
-//                val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
-//                val date = meeting.beginDate?.format(dateFormatter)
-//                val time = meeting.beginDate?.format(timeFormatter)
-//
-//                val bundle = bundleOf(
-//                    "contactEmail" to meeting.contactEmail,
-//                    "title" to meeting.title,
-//                    "date" to date,
-//                    "time" to time,
-//                    "location" to meeting.location,
-//                    "notes" to meeting.description?.substringBefore("\n-::~")?.substringBefore("-::~")
-//                )
-//                Navigation.findNavController(view).navigate(R.id.action_viewMeetingsFragment_to_viewMeetingFragment, bundle)
-//            }
-//        }
+        init {
+            view.setOnClickListener {
+                // Format the start date
+                val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+                val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
+                val date = meeting.beginDate?.format(dateFormatter)
+                val time = meeting.beginDate?.format(timeFormatter)
 
+                val bundle = bundleOf(
+                    "contactEmail" to meeting.contactEmail,
+                    "title" to meeting.title,
+                    "date" to date,
+                    "time" to time,
+                    "location" to meeting.location,
+                    "notes" to meeting.description?.substringBefore("\n-::~")?.substringBefore("-::~")
+                )
+
+
+                Navigation.findNavController(view).navigate(R.id.action_viewMeetingsFragment_to_viewMeetingFragment, bundle)
+            }
+        }
     }
 
     // Create new views (invoked by the layout manager)
@@ -64,7 +66,6 @@ class ViewMeetingsAdapter(private val meetingsList: ArrayList<Meeting>, private 
     }
 
     // Replace the contents of a view (invoked by the layout manager)
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
 
         // Get element from your dataset at this position and replace the
@@ -76,31 +77,6 @@ class ViewMeetingsAdapter(private val meetingsList: ArrayList<Meeting>, private 
         viewHolder.meetingLocationTextView.text = meetingsList[position].location
 
         viewHolder.meeting = meetingsList[position]
-
-        viewHolder.itemView.setOnClickListener {
-            // Format the start date
-            val meeting = viewHolder.meeting
-            val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
-            val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
-            val date = meeting.beginDate?.format(dateFormatter)
-            val time = meeting.beginDate?.format(timeFormatter)
-
-            val bundle = bundleOf(
-                "contactEmail" to meeting.contactEmail,
-                "title" to meeting.title,
-                "date" to date,
-                "time" to time,
-                "location" to meeting.location,
-                "notes" to meeting.description?.substringBefore("\n-::~")?.substringBefore("-::~")
-            )
-
-            if (fromViewContact) {
-                Navigation.findNavController(viewHolder.itemView).navigate(R.id.action_viewContactFragment_to_viewMeetingFragment, bundle)
-            } else {
-                Navigation.findNavController(viewHolder.itemView).navigate(R.id.action_viewMeetingsFragment_to_viewMeetingFragment, bundle)
-            }
-        }
-
     }
 
     // Return the size of your dataset (invoked by the layout manager)

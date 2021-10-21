@@ -61,7 +61,16 @@
     <string name="chip_hint">Add Tags</string>
     <string name="chip_label_text">Tags</string>
 
+    <string name="view_contact_upcoming_meeting_label_text">Upcoming meetings</string>
+    <string name="view_contact_upcoming_meeting_label_no_meetings">No upcoming meetings.</string>
+
     <string name="add_contact_save_button_text">Save</string>
     <string name="delete_contact_button_text">Delete</string>
+
+
+    <string name="view_contact_delete_contact_button_text">Delete</string>
+
+    <string name="login_button_text">Sign-in with Google</string>
+
 
 </resources>
