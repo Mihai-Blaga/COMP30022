@@ -183,4 +183,13 @@
         app:layout_constraintEnd_toEndOf="@+id/view_meeting_outlinedTextFieldMeetingNotes"
         app:layout_constraintTop_toBottomOf="@+id/view_meeting_outlinedTextFieldMeetingNotes" />
 
+    <Button
+        android:id="@+id/view_meeting_delete_meeting_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/delete_contact_button_text"
+        app:layout_constraintStart_toStartOf="@+id/view_meeting_outlinedTextFieldMeetingNotes"
+        app:layout_constraintTop_toBottomOf="@+id/view_meeting_outlinedTextFieldMeetingNotes" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -50,6 +50,7 @@ class ViewMeetingsAdapter(private val meetingsList: ArrayList<Meeting>, private 
 //                Navigation.findNavController(view).navigate(R.id.action_viewMeetingsFragment_to_viewMeetingFragment, bundle)
 //            }
 //        }
+
     }
 
     // Create new views (invoked by the layout manager)

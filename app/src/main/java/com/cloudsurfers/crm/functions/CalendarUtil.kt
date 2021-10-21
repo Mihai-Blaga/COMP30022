@@ -70,7 +70,7 @@ class CalendarUtil{
             return Intent(Intent.ACTION_VIEW).setData(builder.build())
         }
 
-        fun getCalendarId(activity: Activity) : Long{
+        private fun getCalendarId(activity: Activity) : Long{
             val uri: Uri = CalendarContract.Calendars.CONTENT_URI
             val sharedPref = activity.getSharedPreferences(activity.getString(R.string.preference_file_key), Context.MODE_PRIVATE)
             val currEmail = sharedPref.getString("email", "")
@@ -132,6 +132,12 @@ class CalendarUtil{
             return eventId
         }
 
+
+        fun deleteEvent(activity: Activity, eventID: Long): Boolean{
+            val deleteUri: Uri = ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, eventID)
+            val rows: Int = activity.contentResolver.delete(deleteUri, null, null)
+            return rows > 0
+        }
         @RequiresApi(Build.VERSION_CODES.N)
         fun updateEvent(activity: Activity, eventID: Long, title: String, contactEmail: String, location: String, dateTime: Calendar,  desc: String, prevContactEmail: String?) : Long {
             if (activity.checkSelfPermission(Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED){
@@ -141,8 +147,6 @@ class CalendarUtil{
 
             val startMillis: Long = dateTime.timeInMillis
             val endMillis: Long = startMillis + ONE_HOUR_IN_MILLI;
-
-            Log.i("ddddd", "edit${dateTime.time}")
 
             val eventValues = ContentValues().apply {
                 put(CalendarContract.Events.DTSTART, startMillis)
