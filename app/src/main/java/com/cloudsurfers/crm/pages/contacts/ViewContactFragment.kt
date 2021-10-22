@@ -81,7 +81,9 @@ class ViewContactFragment : Fragment() {
             startActivity(Intent.createChooser(intent, "Send mail using..."))
         }
 
-        val meetings = getMeetingsForContact(activity as Activity)
+        val meetings = getMeetingsForContact(activity as Activity).filter {
+            LocalDateTime.now().isBefore(if (it.endDate != null) it.endDate else LocalDateTime.now())
+        } as ArrayList<Meeting>
         if (meetings.isEmpty())
             binding.viewContactUpcomingMeetingsLabel.text = resources.getString(R.string.view_contact_upcoming_meeting_label_no_meetings)
         binding.viewContactUpcomingMeetingsRecyclerView.apply {
