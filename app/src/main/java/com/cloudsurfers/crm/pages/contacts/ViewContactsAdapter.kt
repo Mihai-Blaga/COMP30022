@@ -77,7 +77,8 @@ class ViewContactsAdapter(private val contacts: ArrayList<Contact>):
         val bitmap = Bitmap.createBitmap(50,50,Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         val paint = Paint()
-        paint.color = chooseColour(name!!)
+
+        paint.color = chooseColour(name)
         paint.isAntiAlias = true
 
         // For drawing the letter
@@ -89,8 +90,8 @@ class ViewContactsAdapter(private val contacts: ArrayList<Contact>):
 
         // Actually rendering the icon
         canvas.drawCircle(25f,25f,25f, paint)
-        if (name.isNotEmpty()) {
-            canvas.drawText(name.substring(0,1),24.5f,31.5f,textPaint)
+        if (!name.isNullOrEmpty()) {
+            canvas.drawText(name!!.substring(0,1),24.5f,31.5f,textPaint)
         } else {
             canvas.drawText("",24.5f,31.5f,textPaint)
         }
@@ -99,14 +100,15 @@ class ViewContactsAdapter(private val contacts: ArrayList<Contact>):
     }
 
     // Chooses the colour of the icon from a predefined array of the colours
-    private fun chooseColour(name: String): Int {
+    private fun chooseColour(name: String?): Int {
 
         // Chooses which colour to pick
         var charHash = 0
 
-        for (letter: Char in name) {
-            charHash += letter.code
-        }
+        if (!name.isNullOrEmpty())
+            for (letter: Char in name) {
+                charHash += letter.code
+            }
 
         val colours = arrayOf(
             Color(103, 159, 56).toArgb(),
