@@ -41,7 +41,10 @@
         app:startIconDrawable="@drawable/ic_baseline_person_24"
         app:startIconTint="@color/light_white">
 
-        <com.google.android.material.textfield.TextInputEditText
+        <android.widget.AutoCompleteTextView
+            android:id="@+id/addMeetingAutocompleteEmailTextField"
+            android:textSize="16sp"
+            android:popupBackground="@color/matte_med_grey"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
