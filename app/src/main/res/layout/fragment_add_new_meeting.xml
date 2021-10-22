@@ -182,6 +182,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="@string/add_new_contact_button_text"
+        app:icon="@android:drawable/ic_menu_save"
         app:layout_constraintEnd_toEndOf="@+id/outlinedTextFieldMeetingNotes"
         app:layout_constraintTop_toBottomOf="@+id/outlinedTextFieldMeetingNotes" />
 
