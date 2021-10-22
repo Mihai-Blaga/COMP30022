@@ -89,8 +89,10 @@ class ViewContactsAdapter(private val contacts: ArrayList<Contact>):
 
         // Actually rendering the icon
         canvas.drawCircle(25f,25f,25f, paint)
-        if (name.substring(0,1) != null) {
+        if (name.isNotEmpty()) {
             canvas.drawText(name.substring(0,1),24.5f,31.5f,textPaint)
+        } else {
+            canvas.drawText("",24.5f,31.5f,textPaint)
         }
         imageView.setImageBitmap(bitmap)
 
