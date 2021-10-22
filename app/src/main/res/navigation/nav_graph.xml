@@ -63,7 +63,7 @@
         tools:layout="@layout/fragment_add_new_meeting"/>
     <fragment
         android:id="@+id/addContactFragment"
-        android:name="com.cloudsurfers.crm.pages.meetings.AddContactFragment"
+        android:name="com.cloudsurfers.crm.pages.contacts.AddContactFragment"
         android:label="Add New Contact"
         tools:layout="@layout/fragment_add_new_meeting">
         <action

@@ -16,30 +16,16 @@ import androidx.fragment.app.setFragmentResult
 import androidx.navigation.fragment.findNavController
 import com.cloudsurfers.crm.functions.CalendarUtil
 import com.cloudsurfers.crm.databinding.FragmentAddNewMeetingBinding
+import com.cloudsurfers.crm.functions.Contact
 import com.cloudsurfers.crm.functions.Util
 import java.util.*
+import android.widget.ArrayAdapter
+import com.cloudsurfers.crm.R
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [AddMeetingFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class AddMeetingFragment : Fragment() {
-    private var param1: String? = null
-    private var param2: String? = null
+    private var contactEmails: ArrayList<String> = ArrayList<String>()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreateView(
@@ -48,8 +34,9 @@ class AddMeetingFragment : Fragment() {
     ): View {
 
         val binding = FragmentAddNewMeetingBinding.inflate(layoutInflater, container, false)
+        contactEmails = Contact.readContacts(requireActivity()).map { it.email } as ArrayList<String>
 
-        binding.outlinedTextFieldMeetingName.editText?.setText("Someone's Meeting")
+//        binding.outlinedTextFieldMeetingName.editText?.setText("Someone's Meeting")
         // Stores the date and time that can be changed by the user
         val cal = Calendar.getInstance()
 
@@ -67,7 +54,10 @@ class AddMeetingFragment : Fragment() {
         val timeSetListener = TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
             cal.set(Calendar.HOUR_OF_DAY, hourOfDay)
             cal.set(Calendar.MINUTE, minute)
-            binding.outlinedTextFieldMeetingTime.editText?.setText("${hourOfDay}:${minute}")
+            val minuteStr = minute.toString().padStart(2, '0')
+            val hourStr = hourOfDay.toString().padStart(2, '0')
+            val timeStr = "${hourStr}:${minuteStr}"
+            binding.outlinedTextFieldMeetingTime.editText?.setText(timeStr)
         }
 
         // On Click Listeners
@@ -77,6 +67,17 @@ class AddMeetingFragment : Fragment() {
 //                cal.get(Calendar.MONTH),
 //                cal.get(Calendar.DAY_OF_MONTH)).show()
 //        }
+
+        // Configure autocomplete text edit view for contact emails
+        binding.addMeetingAutocompleteEmailTextField.setAdapter(
+            ArrayAdapter(
+                requireActivity(),
+                R.layout.autocomplete_list_item, contactEmails
+            )
+        )
+        binding.addMeetingAutocompleteEmailTextField.onFocusChangeListener =
+            View.OnFocusChangeListener { _, hasFocus -> if (!hasFocus) validateFields(binding)}
+
         binding.outlinedTextFieldMeetingDate.editText?.setOnFocusChangeListener { v, b ->
             // This line prevents keyboard from showing
             Util.hideKeyboard(v, requireContext())
@@ -86,9 +87,10 @@ class AddMeetingFragment : Fragment() {
                     cal.get(Calendar.MONTH),
                     cal.get(Calendar.DAY_OF_MONTH)).show()
             }
-
+            if (!b) validateFields(binding)
         }
 
+        // Data validation when losing focus
         binding.outlinedTextFieldMeetingTime.editText?.setOnFocusChangeListener { v, b ->
             // This line prevents keyboard from showing
             Util.hideKeyboard(v, requireContext())
@@ -98,48 +100,67 @@ class AddMeetingFragment : Fragment() {
                     cal.get(Calendar.MINUTE),
                     false).show()
             }
-
+            if (!b) validateFields(binding)
         }
 
         binding.addMeetingButton.setOnClickListener {
             val meetingName = binding.outlinedTextFieldMeetingName.editText?.text.toString()
-            val meetingContact  = binding.outlinedTextFieldMeetingContact.editText?.text.toString()
+            val meetingContact  = binding.addMeetingAutocompleteEmailTextField.text.toString()
             val meetingLocation = binding.outlinedTextFieldMeetingLocation.editText?.text.toString()
             val meetingNotes = binding.outlinedTextFieldMeetingNotes.editText?.text.toString()
 
 //            val intent = CalendarUtil.getInsertEventIntent(meetingName, meetingContact, meetingLocation, cal, meetingNotes)
 //            startActivity(intent)
+            if (validateFields(binding)) {
+                val eventID = CalendarUtil.addEvent(requireActivity(), meetingName, meetingContact, meetingLocation, cal, meetingNotes)
 
-            val eventID = CalendarUtil.addEvent(requireActivity(), meetingName, meetingContact, meetingLocation, cal, meetingNotes)
-
-            if (eventID >= 0){
-                setFragmentResult("requestKey", bundleOf("refreshMeetings" to true))
-                findNavController().popBackStack()
+                if (eventID >= 0) {
+                    setFragmentResult("requestKey", bundleOf("refreshMeetings" to true))
+                    findNavController().popBackStack()
+                }
             }
-
         }
 
 
         return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment AddMeetingFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            AddMeetingFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    @RequiresApi(Build.VERSION_CODES.N)
+    private fun validateFields(binding: FragmentAddNewMeetingBinding): Boolean {
+        val emailField = binding.outlinedTextFieldMeetingContact
+        val dateField = binding.outlinedTextFieldMeetingDate
+        val timeField = binding.outlinedTextFieldMeetingTime
+        val email = binding.addMeetingAutocompleteEmailTextField.text.toString()
+
+        var valid = true
+        if (email !in contactEmails) {
+            emailField.isErrorEnabled = true
+            emailField.error = "Invalid email"
+            valid = false
+        } else {
+            emailField.error = null
+            emailField.isErrorEnabled = false
+        }
+
+        if (!Util.isValidDate(dateField.editText?.text.toString())) {
+            dateField.isErrorEnabled = true
+            dateField.error = "Invalid date"
+            valid = false
+        } else {
+            dateField.error = null
+            dateField.isErrorEnabled = false
+        }
+
+        if (!Util.isValidTime(timeField.editText?.text.toString())) {
+            timeField.isErrorEnabled = true
+            timeField.error = "Invalid time"
+            valid = false
+        } else {
+            timeField.error = null
+            timeField.isErrorEnabled = false
+        }
+
+
+        return valid
     }
 }

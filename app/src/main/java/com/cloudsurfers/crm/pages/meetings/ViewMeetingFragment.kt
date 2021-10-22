@@ -82,7 +82,6 @@ class ViewMeetingFragment : Fragment() {
 
         // Stores the date and time that can be changed by the user
         val cal = Calendar.getInstance().apply {
-            Log.i("ddddd", "date $date")
             if (date != null && date != "")
                 set(date!!.split(".")[2].toInt(),
                     date!!.split(".")[1].toInt()-1,
@@ -110,7 +109,9 @@ class ViewMeetingFragment : Fragment() {
         val timeSetListener = TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
             cal.set(Calendar.HOUR_OF_DAY, hourOfDay)
             cal.set(Calendar.MINUTE, minute)
-            binding.viewMeetingOutlinedTextFieldMeetingTime.editText?.setText("${hourOfDay}:${minute}")
+            val minuteStr = minute.toString().padStart(2, '0')
+            val hourStr = hourOfDay.toString().padStart(2, '0')
+            binding.viewMeetingOutlinedTextFieldMeetingTime.editText?.setText("${hourStr}:${minuteStr}")
         }
 
         // On Click Listeners
@@ -120,6 +121,10 @@ class ViewMeetingFragment : Fragment() {
 //                cal.get(Calendar.MONTH),
 //                cal.get(Calendar.DAY_OF_MONTH)).show()
 //        }
+
+
+        binding.viewMeetingOutlinedTextFieldMeetingContact.editText?.onFocusChangeListener =
+            View.OnFocusChangeListener { _, hasFocus -> if (!hasFocus) validateFields(binding)}
 
         binding.viewMeetingOutlinedTextFieldMeetingDate.editText?.setOnFocusChangeListener { v, b ->
             // This line prevents keyboard from showing
@@ -132,7 +137,7 @@ class ViewMeetingFragment : Fragment() {
                     cal.get(Calendar.DAY_OF_MONTH)
                 ).show()
             }
-
+            if (!b) validateFields(binding)
         }
 
         binding.viewMeetingOutlinedTextFieldMeetingTime.editText?.setOnFocusChangeListener { v, b ->
@@ -146,6 +151,7 @@ class ViewMeetingFragment : Fragment() {
                     false
                 ).show()
             }
+            if (!b) validateFields(binding)
         }
 
         binding.viewMeetingEditMeetingButton.setOnClickListener {
@@ -158,7 +164,8 @@ class ViewMeetingFragment : Fragment() {
             val meetingNotes =
                 binding.viewMeetingOutlinedTextFieldMeetingNotes.editText?.text.toString()
 
-            Log.i("ddddd", "saved${cal.timeInMillis}")
+//            val intent = CalendarUtil.getInsertEventIntent(meetingName, meetingContact, meetingLocation, cal, meetingNotes)
+//            startActivity(intent)
 
             val eventID = CalendarUtil.updateEvent(
                 requireActivity(),
@@ -190,5 +197,44 @@ class ViewMeetingFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    private fun validateFields(binding: FragmentViewMeetingBinding): Boolean {
+        val emailField = binding.viewMeetingOutlinedTextFieldMeetingContact
+        val dateField = binding.viewMeetingOutlinedTextFieldMeetingDate
+        val timeField = binding.viewMeetingOutlinedTextFieldMeetingTime
+
+        var valid = true
+
+        if (!Util.isValidEmail(emailField.editText?.text.toString())) {
+            emailField.isErrorEnabled = true
+            emailField.error = "Invalid email"
+            valid = false
+        } else {
+            emailField.error = null
+            emailField.isErrorEnabled = false
+        }
+
+        if (!Util.isValidDate(dateField.editText?.text.toString())) {
+            dateField.isErrorEnabled = true
+            dateField.error = "Invalid date"
+            valid = false
+        } else {
+            dateField.error = null
+            dateField.isErrorEnabled = false
+        }
+
+        if (!Util.isValidTime(timeField.editText?.text.toString())) {
+            timeField.isErrorEnabled = true
+            timeField.error = "Invalid time"
+            valid = false
+        } else {
+            timeField.error = null
+            timeField.isErrorEnabled = false
+        }
+
+
+        return valid
     }
 }

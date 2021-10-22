@@ -1,15 +1,10 @@
-package com.cloudsurfers.crm.pages.meetings
+package com.cloudsurfers.crm.pages.contacts
 
-import android.app.DatePickerDialog
-import android.app.TimePickerDialog
-import android.icu.text.SimpleDateFormat
-import android.icu.util.Calendar
 import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.Gravity
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,14 +12,13 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.os.bundleOf
 import androidx.core.view.children
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.navigation.fragment.findNavController
-import com.cloudsurfers.crm.R
 import com.cloudsurfers.crm.databinding.FragmentAddNewContactBinding
-import com.cloudsurfers.crm.functions.CalendarUtil
-import com.cloudsurfers.crm.databinding.FragmentAddNewMeetingBinding
 import com.cloudsurfers.crm.functions.Contact
 import com.cloudsurfers.crm.functions.Util
+import com.cloudsurfers.crm.pages.meetings.AddMeetingFragment
 import com.google.android.flexbox.FlexboxLayout
 import com.google.android.material.chip.Chip
 import java.util.*
@@ -40,7 +34,7 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class AddContactFragment : Fragment() {
-    private var tags: ArrayList<String> = ArrayList<String>();
+    private var tags: ArrayList<String> = ArrayList<String>()
 
     private var param1: String? = null
     private var param2: String? = null
@@ -89,26 +83,60 @@ class AddContactFragment : Fragment() {
             })
         }
 
-        binding.addContactButton.setOnClickListener {
-            var name = binding.outlinedTextFieldName.editText?.text.toString()
-            var email = binding.outlinedTextFieldEmail.editText?.text.toString()
-            var phone = binding.outlinedTextFieldMobile.editText?.text.toString()
-            var notes = binding.outlinedTextFieldNotes.editText?.text.toString()
-            val success = Contact.createContact(requireActivity(), name, phone, email, notes, getTags(binding.addContactChipGroup))
-            if (success){
-                setFragmentResult("requestKey", bundleOf("refreshContacts" to true))
-                findNavController().popBackStack()
-            }
-            else{
-                val text = "Failed to add Contact. Please retry!"
-                val duration = Toast.LENGTH_SHORT
+        // Data validation when losing focus
+        binding.outlinedTextFieldEmail.editText?.onFocusChangeListener =
+            View.OnFocusChangeListener { _, hasFocus -> if (!hasFocus) validateFields(binding)}
+        binding.outlinedTextFieldMobile.editText?.onFocusChangeListener =
+            View.OnFocusChangeListener { _, hasFocus -> if (!hasFocus) validateFields(binding)}
 
-                val toast = Toast.makeText(requireActivity(), text, duration)
-                toast.show()
-            }
+        binding.addContactButton.setOnClickListener {
+            val name = binding.outlinedTextFieldName.editText?.text.toString()
+            val email = binding.outlinedTextFieldEmail.editText?.text.toString()
+            val phone = binding.outlinedTextFieldMobile.editText?.text.toString()
+            val notes = binding.outlinedTextFieldNotes.editText?.text.toString()
+            val success = Contact.createContact(requireActivity(), name, phone, email, notes, getTags(binding.addContactChipGroup))
+            if (validateFields(binding))
+                if (success && validateFields(binding)){
+                    setFragmentResult("requestKey", bundleOf("refreshContacts" to true))
+                    findNavController().popBackStack()
+                }
+                else{
+                    val text = "Failed to add Contact. Please retry!"
+                    val duration = Toast.LENGTH_SHORT
+
+                    val toast = Toast.makeText(requireActivity(), text, duration)
+                    toast.show()
+                }
         }
 
         return binding.root
+    }
+
+
+
+    private fun validateFields(binding: FragmentAddNewContactBinding): Boolean {
+        val emailField = binding.outlinedTextFieldEmail
+        val phoneField = binding.outlinedTextFieldMobile
+        var valid = true
+
+        if (!Util.isValidEmail(emailField.editText?.text.toString())) {
+            emailField.isErrorEnabled = true
+            emailField.error = "Invalid email"
+            valid = false
+        } else {
+            emailField.error = null
+            emailField.isErrorEnabled = false
+        }
+        if (!Util.isValidPhoneNumber(phoneField.editText?.text.toString())) {
+            phoneField.isErrorEnabled = true
+            phoneField.error = "Invalid phone number"
+            valid = false
+        } else {
+            phoneField.error = null
+            phoneField.isErrorEnabled = false
+        }
+
+        return valid
     }
 
     private fun getTags(chipGroup: FlexboxLayout): ArrayList<String> {
@@ -131,25 +159,5 @@ class AddContactFragment : Fragment() {
 
         chipGroup.addView(chip as View, chipGroup.childCount - 1)
         chip.setOnCloseIconClickListener { chipGroup.removeView(chip as View) }
-    }
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment AddMeetingFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            AddMeetingFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
     }
 }

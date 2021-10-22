@@ -15,7 +15,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import com.cloudsurfers.crm.R
-import com.cloudsurfers.crm.functions.CalendarUtil
 import com.cloudsurfers.crm.databinding.FragmentViewContactBinding
 import com.cloudsurfers.crm.functions.ComposeEmail
 import androidx.annotation.RequiresApi
@@ -82,7 +81,9 @@ class ViewContactFragment : Fragment() {
             startActivity(Intent.createChooser(intent, "Send mail using..."))
         }
 
-        val meetings = getMeetingsForContact(activity as Activity)
+        val meetings = getMeetingsForContact(activity as Activity).filter {
+            LocalDateTime.now().isBefore(if (it.endDate != null) it.endDate else LocalDateTime.now())
+        } as ArrayList<Meeting>
         if (meetings.isEmpty())
             binding.viewContactUpcomingMeetingsLabel.text = resources.getString(R.string.view_contact_upcoming_meeting_label_no_meetings)
         binding.viewContactUpcomingMeetingsRecyclerView.apply {
@@ -123,7 +124,9 @@ class ViewContactFragment : Fragment() {
             if (success){
                 setFragmentResult("requestKey", bundleOf("refreshContacts" to true))
                 findNavController().popBackStack()
+//                requireActivity().onBackPressed()
             }
+
             else{
                 Toast.makeText(activity,"Failed to delete contact, please try again.", Toast.LENGTH_SHORT).show()
             }
@@ -136,7 +139,7 @@ class ViewContactFragment : Fragment() {
     // Retrieve the upcoming meetings for the contact
     @RequiresApi(Build.VERSION_CODES.O)
     fun getMeetingsForContact(activity: Activity): ArrayList<Meeting> {
-        if (email== null){
+        if (email == null){
             return arrayListOf()
         }
         return email?.let { Meeting.fetchMeetingsByEmail(it,activity) }!!

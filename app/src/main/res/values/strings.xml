@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">CRM</string>
+    <string name="app_name">Meet n Keep</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="input">Input</string>
@@ -29,7 +29,7 @@
     <string name="edit_contact_button_text">Save Edit</string>
     <string name="new_meeting_contact_text">Contact Email</string>
     <string name="view_contact_create_new_contact">New</string>
-    <string name="new_meeting_name_text">Name</string>
+    <string name="new_meeting_name_text">Meeting title</string>
     <string name="new_meeting_date_text">Date</string>
     <string name="new_meeting_time_text">Time</string>
     <string name="new_meeting_location_text">Location</string>

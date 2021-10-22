@@ -47,7 +47,7 @@
         app:layout_constraintHorizontal_chainStyle="spread"
         app:layout_constraintStart_toEndOf="@+id/search_back_button"
         app:layout_constraintTop_toTopOf="parent"
-        app:theme="@style/AppSearchView">
+        android:theme="@style/AppSearchView">
 
     </android.widget.SearchView>
 
