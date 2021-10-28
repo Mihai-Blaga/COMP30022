@@ -1,189 +1,194 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <TextView
-        tools:ignore="MissingConstraints"
-        android:id="@+id/dummy_focus_view_add_meeting"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:focusable="true"
-        android:focusableInTouchMode="true">
-    <requestFocus/>
-    </TextView>
-
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/topAppBarLayout"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"/>
+        android:layout_height="wrap_content">
 
+        <TextView
+            tools:ignore="MissingConstraints"
+            android:id="@+id/dummy_focus_view_add_meeting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:focusable="true"
+            android:focusableInTouchMode="true">
+        <requestFocus/>
+        </TextView>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/outlinedTextFieldMeetingContact"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginRight="16dp"
-
-        android:hint="@string/new_meeting_contact_text"
-        android:textColorHint="@color/light_white"
-        app:boxStrokeColor="@color/light_white"
-
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/topAppBarLayout"
-
-        app:startIconDrawable="@drawable/ic_baseline_person_24"
-        app:startIconTint="@color/light_white">
-
-        <android.widget.AutoCompleteTextView
-            android:id="@+id/addMeetingAutocompleteEmailTextField"
-            android:textSize="16sp"
-            android:popupBackground="@color/matte_med_grey"
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/topAppBarLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"/>
 
-    </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/outlinedTextFieldMeetingName"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginRight="16dp"
-
-        android:hint="@string/new_meeting_name_text"
-        android:textColorHint="@color/light_white"
-        app:boxStrokeColor="@color/light_white"
-
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/outlinedTextFieldMeetingContact"
-
-        app:startIconDrawable="@drawable/ic_baseline_local_offer_24"
-        app:startIconTint="@color/light_white">
-
-        <com.google.android.material.textfield.TextInputEditText
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/outlinedTextFieldMeetingContact"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginRight="16dp"
 
-    </com.google.android.material.textfield.TextInputLayout>
+            android:hint="@string/new_meeting_contact_text"
+            android:textColorHint="@color/light_white"
+            app:boxStrokeColor="@color/light_white"
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/outlinedTextFieldMeetingDate"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginRight="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/topAppBarLayout"
 
-        android:hint="@string/new_meeting_date_text"
-        android:textColorHint="@color/light_white"
-        app:boxStrokeColor="@color/light_white"
+            app:startIconDrawable="@drawable/ic_baseline_person_24"
+            app:startIconTint="@color/light_white">
 
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/outlinedTextFieldMeetingName"
+            <android.widget.AutoCompleteTextView
+                android:id="@+id/addMeetingAutocompleteEmailTextField"
+                android:textSize="16sp"
+                android:popupBackground="@color/matte_med_grey"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-        app:startIconDrawable="@drawable/ic_baseline_access_time_24"
-        app:startIconTint="@color/light_white">
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputEditText
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/outlinedTextFieldMeetingName"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginRight="16dp"
 
-    </com.google.android.material.textfield.TextInputLayout>
+            android:hint="@string/new_meeting_name_text"
+            android:textColorHint="@color/light_white"
+            app:boxStrokeColor="@color/light_white"
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/outlinedTextFieldMeetingTime"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginRight="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/outlinedTextFieldMeetingContact"
 
-        android:hint="@string/new_meeting_time_text"
-        android:textColorHint="@color/light_white"
-        app:boxStrokeColor="@color/light_white"
+            app:startIconDrawable="@drawable/ic_baseline_local_offer_24"
+            app:startIconTint="@color/light_white">
 
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/outlinedTextFieldMeetingDate"
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-        app:startIconDrawable="@drawable/ic_baseline_access_time_24"
-        app:startIconTint="@color/light_white">
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputEditText
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/outlinedTextFieldMeetingDate"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginRight="16dp"
 
-    </com.google.android.material.textfield.TextInputLayout>
+            android:hint="@string/new_meeting_date_text"
+            android:textColorHint="@color/light_white"
+            app:boxStrokeColor="@color/light_white"
 
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/outlinedTextFieldMeetingName"
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/outlinedTextFieldMeetingLocation"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginRight="16dp"
+            app:startIconDrawable="@drawable/ic_baseline_access_time_24"
+            app:startIconTint="@color/light_white">
 
-        android:hint="@string/new_meeting_location_text"
-        android:textColorHint="@color/light_white"
-        app:boxStrokeColor="@color/light_white"
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/outlinedTextFieldMeetingTime"
+        </com.google.android.material.textfield.TextInputLayout>
 
-        app:startIconDrawable="@drawable/ic_baseline_location_on_24"
-        app:startIconTint="@color/light_white">
-
-        <com.google.android.material.textfield.TextInputEditText
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/outlinedTextFieldMeetingTime"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginRight="16dp"
 
-    </com.google.android.material.textfield.TextInputLayout>
+            android:hint="@string/new_meeting_time_text"
+            android:textColorHint="@color/light_white"
+            app:boxStrokeColor="@color/light_white"
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/outlinedTextFieldMeetingNotes"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginRight="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/outlinedTextFieldMeetingDate"
 
-        android:hint="@string/new_meeting_notes_text"
-        android:textColorHint="@color/light_white"
-        app:boxStrokeColor="@color/light_white"
+            app:startIconDrawable="@drawable/ic_baseline_access_time_24"
+            app:startIconTint="@color/light_white">
 
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/outlinedTextFieldMeetingLocation"
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-        app:startIconDrawable="@drawable/ic_baseline_notes_24"
-        app:startIconTint="@color/light_white">
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputEditText
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/outlinedTextFieldMeetingLocation"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginRight="16dp"
 
-    </com.google.android.material.textfield.TextInputLayout>
+            android:hint="@string/new_meeting_location_text"
+            android:textColorHint="@color/light_white"
+            app:boxStrokeColor="@color/light_white"
 
-    <Button
-        android:id="@+id/add_meeting_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/add_new_contact_button_text"
-        app:icon="@android:drawable/ic_menu_save"
-        app:layout_constraintEnd_toEndOf="@+id/outlinedTextFieldMeetingNotes"
-        app:layout_constraintTop_toBottomOf="@+id/outlinedTextFieldMeetingNotes" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/outlinedTextFieldMeetingTime"
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            app:startIconDrawable="@drawable/ic_baseline_location_on_24"
+            app:startIconTint="@color/light_white">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/outlinedTextFieldMeetingNotes"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginRight="16dp"
+
+            android:hint="@string/new_meeting_notes_text"
+            android:textColorHint="@color/light_white"
+            app:boxStrokeColor="@color/light_white"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/outlinedTextFieldMeetingLocation"
+
+            app:startIconDrawable="@drawable/ic_baseline_notes_24"
+            app:startIconTint="@color/light_white">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/add_meeting_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/add_new_contact_button_text"
+            app:icon="@android:drawable/ic_menu_save"
+            app:layout_constraintEnd_toEndOf="@+id/outlinedTextFieldMeetingNotes"
+            app:layout_constraintTop_toBottomOf="@+id/outlinedTextFieldMeetingNotes" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

@@ -35,7 +35,7 @@ class AddMeetingFragment : Fragment() {
 
         val binding = FragmentAddNewMeetingBinding.inflate(layoutInflater, container, false)
         contactEmails = Contact.readContacts(requireActivity()).map { it.email } as ArrayList<String>
-
+        println(contactEmails)
 //        binding.outlinedTextFieldMeetingName.editText?.setText("Someone's Meeting")
         // Stores the date and time that can be changed by the user
         val cal = Calendar.getInstance()
@@ -147,6 +147,8 @@ class AddMeetingFragment : Fragment() {
             dateField.error = "Invalid date"
             valid = false
         } else {
+            if (dateField.editText?.text.toString().isNullOrEmpty())
+                valid = false
             dateField.error = null
             dateField.isErrorEnabled = false
         }
@@ -156,6 +158,8 @@ class AddMeetingFragment : Fragment() {
             timeField.error = "Invalid time"
             valid = false
         } else {
+            if (timeField.editText?.text.toString().isNullOrEmpty())
+                valid = false
             timeField.error = null
             timeField.isErrorEnabled = false
         }
