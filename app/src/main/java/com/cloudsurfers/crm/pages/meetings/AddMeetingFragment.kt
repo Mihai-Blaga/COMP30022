@@ -34,9 +34,10 @@ class AddMeetingFragment : Fragment() {
     ): View {
 
         val binding = FragmentAddNewMeetingBinding.inflate(layoutInflater, container, false)
-        contactEmails = Contact.readContacts(requireActivity()).map { it.email } as ArrayList<String>
-        println(contactEmails)
-//        binding.outlinedTextFieldMeetingName.editText?.setText("Someone's Meeting")
+
+        // Retrieve the contact emails
+        contactEmails = ArrayList(Contact.readContacts(requireActivity()).map { it.email })
+
         // Stores the date and time that can be changed by the user
         val cal = Calendar.getInstance()
 
@@ -60,14 +61,6 @@ class AddMeetingFragment : Fragment() {
             binding.outlinedTextFieldMeetingTime.editText?.setText(timeStr)
         }
 
-        // On Click Listeners
-//        binding.outlinedTextFieldMeetingDate.editText?.setOnClickListener(){
-//            DatePickerDialog(requireActivity(), dateSetListener,
-//                cal.get(Calendar.YEAR),
-//                cal.get(Calendar.MONTH),
-//                cal.get(Calendar.DAY_OF_MONTH)).show()
-//        }
-
         // Configure autocomplete text edit view for contact emails
         binding.addMeetingAutocompleteEmailTextField.setAdapter(
             ArrayAdapter(
@@ -75,9 +68,12 @@ class AddMeetingFragment : Fragment() {
                 R.layout.autocomplete_list_item, contactEmails
             )
         )
+
+        // Perform data validation when email is changed
         binding.addMeetingAutocompleteEmailTextField.onFocusChangeListener =
             View.OnFocusChangeListener { _, hasFocus -> if (!hasFocus) validateFields(binding)}
 
+        // Perform data validation when date is changed
         binding.outlinedTextFieldMeetingDate.editText?.setOnFocusChangeListener { v, b ->
             // This line prevents keyboard from showing
             Util.hideKeyboard(v, requireContext())
@@ -103,14 +99,14 @@ class AddMeetingFragment : Fragment() {
             if (!b) validateFields(binding)
         }
 
+        // Configure add meeting button listener
         binding.addMeetingButton.setOnClickListener {
             val meetingName = binding.outlinedTextFieldMeetingName.editText?.text.toString()
             val meetingContact  = binding.addMeetingAutocompleteEmailTextField.text.toString()
             val meetingLocation = binding.outlinedTextFieldMeetingLocation.editText?.text.toString()
             val meetingNotes = binding.outlinedTextFieldMeetingNotes.editText?.text.toString()
 
-//            val intent = CalendarUtil.getInsertEventIntent(meetingName, meetingContact, meetingLocation, cal, meetingNotes)
-//            startActivity(intent)
+            // Perform data validation
             if (validateFields(binding)) {
                 val eventID = CalendarUtil.addEvent(requireActivity(), meetingName, meetingContact, meetingLocation, cal, meetingNotes)
 
@@ -125,6 +121,7 @@ class AddMeetingFragment : Fragment() {
         return binding.root
     }
 
+    // Returns whether the fields have valid entry values
     @RequiresApi(Build.VERSION_CODES.N)
     private fun validateFields(binding: FragmentAddNewMeetingBinding): Boolean {
         val emailField = binding.outlinedTextFieldMeetingContact
@@ -147,7 +144,7 @@ class AddMeetingFragment : Fragment() {
             dateField.error = "Invalid date"
             valid = false
         } else {
-            if (dateField.editText?.text.toString().isNullOrEmpty())
+            if (dateField.editText?.text.toString().isEmpty())
                 valid = false
             dateField.error = null
             dateField.isErrorEnabled = false
@@ -158,7 +155,7 @@ class AddMeetingFragment : Fragment() {
             timeField.error = "Invalid time"
             valid = false
         } else {
-            if (timeField.editText?.text.toString().isNullOrEmpty())
+            if (timeField.editText?.text.toString().isEmpty())
                 valid = false
             timeField.error = null
             timeField.isErrorEnabled = false

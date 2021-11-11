@@ -1,33 +1,21 @@
 package com.cloudsurfers.crm.pages.login
 
-import android.R.attr
-import android.R.attr.*
 import android.app.Activity
-import android.app.Instrumentation
 import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import android.util.AttributeSet
-import android.view.View
-import com.cloudsurfers.crm.databinding.FragmentViewContactBinding
-import com.cloudsurfers.crm.databinding.LoginPageBinding
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import androidx.core.app.ActivityCompat.startActivityForResult
-
 import android.content.Intent
+import android.os.Bundle
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import android.util.Log
-import android.widget.TextView
-import androidx.core.view.setPadding
+import androidx.appcompat.app.AppCompatActivity
 import com.cloudsurfers.crm.R
+import com.cloudsurfers.crm.databinding.LoginPageBinding
 import com.cloudsurfers.crm.pages.main.MainActivity
-import com.google.android.gms.common.SignInButton
-import com.google.android.gms.tasks.Task
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.Task
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var mGoogleSignInClient : GoogleSignInClient
@@ -35,19 +23,19 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding = LoginPageBinding.inflate(layoutInflater);
+        val binding = LoginPageBinding.inflate(layoutInflater)
         val clientID = getString(R.string.server_client_id)
         val gso: GoogleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(clientID)
             .requestEmail()
             .build()
 
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        val account = GoogleSignIn.getLastSignedInAccount(this);
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
+        val account = GoogleSignIn.getLastSignedInAccount(this)
         updateUI(account)
         resultLauncher = this.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
-                val data = result.data
+                result.data
 
                 val task: Task<GoogleSignInAccount> =
                     GoogleSignIn.getSignedInAccountFromIntent(result.data)

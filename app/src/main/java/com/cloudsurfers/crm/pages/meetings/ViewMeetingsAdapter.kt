@@ -31,26 +31,6 @@ class ViewMeetingsAdapter(private val meetingsList: ArrayList<Meeting>, private 
 
         lateinit var meeting: Meeting
 
-//        init {
-//            view.setOnClickListener {
-//                // Format the start date
-//                val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
-//                val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
-//                val date = meeting.beginDate?.format(dateFormatter)
-//                val time = meeting.beginDate?.format(timeFormatter)
-//
-//                val bundle = bundleOf(
-//                    "contactEmail" to meeting.contactEmail,
-//                    "title" to meeting.title,
-//                    "date" to date,
-//                    "time" to time,
-//                    "location" to meeting.location,
-//                    "notes" to meeting.description?.substringBefore("\n-::~")?.substringBefore("-::~")
-//                )
-//                Navigation.findNavController(view).navigate(R.id.action_viewMeetingsFragment_to_viewMeetingFragment, bundle)
-//            }
-//        }
-
     }
 
     // Create new views (invoked by the layout manager)

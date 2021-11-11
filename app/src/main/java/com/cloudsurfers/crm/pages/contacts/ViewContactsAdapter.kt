@@ -23,10 +23,6 @@ import kotlin.collections.ArrayList
 class ViewContactsAdapter(private val contacts: ArrayList<Contact>):
     RecyclerView.Adapter<ViewContactsAdapter.ViewHolder>() {
 
-    /**
-     * Provide a reference to the type of views that you are using
-     * (custom ViewHolder).
-     */
     @RequiresApi(Build.VERSION_CODES.N)
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val contactNameTextView: TextView = view.findViewById(R.id.view_contacts_list_item_contact_name_text_view)
@@ -37,11 +33,9 @@ class ViewContactsAdapter(private val contacts: ArrayList<Contact>):
             // Define click listener for the ViewHolder's View.
             view.setOnClickListener {
                 val activity: AppCompatActivity = view.context as AppCompatActivity
-//                val c: Contact = Contact.readContact(contact, activity)
                 val c: Contact = contact
 
                 val bundle = bundleOf("name" to c.name, "email" to c.email, "mobile" to c.phone, "notes" to c.note, "tags" to c.getGroupNames(activity), "contactID" to c.id)
-                println(c.getGroupNames(activity))
                 Navigation.findNavController(view).navigate(R.id.action_viewContactsList_to_viewContactFragment, bundle)
             }
         }
@@ -91,7 +85,7 @@ class ViewContactsAdapter(private val contacts: ArrayList<Contact>):
         // Actually rendering the icon
         canvas.drawCircle(25f,25f,25f, paint)
         if (!name.isNullOrEmpty()) {
-            canvas.drawText(name!!.substring(0,1),24.5f,31.5f,textPaint)
+            canvas.drawText(name.substring(0,1),24.5f,31.5f,textPaint)
         } else {
             canvas.drawText("",24.5f,31.5f,textPaint)
         }
