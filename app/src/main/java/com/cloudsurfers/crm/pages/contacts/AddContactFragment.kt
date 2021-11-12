@@ -18,34 +18,14 @@ import androidx.navigation.fragment.findNavController
 import com.cloudsurfers.crm.databinding.FragmentAddNewContactBinding
 import com.cloudsurfers.crm.functions.Contact
 import com.cloudsurfers.crm.functions.Util
-import com.cloudsurfers.crm.pages.meetings.AddMeetingFragment
 import com.google.android.flexbox.FlexboxLayout
 import com.google.android.material.chip.Chip
 import java.util.*
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [AddMeetingFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class AddContactFragment : Fragment() {
     private var tags: ArrayList<String> = ArrayList<String>()
 
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreateView(
@@ -113,7 +93,7 @@ class AddContactFragment : Fragment() {
     }
 
 
-
+    // Returns whether the fields have valid entry values
     private fun validateFields(binding: FragmentAddNewContactBinding): Boolean {
         val emailField = binding.outlinedTextFieldEmail
         val phoneField = binding.outlinedTextFieldMobile
@@ -139,6 +119,7 @@ class AddContactFragment : Fragment() {
         return valid
     }
 
+    // Retrieve the current list of tags
     private fun getTags(chipGroup: FlexboxLayout): ArrayList<String> {
         val tags = ArrayList<String>()
         for (child: View in chipGroup.children) {

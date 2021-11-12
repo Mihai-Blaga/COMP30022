@@ -6,7 +6,6 @@ import android.icu.text.SimpleDateFormat
 import android.icu.util.Calendar
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,13 +29,8 @@ private const val ARG_PARAM3 = "date"
 private const val ARG_PARAM4 = "time"
 private const val ARG_PARAM5 = "location"
 private const val ARG_PARAM6 = "notes"
-private const val ARG_PARAM7 = "eventID"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [AddMeetingFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
+
 class ViewMeetingFragment : Fragment() {
     private var contactEmail: String? = null
     private var title: String? = null
@@ -69,9 +63,9 @@ class ViewMeetingFragment : Fragment() {
 
         val binding = FragmentViewMeetingBinding.inflate(layoutInflater, container, false)
 
-        val prevContactEmail = contactEmail;
+        val prevContactEmail = contactEmail
         // Set value of text fields
-        println("${contactEmail}, ${title}, ${date}, ${time}, ${location}, ${notes}")
+        println("${contactEmail}, ${title}, ${date}, ${time}, ${location}, $notes")
         binding.viewMeetingOutlinedTextFieldMeetingContact.editText?.setText(contactEmail)
         binding.viewMeetingOutlinedTextFieldMeetingName.editText?.setText(title)
         binding.viewMeetingOutlinedTextFieldMeetingDate.editText?.setText(date)
@@ -106,26 +100,21 @@ class ViewMeetingFragment : Fragment() {
                 binding.viewMeetingOutlinedTextFieldMeetingDate.editText?.setText(sdf.format(cal.time))
             }
 
+        // Change the text field after the dialog selectors are changed
         val timeSetListener = TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
             cal.set(Calendar.HOUR_OF_DAY, hourOfDay)
             cal.set(Calendar.MINUTE, minute)
             val minuteStr = minute.toString().padStart(2, '0')
             val hourStr = hourOfDay.toString().padStart(2, '0')
-            binding.viewMeetingOutlinedTextFieldMeetingTime.editText?.setText("${hourStr}:${minuteStr}")
+            val meetingTime = "${hourStr}:${minuteStr}"
+            binding.viewMeetingOutlinedTextFieldMeetingTime.editText?.setText(meetingTime)
         }
 
-        // On Click Listeners
-//        binding.outlinedTextFieldMeetingDate.editText?.setOnClickListener(){
-//            DatePickerDialog(requireActivity(), dateSetListener,
-//                cal.get(Calendar.YEAR),
-//                cal.get(Calendar.MONTH),
-//                cal.get(Calendar.DAY_OF_MONTH)).show()
-//        }
-
-
+        // Perform data validation when the contact email is edited
         binding.viewMeetingOutlinedTextFieldMeetingContact.editText?.onFocusChangeListener =
             View.OnFocusChangeListener { _, hasFocus -> if (!hasFocus) validateFields(binding)}
 
+        // Show dialog when the date field is clicked on
         binding.viewMeetingOutlinedTextFieldMeetingDate.editText?.setOnFocusChangeListener { v, b ->
             // This line prevents keyboard from showing
             Util.hideKeyboard(v, requireContext())
@@ -140,6 +129,7 @@ class ViewMeetingFragment : Fragment() {
             if (!b) validateFields(binding)
         }
 
+        // Show dialog when the time field is clicked on
         binding.viewMeetingOutlinedTextFieldMeetingTime.editText?.setOnFocusChangeListener { v, b ->
             // This line prevents keyboard from showing
             Util.hideKeyboard(v, requireContext())
@@ -154,6 +144,7 @@ class ViewMeetingFragment : Fragment() {
             if (!b) validateFields(binding)
         }
 
+        // Configure edit button listener
         binding.viewMeetingEditMeetingButton.setOnClickListener {
             val meetingName =
                 binding.viewMeetingOutlinedTextFieldMeetingName.editText?.text.toString()
@@ -163,9 +154,6 @@ class ViewMeetingFragment : Fragment() {
                 binding.viewMeetingOutlinedTextFieldMeetingLocation.editText?.text.toString()
             val meetingNotes =
                 binding.viewMeetingOutlinedTextFieldMeetingNotes.editText?.text.toString()
-
-//            val intent = CalendarUtil.getInsertEventIntent(meetingName, meetingContact, meetingLocation, cal, meetingNotes)
-//            startActivity(intent)
 
             val eventID = CalendarUtil.updateEvent(
                 requireActivity(),
@@ -185,7 +173,7 @@ class ViewMeetingFragment : Fragment() {
         }
 
         binding.viewMeetingDeleteMeetingButton.setOnClickListener {
-            val success = CalendarUtil.deleteEvent(requireActivity(), eventID!!)
+            val success = CalendarUtil.deleteEvent(requireActivity(), eventID)
             if (success){
                 setFragmentResult("requestKey", bundleOf("refreshMeetings" to true))
                 findNavController().popBackStack()
@@ -199,6 +187,7 @@ class ViewMeetingFragment : Fragment() {
         return binding.root
     }
 
+    // Perform data validation on the fields
     @RequiresApi(Build.VERSION_CODES.N)
     private fun validateFields(binding: FragmentViewMeetingBinding): Boolean {
         val emailField = binding.viewMeetingOutlinedTextFieldMeetingContact
@@ -207,6 +196,7 @@ class ViewMeetingFragment : Fragment() {
 
         var valid = true
 
+        // Check email is valid
         if (!Util.isValidEmail(emailField.editText?.text.toString())) {
             emailField.isErrorEnabled = true
             emailField.error = "Invalid email"
@@ -216,6 +206,7 @@ class ViewMeetingFragment : Fragment() {
             emailField.isErrorEnabled = false
         }
 
+        // Check date is valid
         if (!Util.isValidDate(dateField.editText?.text.toString())) {
             dateField.isErrorEnabled = true
             dateField.error = "Invalid date"
@@ -225,6 +216,7 @@ class ViewMeetingFragment : Fragment() {
             dateField.isErrorEnabled = false
         }
 
+        // Check time is valid
         if (!Util.isValidTime(timeField.editText?.text.toString())) {
             timeField.isErrorEnabled = true
             timeField.error = "Invalid time"

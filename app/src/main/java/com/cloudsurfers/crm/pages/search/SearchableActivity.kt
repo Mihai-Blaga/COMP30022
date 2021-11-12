@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.cloudsurfers.crm.R
 import com.cloudsurfers.crm.functions.Contact
 import com.cloudsurfers.crm.functions.Group
-import com.cloudsurfers.crm.functions.Meeting
 import com.cloudsurfers.crm.pages.main.MainActivity
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
@@ -133,6 +132,7 @@ class SearchableActivity : MainActivity() {
         if (Intent.ACTION_SEARCH == intent.action) {
             intent.getStringExtra(SearchManager.QUERY)?.also { query ->
                 val tags: ArrayList<String> = getSelectedTags()
+                // Perform the search
                 val queryContacts: ArrayList<Contact> = basicContactSearchWithTags(query, tags)
 
                 val recyclerView = findViewById<RecyclerView>(R.id.search_recycler_view)
@@ -155,10 +155,4 @@ class SearchableActivity : MainActivity() {
             }
         }
     }
-
-//    override fun onResume() {
-//        super.onResume()
-//        finish();
-//        startActivity(intent);
-//    }
 }
